@@ -1,4 +1,4 @@
-# paip-in-clojure
+### [Paradigms of Artificial Intelligence Programming](http://norvig.com/paip.html) in Clojure
 
 A Clojure library designed to ... well, that part is up to you.
 
