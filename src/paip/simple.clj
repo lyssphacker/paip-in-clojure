@@ -1,4 +1,4 @@
-(ns paip.core)
+(ns paip.simple)
 
 (defn foo
   "I don't do a whole lot."

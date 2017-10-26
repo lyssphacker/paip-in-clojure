@@ -1,4 +1,4 @@
-(ns paip-in-clojure.core-test
+(ns paip-in-clojure.simple
   (:require [clojure.test :refer :all]
             [paip-in-clojure.core :refer :all]))
 
