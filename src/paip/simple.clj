@@ -41,6 +41,7 @@
 ;;; ==============================
 
 (def ^:dynamic *simple-grammar*
+  "A grammar for a trivial subset of English."
   {:sentence    [[:noun-phrase :verb-phrase]]
    :noun-phrase [[:Article :Noun]]
    :verb-phrase [[:Verb :noun-phrase]]
