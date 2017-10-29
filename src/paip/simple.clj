@@ -18,7 +18,7 @@
 
 (defn verb-phrase [] (concat (verb) (noun-phrase)))
 
-(defn sentence []  (concat (noun-phrase) (verb-phrase)))
+(defn sentence [] (concat (noun-phrase) (verb-phrase)))
 
 ;;; ==============================
 
@@ -37,4 +37,16 @@
   (if (random-elt '(true false))
     (concat (pp) (pp*))
     nil))
+
+;;; ==============================
+
+(def ^:dynamic *simple-grammar*
+  {:sentence    [[:noun-phrase :verb-phrase]]
+   :noun-phrase [[:Article :Noun]]
+   :verb-phrase [[:Verb :noun-phrase]]
+   :Article     ["the" "a"]
+   :Noun        ["man" "ball" "woman" "table"]
+   :Verb        ["hit" "took" "saw" "liked"]})
+
+
 
