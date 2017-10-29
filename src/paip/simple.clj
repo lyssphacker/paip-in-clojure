@@ -20,6 +20,12 @@
 
 (defn sentence []  (concat (noun-phrase) (verb-phrase)))
 
+;;; ==============================
+
+(defn adj* []
+  (if (= (rand-int 2) 0)
+    nil
+    (concat (adj) (adj*))))
 
 
 
