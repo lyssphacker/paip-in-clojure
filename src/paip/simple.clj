@@ -40,7 +40,7 @@
 
 ;;; ==============================
 
-(def ^:dynamic *simple-grammar*
+(def simple-grammar
   "A grammar for a trivial subset of English."
   {:sentence    [[:noun-phrase :verb-phrase]]
    :noun-phrase [[:Article :Noun]]
@@ -48,6 +48,11 @@
    :Article     ["the" "a"]
    :Noun        ["man" "ball" "woman" "table"]
    :Verb        ["hit" "took" "saw" "liked"]})
+
+(def ^:dynamic grammar
+  "The grammar used by generate.  Initially, this is
+  *simple-grammar*, but we can switch to other grammers."
+  simple-grammar)
 
 
 
