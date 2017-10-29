@@ -22,10 +22,19 @@
 
 ;;; ==============================
 
+(defn adj [] (one-of '(big little blue gree adiabatic)))
+
 (defn adj* []
   (if (= (rand-int 2) 0)
     nil
     (concat (adj) (adj*))))
 
+(defn prep [] (one-of '(to in by with on)))
 
+(defn pp [] (concat (prep) (noun-phrase)))
+
+(defn pp* []
+  (if (random-elt '(true false))
+    (concat (pp) (pp*))
+    nil))
 
