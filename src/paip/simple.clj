@@ -22,7 +22,7 @@
 
 ;;; ==============================
 
-(defn adj [] (one-of '(big little blue gree adiabatic)))
+(defn adj [] (one-of '(big little blue green adiabatic)))
 
 (defn adj* []
   (if (= (rand-int 2) 0)
