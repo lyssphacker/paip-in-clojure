@@ -54,5 +54,18 @@
   *simple-grammar*, but we can switch to other grammers."
   simple-grammar)
 
+;;; ==============================
 
+(defn rewrites
+  [key]
+  (if (contains? grammar key)
+    (key grammar)
+    nil))
+
+(defn generate
+  [phrase]
+  (cond
+    (vector? phrase) (mapcat generate phrase)
+    (rewrites phrase) (generate (random-elt (rewrites phrase)))
+    :else (vector phrase)))
 
