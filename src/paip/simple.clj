@@ -105,15 +105,17 @@
   -> ((A 1) (B 1) (A 2) (B 2))."
   [xlist ylist]
   (mappend (fn [y]
-            (map (fn [x] (concat x y)) xlist))
-          ylist))
+             (map (fn [x] (concat x y)) xlist))
+           ylist))
 
 (defn generate-all
+  "Generate a list of all possible expansions of this phrase."
   [phrase]
+  (println phrase)
   (cond
-    (or (seq? phrase) (nil? phrase)) (list '())
-    (vector? phrase) (combine-all (generate-all (first phrase))
-                                  (generate-all (rest phrase)))
+    (and (seq? phrase) (empty? phrase)) (list '())
+    (sequential? phrase) (combine-all (generate-all (first phrase))
+                                      (generate-all (rest phrase)))
     (rewrites phrase) (mappend generate-all (rewrites phrase))
     :else (list (list phrase))))
 
