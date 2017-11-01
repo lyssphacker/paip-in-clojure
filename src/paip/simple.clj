@@ -87,5 +87,8 @@
   [phrase]
   (cond
     (vector? phrase) (map generate-tree phrase)
-    (rewrites phrase) (cons phrase (generate-tree (random-elt (rewrites phrase))))
+    (rewrites phrase) (cons phrase
+                            (generate-tree (random-elt (rewrites phrase))))
     :else (vector phrase)))
+
+;;; ==============================
