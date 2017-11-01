@@ -49,6 +49,8 @@
    :Noun        ["man" "ball" "woman" "table"]
    :Verb        ["hit" "took" "saw" "liked"]})
 
+(def grammar simple-grammar)
+
 ;;; ==============================
 
 (defn rewrites
@@ -117,5 +119,3 @@
                                       (generate-all (rest phrase)))
     (rewrites phrase) (mappend generate-all (rewrites phrase))
     :else (list (list phrase))))
-
-(def grammar simple-grammar)
