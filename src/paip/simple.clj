@@ -1,4 +1,5 @@
-(ns paip.simple)
+(ns paip.simple
+  (:require [paip.auxfns :refer :all]))
 
 (defn random-elt [choices]
   "Choose an element from a list at random."
@@ -58,11 +59,6 @@
   (if (contains? grammar key)
     (key grammar)
     nil))
-
-(defn mappend
-  "Append the results of calling fn on each element of list."
-  [fn list]
-  (apply concat (map fn list)))
 
 (defn generate
   [phrase]
