@@ -1,7 +1,12 @@
-(ns paip-in-clojure.simple
+(ns paip.simple
   (:require [clojure.test :refer :all]
-            [paip-in-clojure.core :refer :all]))
+            [paip.simple :refer :all]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(deftest generate-all-count-test
+  (testing "generate-all"
+    (is (= 256 (count (generate-all :sentence))))))
+
+(deftest combine-all-test
+  (testing "combine-all"
+    (is (= (combine-all '((a) (b)) '((1) (2)))
+           '((a 1) (b 1) (a 2) (b 2))))))
