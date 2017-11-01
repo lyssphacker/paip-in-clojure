@@ -111,7 +111,6 @@
 (defn generate-all
   "Generate a list of all possible expansions of this phrase."
   [phrase]
-  (println phrase)
   (cond
     (and (seq? phrase) (empty? phrase)) (list '())
     (sequential? phrase) (combine-all (generate-all (first phrase))
