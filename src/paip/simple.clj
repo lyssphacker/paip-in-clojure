@@ -40,7 +40,7 @@
 
 ;;; ==============================
 
-(def grammar
+(def simple-grammar
   "A grammar for a trivial subset of English."
   {:sentence    [[:noun-phrase :verb-phrase]]
    :noun-phrase [[:Article :Noun]]
@@ -57,16 +57,21 @@
     (key grammar)
     nil))
 
+(defn mappend
+  "Append the results of calling fn on each element of list."
+  [fn list]
+  (apply concat (map fn list)))
+
 (defn generate
   [phrase]
   (cond
-    (vector? phrase) (mapcat generate phrase)
+    (vector? phrase) (mappend generate phrase)
     (rewrites phrase) (generate (random-elt (rewrites phrase)))
     :else (vector phrase)))
 
 ;;; ==============================
 
-(def grammar
+(def bigger-grammar
   {:sentence    [[:noun-phrase :verb-phrase]]
    :noun-phrase [[:Article :Adj* :Noun :PP*] [:Name] [:Pronoun]]
    :verb-phrase [[:Verb :noun-phrase :PP*]]
@@ -88,7 +93,28 @@
   (cond
     (vector? phrase) (map generate-tree phrase)
     (rewrites phrase) (cons phrase
-                            (generate-tree (random-elt (rewrites phrase))))
+                            (generate-tree
+                              (random-elt (rewrites phrase))))
     :else (vector phrase)))
 
 ;;; ==============================
+
+(defn combine-all
+  "Return a list of lists formed by appending a y to an x.
+  E.g., (combine-all '((a) (b)) '((1) (2)))
+  -> ((A 1) (B 1) (A 2) (B 2))."
+  [xlist ylist]
+  (mappend (fn [y]
+            (map (fn [x] (concat x y)) xlist))
+          ylist))
+
+(defn generate-all
+  [phrase]
+  (cond
+    (or (seq? phrase) (nil? phrase)) (list '())
+    (vector? phrase) (combine-all (generate-all (first phrase))
+                                  (generate-all (rest phrase)))
+    (rewrites phrase) (mappend generate-all (rewrites phrase))
+    :else (list (list phrase))))
+
+(def grammar simple-grammar)
