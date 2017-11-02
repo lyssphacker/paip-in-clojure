@@ -1,5 +1,5 @@
 (ns ^{:doc "First version of GPS (General Problem Solver)"}
-paip.gps1)
+  paip.gps1)
 
 (def state
   "The current state: a set of conditions."
