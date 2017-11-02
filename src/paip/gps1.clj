@@ -9,9 +9,9 @@ paip.gps1)
   "A set of available operators."
   #{})
 
-(def op
+(def school-ops
   "An operation"
-  {:action   nil
-   :preconds #{}
-   :add-set  #{}
-   :del-set  #{}})
+  #{{:action   'drive-son-to-school
+     :preconds #{'son-at-home 'car-works}
+     :add-set  #{'son-at-school}
+     :del-set  #{'son-at-home}}})
