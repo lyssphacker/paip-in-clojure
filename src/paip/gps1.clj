@@ -33,6 +33,8 @@ paip.gps1
 (declare apply-op)
 
 (defn achieve
+  "A goal is achieved if it already holds,
+  or if there is an appropriate op for it that is applicable."
   [state ops]
   (fn [goal]
     (or (contains? state goal)
@@ -40,6 +42,7 @@ paip.gps1
               (filter (appropriate? goal) ops)))))
 
 (defn apply-op
+  "Print a message and update *state* if op is applicable."
   [state ops]
   (fn [op]
     (with-local-vars [local-state state]
@@ -50,6 +53,7 @@ paip.gps1
         local-state))))
 
 (defn gps
+  "General Problem Solver: achieve all goals using *ops*."
   [state goals ops]
   (if (every? (achieve state ops) goals) 'solved))
 
