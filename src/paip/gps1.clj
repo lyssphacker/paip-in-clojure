@@ -1,13 +1,6 @@
 (ns ^{:doc "First version of GPS (General Problem Solver)"}
-paip.gps1)
-
-(def state
-  "The current state: a set of conditions."
-  #{})
-
-(def ops
-  "A set of available operators."
-  #{})
+  paip.gps1
+  (:require [clojure.set :refer :all]))
 
 (def school-ops
   #{{:action   'drive-son-to-school
@@ -33,5 +26,27 @@ paip.gps1)
 
 (defn appropriate?
   "An op is appropriate to a goal if it is in its add list."
-  [goal op]
-  (contains? (:add-set op) goal))
+  [goal]
+  (fn [op]
+    (contains? (:add-set op) goal)))
+
+(declare apply-op)
+
+(defn achieve
+     [goal state ops]
+     (or (contains? goal state)
+         (some (apply-op state)
+               (filter (appropriate? goal) ops))))
+
+(defn apply-op
+  [state]
+  (fn [op]
+    (with-local-vars [local-state state]
+      (when (every? achieve (:preconds op))
+        (print (list 'executing (:action op)))
+        (var-set local-state (difference local-state :del-list op))
+        (var-set local-state (union local-state :add-list op))
+        local-state))))
+
+
+
