@@ -44,9 +44,9 @@ paip.gps1
   (fn [op]
     (with-local-vars [local-state state]
       (when (every? (achieve state ops) (:preconds op))
-        (print (list 'executing (:action op)))
-        (var-set local-state (difference local-state (:del-list op)))
-        (var-set local-state (union local-state (:add-list op)))
+        (println (list 'executing (:action op)))
+        (var-set local-state (difference @local-state (:del-list op)))
+        (var-set local-state (union @local-state (:add-list op)))
         local-state))))
 
 (defn gps
