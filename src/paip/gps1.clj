@@ -1,5 +1,5 @@
 (ns ^{:doc "First version of GPS (General Problem Solver)"}
-  paip.gps1
+paip.gps1
   (:require [clojure.set :refer :all]))
 
 (def school-ops
@@ -33,20 +33,25 @@
 (declare apply-op)
 
 (defn achieve
-     [goal state ops]
-     (or (contains? goal state)
-         (some (apply-op state)
-               (filter (appropriate? goal) ops))))
+  [state ops]
+  (fn [goal]
+    (or (contains? state goal)
+        (some (apply-op state ops)
+              (filter (appropriate? goal) ops)))))
 
 (defn apply-op
-  [state]
+  [state ops]
   (fn [op]
     (with-local-vars [local-state state]
-      (when (every? achieve (:preconds op))
+      (when (every? (achieve state ops) (:preconds op))
         (print (list 'executing (:action op)))
-        (var-set local-state (difference local-state :del-list op))
-        (var-set local-state (union local-state :add-list op))
+        (var-set local-state (difference local-state (:del-list op)))
+        (var-set local-state (union local-state (:add-list op)))
         local-state))))
+
+(defn gps
+  [state goals ops]
+  (if (every? (achieve state ops) goals) 'solved))
 
 
 
