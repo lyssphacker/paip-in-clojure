@@ -1,13 +1,7 @@
 (ns ^{:doc "Auxiliary functions used by all other programs"}
-  paip.auxfns)
+paip.auxfns)
 
 (defn mappend
   "Append the results of calling fn on each element of list."
   [fn list]
   (apply concat (map fn list)))
-
-(defn fun
-  [& args]
-  args)
-
-(apply fun 1 2 '(3 4))
