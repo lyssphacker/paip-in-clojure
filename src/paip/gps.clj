@@ -1,12 +1,13 @@
 (ns ^{:doc "Final version of GPS"}
 paip.gps
-  (:require [paip.gps1 :refer :all]
-            [clojure.string :as str]))
+  (:require [paip.gps1 :refer :all]))
 
-(defn executing?
-  "Is x of the form: (executing ...) ?"
-  [x]
-  (str/starts-with? x "executing"))
+(defn starts-with
+  "Is this a list whose first element is x?"
+  [list x]
+  (and (not (atom? list))
+       (= (first list) x)))
+
 
 
 
