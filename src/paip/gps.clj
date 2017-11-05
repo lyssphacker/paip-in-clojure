@@ -1,7 +1,7 @@
 (ns ^{:doc "Final version of GPS"}
 paip.gps
   (:require [clojure.inspector :refer (atom?)]
-            [paip.gps1 :refer (school-ops)]))
+            [paip.gps1 :refer (school-ops find-all)]))
 
 (defn starts-with
   "Is this a list whose first element is x?"
