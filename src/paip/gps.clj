@@ -44,7 +44,8 @@ paip.gps
                  (var-set current-state
                           (achieve state g goal-stack ops)))
                goals)
-             (subset? goals current-state)))))
+             (subset? goals current-state))
+      current-state)))
 
 (defn gps
   [state goals ops]
