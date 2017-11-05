@@ -1,7 +1,7 @@
 (ns ^{:doc "Final version of GPS"}
 paip.gps
-  (:require [paip.gps1 :refer :all]
-            [clojure.inspector :refer :all]))
+  (:require [clojure.inspector :refer (atom?)]
+            [paip.gps1 :refer (school-ops)]))
 
 (defn starts-with
   "Is this a list whose first element is x?"
@@ -27,9 +27,6 @@ paip.gps
 
 (def converted-school-ops
   (map convert-op school-ops))
-
-(defn achieve
-  [state goal goal-stack])
 
 (declare achieve-all)
 
