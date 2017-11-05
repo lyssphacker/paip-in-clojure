@@ -1,7 +1,8 @@
 (ns ^{:doc "Final version of GPS"}
 paip.gps
   (:require [clojure.inspector :refer (atom?)]
-            [paip.gps1 :refer (school-ops find-all contains-val?)]))
+            [paip.gps1 :refer (school-ops)]
+            [paip.auxfns :refer (find-all contains-val?)]))
 
 (defn starts-with
   "Is this a list whose first element is x?"
@@ -35,7 +36,7 @@ paip.gps
   (cond (contains-val? state goal) state
         (contains-val? goal-stack goal) '()
         :else (some
-                (fn (op)
+                (fn [op]
                   (apply-op state goal op goal-stack))
                 (find-all goal ops))))
 
