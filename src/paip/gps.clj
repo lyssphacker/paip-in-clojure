@@ -25,6 +25,21 @@ paip.gps
                 (list 'executing (:action op))
                 add-set)))))
 
+(def converted-school-ops
+  (map convert-op school-ops))
+
+(defn achieve
+  [state goal goal-stack])
+
+(declare achieve-all)
+
+(defn gps
+  [state goals ops]
+  (filter (complement atom?)
+          (achieve-all (cons '(start) state)
+                       goals
+                       [])))
+
 
 
 
