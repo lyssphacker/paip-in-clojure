@@ -4,7 +4,7 @@ paip.gps
             [paip.gps1 :refer (school-ops)]
             [paip.auxfns :refer (find-all contains-val?)]
             [clojure.string :refer (starts-with?)]
-            [clojure.set :refer (subset?)]))
+            [clojure.set :refer (subset? union)]))
 
 (defn executing?
   "Does x's name starts with 'executing'?"
@@ -25,7 +25,18 @@ paip.gps
 (def converted-school-ops
   (map convert-op school-ops))
 
-(declare apply-op)
+(declare achieve-all)
+
+(defn apply-op
+  [state goal op goal-stack ops]
+  (let [state2 (achieve-all state (:preconds op)
+                            (cons goal goal-stack) ops)]
+    (when-not (empty? state2)
+      (union (filter (complement
+                       (fn [x]
+                         (contains? x (:del-set op))))
+                     state2)
+             (:add-set op)))))
 
 (defn achieve
   [state goal goal-stack ops]
@@ -33,7 +44,7 @@ paip.gps
         (contains? goal-stack goal) '()
         :else (some
                 (fn [op]
-                  (apply-op state goal op goal-stack))
+                  (apply-op state goal op goal-stack ops))
                 (find-all goal ops))))
 
 (defn achieve-all
