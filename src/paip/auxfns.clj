@@ -16,3 +16,9 @@
   "Find all those elements of sequence that match item"
   [goal ops]
   (filter (appropriate? goal) ops))
+
+(defn contains-val?
+  [coll val]
+  (when (seq coll)
+    (or (= val (first coll))
+        (recur (next coll) val))))
