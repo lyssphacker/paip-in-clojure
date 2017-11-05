@@ -12,7 +12,7 @@ paip.gps
   (starts-with? x "executing"))
 
 (defn convert-op
-  "Make op conform to the (EXECUTING op) convention."
+  "Make op conform to the executing-op convention."
   [op]
   (if (some executing? (:add-vec op))
     op
@@ -28,6 +28,7 @@ paip.gps
 (declare achieve-all)
 
 (defn apply-op
+  "Return a new, transformed state if op is applicable."
   [state goal op goal-stack ops]
   (let [state2 (achieve-all state (:preconds op)
                             (cons goal goal-stack) ops)]
@@ -39,6 +40,8 @@ paip.gps
              (:add-vec op)))))
 
 (defn achieve
+  "A goal is achieved if it already holds,
+  or if there is an appropriate op for it that is applicable."
   [state goal goal-stack ops]
   (cond (contains? state goal) state
         (contains? goal-stack goal) '()
@@ -48,6 +51,7 @@ paip.gps
                 (find-all goal ops))))
 
 (defn achieve-all
+  "Achieve each goal, and make sure they still hold at the end."
   [state goals goal-stack ops]
   (with-local-vars [current-state state]
     (if (and (every?
@@ -59,6 +63,7 @@ paip.gps
       current-state)))
 
 (defn gps
+  "General Problem Solver: from state, achieve goals using ops."
   [state goals ops]
   (filter (complement atom?)
           (achieve-all (cons '(start) state)
