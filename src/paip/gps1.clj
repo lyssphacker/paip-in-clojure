@@ -5,25 +5,25 @@ paip.gps1
 
 (def school-ops
   #{{:action   'drive-son-to-school
-     :preconds #{'son-at-home 'car-works}
-     :add-set  #{'son-at-school}
-     :del-set  #{'son-at-home}},
+     :preconds ['son-at-home 'car-works]
+     :add-vec  ['son-at-school]
+     ::del-vec  ['son-at-home]},
     {:action   'shop-installs-battery
-     :preconds #{'car-needs-battery 'shop-knows-problem 'shop-has-money}
-     :add-set  #{'car-works}},
+     :preconds ['car-needs-battery 'shop-knows-problem 'shop-has-money]
+     :add-vec  ['car-works]},
     {:action   'tell-shop-problem
-     :preconds #{'in-communication-with-shop}
-     :add-set  #{'shop-knows-problem}},
+     :preconds ['in-communication-with-shop]
+     :add-vec  ['shop-knows-problem]},
     {:action   'telephone-shop
-     :preconds #{'know-phone-number}
-     :add-set  #{'in-communication-with-shop}},
+     :preconds ['know-phone-number]
+     :add-vec  ['in-communication-with-shop]},
     {:action   'look-up-number
-     :preconds #{'have-phone-book}
-     :add-set  #{'know-phone-number}},
+     :preconds ['have-phone-book]
+     :add-vec  ['know-phone-number]},
     {:action   'give-shop-money
-     :preconds #{'have-money}
-     :add-set  #{'shop-has-money},
-     :del-set  #{'have-money}}})
+     :preconds ['have-money]
+     :add-vec  ['shop-has-money]
+     ::del-vec  ['have-money]}})
 
 (declare apply-op)
 
@@ -43,8 +43,8 @@ paip.gps1
     (with-local-vars [local-state state]
       (when (every? (achieve state ops) (:preconds op))
         (println (list 'executing (:action op)))
-        (var-set local-state (difference @local-state (:del-list op)))
-        (var-set local-state (union @local-state (:add-list op)))
+        (var-set local-state (difference @local-state (:del-vec op)))
+        (var-set local-state (union @local-state (:add-vec op)))
         local-state))))
 
 (defn gps

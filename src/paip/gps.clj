@@ -14,13 +14,13 @@ paip.gps
 (defn convert-op
   "Make op conform to the (EXECUTING op) convention."
   [op]
-  (if (some executing? (:add-set op))
+  (if (some executing? (:add-vec op))
     op
-    (update op :add-set
-            (fn [add-set]
-              (conj
-                add-set
-                (symbol (str 'executing- (name (:action op)))))))))
+    (update op :add-vec
+            (fn [:add-vec]
+              (cons
+                (symbol (str 'executing- (name (:action op))))
+                :add-vec)))))
 
 (def converted-school-ops
   (map convert-op school-ops))
@@ -34,9 +34,9 @@ paip.gps
     (when-not (empty? state2)
       (union (filter (complement
                        (fn [x]
-                         (contains? x (:del-set op))))
+                         (contains? x (:del-vec op))))
                      state2)
-             (:add-set op)))))
+             (:add-vec op)))))
 
 (defn achieve
   [state goal goal-stack ops]
