@@ -28,3 +28,13 @@
   (testing "find-all"
     (is (> (count (find-all 'son-at-school test-ops))
            0))))
+
+(def op
+  {:action   'drive-son-to-school
+   :preconds #{'son-at-home 'car-works}
+   :add-set  #{'son-at-school}
+   :del-set  #{'son-at-home}})
+
+(deftest test-appropriate?
+  (testing "appropriate?"
+    (is (= true ((appropriate? 'son-at-school) op)))))
