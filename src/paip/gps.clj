@@ -21,12 +21,23 @@ paip.gps
     op
     (update op :add-set
             (fn [add-set]
-              (cons
-                (list 'executing (:action op))
-                add-set)))))
+              (conj
+                add-set
+                (list 'executing (:action op)))))))
 
 (def converted-school-ops
   (map convert-op school-ops))
+
+(declare apply-op)
+
+(defn achieve
+  [state goal goal-stack ops]
+  (cond (contains? state goal) state
+        (contains? goal-stack goal) '()
+        :else (some
+                (fn (op)
+                  (apply-op state goal op goal-stack))
+                (find-all goal ops))))
 
 (declare achieve-all)
 
