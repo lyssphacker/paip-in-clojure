@@ -1,6 +1,7 @@
 (ns ^{:doc "First version of GPS (General Problem Solver)"}
 paip.gps1
-  (:require [clojure.set :refer :all]))
+  (:require [clojure.set :refer :all]
+            [paip.auxfns :refer (appropriate?)]))
 
 (def school-ops
   #{{:action   'drive-son-to-school
@@ -23,12 +24,6 @@ paip.gps1
      :preconds #{'have-money}
      :add-set  #{'shop-has-money},
      :del-set  #{'have-money}}})
-
-(defn appropriate?
-  "An op is appropriate to a goal if it is in its add list."
-  [goal]
-  (fn [op]
-    (contains? (:add-set op) goal)))
 
 (declare apply-op)
 
