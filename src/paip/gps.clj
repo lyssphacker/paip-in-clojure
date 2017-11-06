@@ -2,9 +2,9 @@
 paip.gps
   (:require [clojure.inspector :refer (atom?)]
             [paip.gps1 :refer (school-ops)]
-            [paip.auxfns :refer (find-all contains-val?)]
+            [paip.auxfns :refer (find-all in?)]
             [clojure.string :refer (starts-with?)]
-            [clojure.set :refer (subset? union)]))
+            [clojure.set :refer (union)]))
 
 (defn executing?
   "Does x's name starts with 'executing'?"
@@ -35,16 +35,21 @@ paip.gps
     (when-not (empty? state2)
       (union (filter (complement
                        (fn [x]
-                         (contains-val? x (:del-vec op))))
+                         (in? x (:del-vec op))))
                      state2)
              (:add-vec op)))))
+
+(defn subset-in?
+  [set1 set2]
+  (and (<= (count set1) (count set2))
+       (every? #(in? set2 %) set1)))
 
 (defn achieve
   "A goal is achieved if it already holds,
   or if there is an appropriate op for it that is applicable."
   [state goal goal-stack ops]
-  (cond (contains-val? state goal) state
-        (contains-val? goal-stack goal) '()
+  (cond (in? state goal) state
+        (in? goal-stack goal) '()
         :else (some
                 (fn [op]
                   (apply-op state goal op goal-stack ops))
@@ -59,7 +64,7 @@ paip.gps
                  (var-set current-state
                           (achieve state g goal-stack ops)))
                goals)
-             (subset? goals @current-state))
+             (subset-in? goals @current-state))
       @current-state)))
 
 (defn gps

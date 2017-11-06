@@ -39,6 +39,6 @@
   (testing "appropriate?"
     (is (= true ((appropriate? 'son-at-school) op)))))
 
-(deftest contains-val?-test
-  (testing "contains-val"
-    (is (= true (contains-val? ['son-at-home 1] 'son-at-home)))))
+(deftest in?-test
+  (testing "in?"
+    (is (= true (in? ['son-at-home 1] 'son-at-home)))))
