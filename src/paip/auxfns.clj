@@ -8,7 +8,7 @@
 
 (defn contains-val?
   [coll val]
-  (when (seq coll)
+  (when (seq? coll)
     (or (= val (first coll))
         (recur (next coll) val))))
 
