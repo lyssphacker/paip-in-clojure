@@ -17,10 +17,10 @@ paip.gps
   (if (some executing? (:add-vec op))
     op
     (update op :add-vec
-            (fn [:add-vec]
+            (fn [add-vec]
               (cons
                 (symbol (str 'executing- (name (:action op))))
-                :add-vec)))))
+                add-vec)))))
 
 (def converted-school-ops
   (map convert-op school-ops))
@@ -35,7 +35,7 @@ paip.gps
     (when-not (empty? state2)
       (union (filter (complement
                        (fn [x]
-                         (contains? x (:del-vec op))))
+                         (contains-val? x (:del-vec op))))
                      state2)
              (:add-vec op)))))
 
@@ -43,8 +43,8 @@ paip.gps
   "A goal is achieved if it already holds,
   or if there is an appropriate op for it that is applicable."
   [state goal goal-stack ops]
-  (cond (contains? state goal) state
-        (contains? goal-stack goal) '()
+  (cond (contains-val? state goal) state
+        (contains-val? goal-stack goal) '()
         :else (some
                 (fn [op]
                   (apply-op state goal op goal-stack ops))
@@ -66,7 +66,7 @@ paip.gps
   "General Problem Solver: from state, achieve goals using ops."
   [state goals ops]
   (filter (complement atom?)
-          (achieve-all (cons '(start) state)
+          (achieve-all (cons 'start state)
                        goals
                        []
                        ops)))
