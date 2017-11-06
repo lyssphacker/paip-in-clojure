@@ -60,7 +60,7 @@ paip.gps
                           (achieve state g goal-stack ops)))
                goals)
              (subset? goals @current-state))
-      current-state)))
+      @current-state)))
 
 (defn gps
   "General Problem Solver: from state, achieve goals using ops."
