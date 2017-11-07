@@ -22,3 +22,7 @@
   [goal ops]
   (filter (appropriate? goal) ops))
 
+(defn show-stacktrace
+  []
+  (clojure.stacktrace/print-stack-trace *e 10))
+
