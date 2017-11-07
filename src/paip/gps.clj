@@ -74,10 +74,11 @@ paip.gps
 (defn gps
   "General Problem Solver: from state, achieve goals using ops."
   [state goals ops]
-  (achieve-all (cons 'start state)
-               goals
-               []
-               ops))
+  (filter executing? (achieve-all
+                       (cons 'start state)
+                       goals
+                       []
+                       ops)))
 
 ;;; testing apply-op
 (def op (convert-op {:action   'drive-son-to-school
