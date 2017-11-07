@@ -4,7 +4,7 @@ paip.gps
             [paip.gps1 :refer (school-ops)]
             [paip.auxfns :refer (find-all in?)]
             [clojure.string :refer (starts-with?)]
-            [clojure.set :refer (subset? union)]))
+            [clojure.set :refer (subset?)]))
 
 (defn executing?
   "Does x's name starts with 'executing'?"
