@@ -41,4 +41,4 @@
 
 (deftest in?-test
   (testing "in?"
-    (is (= true (in? ['son-at-home 1] 'son-at-home)))))
+    (is (= true (in? 'son-at-home ['son-at-home 1])))))
