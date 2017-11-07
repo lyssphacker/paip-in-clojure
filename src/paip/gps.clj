@@ -3,7 +3,7 @@ paip.gps
   (:require [clojure.inspector :refer (atom?)]
             [paip.gps1 :refer (school-ops)]
             [paip.auxfns :refer (find-all in? fmt)]
-            [clojure.string :refer (starts-with?)]
+            [clojure.string :refer (starts-with? split)]
             [clojure.set :refer (subset?)]))
 
 (defn executing?
@@ -137,3 +137,13 @@ paip.gps
 
 (def converted-maze-ops
   (map convert-op maze-ops))
+
+;;; ==============================
+
+(defn destination
+  "Find the Y in 'executing-move-from-X-to-Y"
+  [action]
+  (last
+    (split
+      (name action)
+      #"-")))
