@@ -35,7 +35,7 @@ paip.gps
                      (cons goal goal-stack) ops)]
     (when-not
       (empty? state2)
-      (union
+      (concat
         (filter
           (complement
             (fn [x]
