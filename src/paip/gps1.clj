@@ -7,7 +7,7 @@ paip.gps1
   #{{:action   'drive-son-to-school
      :preconds ['son-at-home 'car-works]
      :add-vec  ['son-at-school]
-     ::del-vec  ['son-at-home]},
+     :del-vec  ['son-at-home]},
     {:action   'shop-installs-battery
      :preconds ['car-needs-battery 'shop-knows-problem 'shop-has-money]
      :add-vec  ['car-works]},
@@ -23,7 +23,7 @@ paip.gps1
     {:action   'give-shop-money
      :preconds ['have-money]
      :add-vec  ['shop-has-money]
-     ::del-vec  ['have-money]}})
+     :del-vec  ['have-money]}})
 
 (declare apply-op)
 
