@@ -79,6 +79,13 @@ paip.gps
                []
                ops))
 
+;;; testing apply-op
+(def op (convert-op {:action   'drive-son-to-school
+                     :preconds ['son-at-home 'car-works]
+                     :add-vec  ['son-at-school]
+                     :del-vec  ['son-at-home]}))
 
+(apply-op ['son-at-home] 'son-at-school op [] converted-school-ops)
+;; => nil
 
 
