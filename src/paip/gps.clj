@@ -143,10 +143,11 @@ paip.gps
 (defn destination
   "Find the Y in 'executing-move-from-X-to-Y"
   [action]
-  (last
-    (split
-      (name action)
-      #"-")))
+  (symbol
+    (last
+      (split
+        (name action)
+        #"-"))))
 
 (defn find-path
   [start end ops]
@@ -160,5 +161,5 @@ paip.gps
             (map destination
                  (filter
                    (fn [x]
-                     (not= 'start x)))
-                 results)))))
+                     (not= 'start x))
+                   results))))))
