@@ -1,7 +1,7 @@
 (ns ^{:doc "First version of GPS (General Problem Solver)"}
 paip.gps1
   (:require [clojure.set :refer :all]
-            [paip.auxfns :refer (appropriate? contains-val?)]))
+            [paip.auxfns :refer (appropriate? in?)]))
 
 (def school-ops
   #{{:action   'drive-son-to-school
@@ -32,7 +32,7 @@ paip.gps1
   or if there is an appropriate op for it that is applicable."
   [state ops]
   (fn [goal]
-    (or (contains-val? state goal)
+    (or (in? state goal)
         (some (apply-op state ops)
               (filter (appropriate? goal) ops)))))
 
