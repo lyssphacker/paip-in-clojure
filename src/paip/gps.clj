@@ -64,7 +64,7 @@ paip.gps
         (every?
           (fn [g]
             (var-set current-state
-                     (achieve state g goal-stack ops)))
+                     (achieve @current-state g goal-stack ops)))
           goals)
         (subset?
           (set goals)
