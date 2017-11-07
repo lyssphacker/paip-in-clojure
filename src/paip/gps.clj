@@ -84,4 +84,33 @@ paip.gps
       []
       ops)))
 
+;;; ==============================
 
+(def banana-ops
+  #{{:action   'climb-on-chair
+     :preconds ['chair-at-middle-room 'at-middle-room 'on-floor]
+     :add-vec  ['at-bananas 'on-chair]
+     :del-vec  ['at-middle-room 'on-floor]},
+    {:action   'push-chair-from-door-to-middle-room
+     :preconds ['chair-at-door 'at-door]
+     :add-vec  ['chair-at-middle-room 'at-middle-room]
+     :del-vec  ['chair-at-door 'at-door]},
+    {:action   'walk-from-door-to-middle-room
+     :preconds ['at-door 'on-floor]
+     :add-vec  ['at-middle-room]
+     :del-vec  ['at-door]},
+    {:action   'grasp-bananas
+     :preconds ['at-bananas 'empty-handed]
+     :add-vec  ['has-bananas]
+     :del-vec  ['empty-handed]},
+    {:action   'drop-ball
+     :preconds ['has-ball]
+     :add-vec  ['empty-handed]
+     :del-vec  ['has-ball]},
+    {:action   'eat-bananas
+     :preconds ['has-bananas]
+     :add-vec  ['empty-handed 'not-hungry]
+     :del-vec  ['has-bananas 'hungry]}})
+
+(def converted-banana-ops
+  (map convert-op banana-ops))
