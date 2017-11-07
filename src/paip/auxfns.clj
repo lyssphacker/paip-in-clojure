@@ -1,5 +1,5 @@
 (ns ^{:doc "Auxiliary functions used by all other programs"}
-  paip.auxfns)
+paip.auxfns)
 
 (defn mappend
   "Append the results of calling fn on each element of list."
@@ -26,3 +26,8 @@
   []
   (clojure.stacktrace/print-stack-trace *e 10))
 
+(defmacro fmt [^String string]
+  (let [-re #"#\{(.*?)\}"
+        fstr (clojure.string/replace string -re "%s")
+        fargs (map #(read-string (second %)) (re-seq -re string))]
+    `(format ~fstr ~@fargs)))
