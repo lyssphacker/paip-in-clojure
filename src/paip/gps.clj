@@ -147,3 +147,18 @@ paip.gps
     (split
       (name action)
       #"-")))
+
+(defn find-path
+  [start end ops]
+  (let [results
+        (gps
+          [(symbol (fmt "at-#{start}"))]
+          [(symbol (fmt "at-#{end}"))]
+          ops)]
+    (when-not (empty? results)
+      (cons start
+            (map destination
+                 (filter
+                   (fn [x]
+                     (not= 'start x)))
+                 results)))))
