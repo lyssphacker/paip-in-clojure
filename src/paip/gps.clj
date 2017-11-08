@@ -174,6 +174,7 @@ paip.gps
     [(symbol (<< "#{a}-on-#{c}")) (symbol (<< "space-on-#{b}"))]))
 
 (defn move-op
+  "Make an operator to move A from B to C."
   [a b c]
   {:action   (symbol (<< "move-#{a}-from-#{b}-to-#{c}"))
    :preconds [(symbol (<< "space-on-#{a}"))
