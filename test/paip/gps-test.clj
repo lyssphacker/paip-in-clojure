@@ -53,3 +53,10 @@
            (gps ['son-at-home]
                 ['son-at-home]
                 converted-school-ops)))))
+
+(deftest gps-test-7
+  (testing "gps-7"
+    (is (= '(start executing-move-a-from-table-to-b)
+           (gps ['a-on-table 'b-on-table 'space-on-a 'space-on-b 'space-on-table]
+                ['a-on-b 'b-on-table]
+                (map convert-op (make-block-ops '(a b))))))))
