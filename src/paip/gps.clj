@@ -195,3 +195,36 @@ paip.gps
           (var-set ops (cons (move-op a 'table b) @ops))
           (var-set ops (cons (move-op a b 'table) @ops)))))
     @ops))
+
+;;; ==============================
+
+(defn achieve-each
+  "Achieve each goal, and make sure they still hold at the end."
+  [state goals goal-stack ops]
+  (with-local-vars [current-state state]
+    (if
+      (and
+        (every?
+          (fn [g]
+            (var-set current-state
+                     (achieve @current-state g goal-stack ops)))
+          goals)
+        (subset?
+          (set goals)
+          (set @current-state)))
+      @current-state)))
+
+(defn orderings
+  [l]
+  (if (> (count l) 1)
+    (list l (reverse l))
+    (list l)))
+
+(defn achieve-all
+  "Achieve each goal, trying several orderings."
+  [state goals goal-stack ops]
+  (some
+    (fn [goals]
+      (achieve-each state goals goal-stack ops))
+    (orderings goals)))
+
