@@ -170,15 +170,15 @@ paip.gps
 (defn move-ons
   [a b c]
   (if (= b 'table)
-    [(symbol (<< "#{a} on #{c}"))]
-    [(symbol (<< "#{a} on #{c}")) (symbol (<< "space on #{b}"))]))
+    [(symbol (<< "#{a}-on-#{c}"))]
+    [(symbol (<< "#{a}-on-#{c}")) (symbol (<< "space-on-#{b}"))]))
 
 (defn move-op
   [a b c]
-  {:action   (symbol (<< "move #{a} from #{b} to #{c}"))
-   :preconds [(symbol (<< "space on #{a}"))
-              (symbol (<< "space on #{c}"))
-              (symbol (<< "#{a} on #{b}"))]
+  {:action   (symbol (<< "move-#{a}-from-#{b}-to-#{c}"))
+   :preconds [(symbol (<< "space-on-#{a}"))
+              (symbol (<< "space-on-#{c}"))
+              (symbol (<< "#{a}-on-#{b}"))]
    :add-vec  (move-ons a b c)
    :del-vec  (move-ons a c b)})
 
