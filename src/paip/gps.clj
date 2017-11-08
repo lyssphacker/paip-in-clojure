@@ -185,13 +185,13 @@ paip.gps
 
 (defn make-block-ops
   [blocks]
-  (with-local-vars [ops []]
+  (with-local-vars [ops #{}]
     (doseq [a blocks]
       (doseq [b blocks]
         (when-not (= a b)
           (doseq [c blocks]
             (when-not (or (= c a) (= c b))
-              (conj ops (move-op a 'table b))))
+              (var-set ops (conj @ops (move-op a b c)))))
           (var-set ops (conj @ops (move-op a 'table b)))
           (var-set ops (conj @ops (move-op a b 'table))))))
     @ops))
