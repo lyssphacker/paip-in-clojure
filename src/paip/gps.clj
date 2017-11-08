@@ -231,6 +231,8 @@ paip.gps
 ;;; ==============================
 
 (defn appropriate-ops
+  "Return a list of appropriate operators,
+  sorted by the number of unfulfilled preconditions."
   [goal state ops]
   (sort-by
     (fn [op]
