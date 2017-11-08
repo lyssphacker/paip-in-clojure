@@ -60,3 +60,10 @@
            (gps ['a-on-table 'b-on-table 'space-on-a 'space-on-b 'space-on-table]
                 ['a-on-b 'b-on-table]
                 (map convert-op (make-block-ops '(a b))))))))
+
+(deftest gps-test-8
+  (testing "gps-8"
+    (is (= '(start executing-move-a-from-b-to-table executing-move-b-from-table-to-a)
+           (gps ['a-on-b 'b-on-table 'space-on-a 'space-on-table]
+                ['b-on-a]
+                (map convert-op (make-block-ops '(a b))))))))
