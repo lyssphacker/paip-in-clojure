@@ -228,3 +228,17 @@ paip.gps
       (achieve-each state goals goal-stack ops))
     (orderings goals)))
 
+;;; ==============================
+
+(defn appropriate-ops
+  [goal state ops]
+  (sort-by
+    (fn [op]
+      (count
+        (filter
+          (fn [precond]
+            (not (in? precond state))
+            (:preconds op)))))
+    #(< %1 %2)
+    (find-all goal ops)))
+
