@@ -237,8 +237,19 @@ paip.gps
       (count
         (filter
           (fn [precond]
-            (not (in? precond state))
-            (:preconds op)))))
+            (not (in? precond state)))
+          (:preconds op))))
     #(< %1 %2)
     (find-all goal ops)))
 
+(defn achieve
+  "A goal is achieved if it already holds,
+  or if there is an appropriate op for it that is applicable."
+  [state goal goal-stack ops]
+  (cond
+    (in? goal state) state
+    (in? goal goal-stack) '()
+    :else (some
+            (fn [op]
+              (apply-op state goal op goal-stack ops))
+            (appropriate-ops goal state ops))))
