@@ -191,6 +191,6 @@ paip.gps
           (doseq [c blocks]
             (when-not (or (= c a) (= c b))
               (conj ops (move-op a 'table b))))
-          (conj ops (move-op a 'table b))
-          (conj ops (move-op a b 'table)))))
-    ops))
+          (var-set ops (conj @ops (move-op a 'table b)))
+          (var-set ops (conj @ops (move-op a b 'table))))))
+    @ops))
