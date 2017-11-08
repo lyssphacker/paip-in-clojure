@@ -2,7 +2,7 @@
 paip.gps
   (:require [clojure.inspector :refer (atom?)]
             [paip.gps1 :refer (school-ops)]
-            [paip.auxfns :refer (find-all in? fmt)]
+            [paip.auxfns :refer (find-all in? <<)]
             [clojure.string :refer (starts-with? split)]
             [clojure.set :refer (subset?)]))
 
@@ -119,10 +119,10 @@ paip.gps
 
 (defn make-maze-op
   [here there]
-  {:action   (symbol (fmt "move-from-#{here}-to-#{there}"))
-   :preconds [(symbol (fmt "at-#{here}"))]
-   :add-vec  [(symbol (fmt "at-#{there}"))]
-   :del-vec  [(symbol (fmt "at-#{here}"))]})
+  {:action   (symbol (<< "move-from-#{here}-to-#{there}"))
+   :preconds [(symbol (<< "at-#{here}"))]
+   :add-vec  [(symbol (<< "at-#{there}"))]
+   :del-vec  [(symbol (<< "at-#{here}"))]})
 
 (defn make-maze-ops
   [pair]
@@ -154,8 +154,8 @@ paip.gps
   [start end ops]
   (let [results
         (gps
-          [(symbol (fmt "at-#{start}"))]
-          [(symbol (fmt "at-#{end}"))]
+          [(symbol (<< "at-#{start}"))]
+          [(symbol (<< "at-#{end}"))]
           ops)]
     (when-not (empty? results)
       (cons start
@@ -164,3 +164,33 @@ paip.gps
                    (fn [x]
                      (not= 'start x))
                    results))))))
+
+;;; ==============================
+
+(defn move-ons
+  [a b c]
+  (if (= b 'table)
+    [(symbol (<< "#{a} on #{c}"))]
+    [(symbol (<< "#{a} on #{c}")) (symbol (<< "space on #{b}"))]))
+
+(defn move-op
+  [a b c]
+  {:action   (symbol (<< "move #{a} from #{b} to #{c}"))
+   :preconds [(symbol (<< "space on #{a}"))
+              (symbol (<< "space on #{c}"))
+              (symbol (<< "#{a} on #{b}"))]
+   :add-vec  (move-ons a b c)
+   :del-vec  (move-ons a c b)})
+
+(defn make-block-ops
+  [blocks]
+  (with-local-vars [ops []]
+    (doseq [a blocks]
+      (doseq [b blocks]
+        (when-not (= a b)
+          (doseq [c blocks]
+            (when-not (or (= c a) (= c b))
+              (conj ops (move-op a 'table b))))
+          (conj ops (move-op a 'table b))
+          (conj ops (move-op a b 'table)))))
+    ops))
