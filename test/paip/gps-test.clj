@@ -54,30 +54,35 @@
                 ['son-at-home]
                 converted-school-ops)))))
 
+(def ab-block-ops (map convert-op (make-block-ops '(a b))))
+
 (deftest gps-test-7
   (testing "gps-7"
     (is (= '(start executing-move-a-from-table-to-b)
            (gps ['a-on-table 'b-on-table 'space-on-a 'space-on-b 'space-on-table]
                 ['a-on-b 'b-on-table]
-                (map convert-op (make-block-ops '(a b))))))))
+                ab-block-ops)))))
 
 (deftest gps-test-8
   (testing "gps-8"
     (is (= '(start executing-move-a-from-b-to-table executing-move-b-from-table-to-a)
            (gps ['a-on-b 'b-on-table 'space-on-a 'space-on-table]
                 ['b-on-a]
-                (map convert-op (make-block-ops '(a b))))))))
+                ab-block-ops)))))
+
+(def abc-block-ops (map convert-op (make-block-ops '(a b c))))
 
 (deftest gps-test-9
   (testing "gps-9"
     (is (= '(start executing-move-a-from-b-to-table executing-move-b-from-c-to-a executing-move-c-from-table-to-b)
            (gps ['a-on-b 'b-on-c 'c-on-table 'space-on-a 'space-on-table]
                 ['b-on-a 'c-on-b]
-                (map convert-op (make-block-ops '(a b c))))))))
+                abc-block-ops)))))
 
 (deftest gps-test-10
   (testing "gps-10"
     (is (= '(start executing-move-a-from-b-to-table executing-move-b-from-c-to-a executing-move-c-from-table-to-b)
            (gps ['a-on-b 'b-on-c 'c-on-table 'space-on-a 'space-on-table]
                 ['c-on-b 'b-on-a]
-                (map convert-op (make-block-ops '(a b c))))))))
+                abc-block-ops)))))
+
