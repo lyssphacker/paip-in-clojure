@@ -26,7 +26,7 @@ paip.auxfns)
   []
   (clojure.stacktrace/print-stack-trace *e 10))
 
-(defmacro fmt [^String string]
+(defmacro << [^String string]
   (let [-re #"#\{(.*?)\}"
         fstr (clojure.string/replace string -re "%s")
         fargs (map #(read-string (second %)) (re-seq -re string))]
