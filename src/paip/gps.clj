@@ -150,6 +150,7 @@ paip.gps
         #"-"))))
 
 (defn find-path
+  "Search a maze for a path from start to end."
   [start end ops]
   (let [results
         (gps
