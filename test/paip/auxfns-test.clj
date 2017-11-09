@@ -42,3 +42,8 @@
 (deftest in?-test
   (testing "in?"
     (is (= true (in? 'son-at-home ['son-at-home 1])))))
+
+(deftest pat-match-test
+  (testing "pat-match"
+    (is (= {:true :true, '?X 'vacation}
+           (pat-match '(i need a ?X) '(i need a vacation))))))
