@@ -1,7 +1,13 @@
 (ns ^{:doc "Basic version of the Eliza program"}
   paip.eliza1
   (:require [clojure.inspector :refer (atom?)]
+            [clojure.string :refer (starts-with?)]
             [paip.auxfns :refer (match-variable no-bindings fail variable? cons?)]))
+
+(defn segment-pattern?
+  [pattern]
+  (and (cons? pattern)
+       (starts-with? (first pattern) "?*")))
 
 (defn pat-match
   ([pattern input]
