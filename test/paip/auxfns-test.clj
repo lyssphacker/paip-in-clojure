@@ -53,3 +53,7 @@
     (is (= nil
            (pat-match '(i need a ?X) '(i really need a vacation))))))
 
+(deftest pat-match-test-3
+  (testing "pat-match-3"
+    (is (= {'?X '(2 + 2)}
+           (pat-match '(?X is ?X) '((2 + 2) is (2 + 2)))))))
