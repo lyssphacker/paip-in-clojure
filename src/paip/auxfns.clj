@@ -71,7 +71,8 @@ paip.auxfns
          (= pattern input) bindings
          (and
            (cons? pattern)
-           (cons? input)) (pat-match (rest pattern) (rest input)
+           (cons? input)) (pat-match (rest pattern)
+                                     (rest input)
                                      (pat-match (first pattern)
                                                 (first input)
                                                 bindings))
