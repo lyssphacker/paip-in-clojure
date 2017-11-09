@@ -56,10 +56,10 @@ paip.auxfns
     (assoc bindings var val)))
 
 (defn match-variable
-  [var input bindings]
+  [variable input bindings]
   (cond
-    (not (contains? bindings var)) (extend-bindings var input bindings)
-    (= input (var binding)) bindings
+    (not (contains? bindings variable)) (extend-bindings variable input bindings)
+    (= input (variable bindings)) bindings
     :else fail))
 
 (defn pat-match
