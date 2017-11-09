@@ -1,5 +1,6 @@
 (ns ^{:doc "Auxiliary functions used by all other programs"}
-paip.auxfns)
+paip.auxfns
+  (:require [clojure.inspector :refer (atom?)]))
 
 (defn mappend
   "Append the results of calling fn on each element of list."
@@ -32,6 +33,10 @@ paip.auxfns)
         fargs (map #(read-string (second %)) (re-seq -re string))]
     `(format ~fstr ~@fargs)))
 
+(defn cons?
+  [x]
+  (not (atom? x)))
+
 ;;;; PATTERN MATCHING FACILITY
 
 (defn variable?
@@ -50,3 +55,18 @@ paip.auxfns)
     (not (contains? bindings var)) (assoc bindings var input)
     (= input (var binding)) bindings
     :else fail))
+
+(defn pat-match
+  ([pattern input]
+   (pat-match pattern input no-bindings))
+  ([pattern input bindings]
+   (cond (= bindings fail) fail
+         (variable? pattern) (match-variable pattern input bindings)
+         (= pattern input) bindings
+         (and
+           (cons? pattern)
+           (cons? input)) (pat-match (rest pattern) (rest input)
+                                     (pat-match (first pattern)
+                                                (first input)
+                                                bindings))
+         :else fail)))
