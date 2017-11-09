@@ -49,10 +49,16 @@ paip.auxfns
 
 (def no-bindings {:true :true})
 
+(defn extend-bindings
+  [var val bindings]
+  (if (= bindings no-bindings)
+    (assoc {} var val)
+    (assoc bindings var val)))
+
 (defn match-variable
   [var input bindings]
   (cond
-    (not (contains? bindings var)) (assoc bindings var input)
+    (not (contains? bindings var)) (extend-bindings var input bindings)
     (= input (var binding)) bindings
     :else fail))
 
