@@ -31,3 +31,22 @@ paip.auxfns)
         fstr (clojure.string/replace string -re "%s")
         fargs (map #(read-string (second %)) (re-seq -re string))]
     `(format ~fstr ~@fargs)))
+
+;;;; PATTERN MATCHING FACILITY
+
+(defn variable?
+  "Is x a variable (a symbol beginning with `?')?"
+  [x]
+  (and (symbol? x)
+       (= (get (name x) 0) \?)))
+
+(def fail nil)
+
+(def no-bindings {:true :true})
+
+(defn match-variable
+  [var input bindings]
+  (cond
+    (not (contains? bindings var)) (assoc bindings var input)
+    (= input (var binding)) bindings
+    :else fail))
