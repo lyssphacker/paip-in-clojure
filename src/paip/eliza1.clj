@@ -25,12 +25,18 @@ paip.eliza1
        (let [pos (position input (first pat) start)]
          (if (= -1 pos)
            fail
-           (let [b2 (pat-match pat (drop pos input) bindings)]
+           (let [b2 (pat-match
+                      pat
+                      (drop pos input)
+                      (match-variable
+                        var
+                        (take pos input)
+                        bindings))]
              ;; If this match failed, try another longer one
              ;; If it worked, check that the variables match
              (if (= b2 fail)
                (segment-match pattern input bindings (+ pos 1))
-               (match-variable var (take pos input) b2)))))))))
+               b2))))))))
 
 (defn pat-match
   ([pattern input]
