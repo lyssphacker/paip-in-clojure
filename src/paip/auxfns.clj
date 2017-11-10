@@ -77,3 +77,23 @@ paip.auxfns
                                                 (first input)
                                                 bindings))
          :else fail)))
+
+;;; ==============================
+
+(defn position
+  "Finds the index of item in a collection.
+  If start is specified, it finds index of item
+  in a sub-collection starting from start."
+  ([coll item]
+   (position coll item 0))
+  ([coll item start]
+   (let [subcoll (drop start coll)
+         index (.indexOf subcoll item)]
+     (if (= index -1)
+       index
+       (+ start index)))))
+
+(defn starts-with
+  "Is x a list whose first element is x?"
+  [lst x]
+  (and (cons? lst) (= (first lst) x)))
