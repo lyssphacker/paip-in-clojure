@@ -2,7 +2,9 @@
 paip.eliza1
   (:require [clojure.inspector :refer (atom?)]
             [paip.auxfns :refer (match-variable no-bindings fail variable?
-                                                cons? position starts-with)]))
+                                                cons? position starts-with
+                                                random-elt)]
+            [clojure.walk :refer (postwalk-replace)]))
 
 (defn segment-pattern?
   "Is this a segment matching pattern: ((?* var) . pat)"
@@ -85,3 +87,27 @@ paip.eliza1
    ['(Do you often feel ?y ?)],
    '((?* ?x) I felt (?* ?y))
    ['(What other feelings do you have?)]})
+
+(defn switch-viewpoint
+  [words]
+  (postwalk-replace
+    {'I 'you, 'you 'I, 'me 'you, 'am 'are}
+    words))
+
+(defn use-eliza-rules
+  ([input]
+   (use-eliza-rules input eliza-rules))
+  ([input rules]
+   (some
+     (fn
+       [rule]
+       (let [result
+             (pat-match
+               (rule-pattern rule)
+               input)]
+         (if
+           (not= result fail)
+           (postwalk-replace
+             (switch-viewpoint result)
+             (random-elt (rule-responses rule))))))
+     rules)))
