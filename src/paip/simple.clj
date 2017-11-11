@@ -1,10 +1,6 @@
 (ns paip.simple
   (:require [paip.auxfns :refer :all]))
 
-(defn random-elt [choices]
-  "Choose an element from a list at random."
-  (nth choices (rand-int (count choices))))
-
 (defn one-of [set]
   "Pick one element of set, and make a list of it"
   (list (random-elt set)))
