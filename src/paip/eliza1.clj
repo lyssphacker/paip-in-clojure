@@ -4,7 +4,8 @@ paip.eliza1
             [paip.auxfns :refer (match-variable no-bindings fail variable?
                                                 cons? position starts-with
                                                 random-elt)]
-            [clojure.walk :refer (postwalk-replace)]))
+            [clojure.walk :refer (postwalk-replace)]
+            [clojure.pprint :refer (pprint)]))
 
 (defn segment-pattern?
   "Is this a segment matching pattern: ((?* var) . pat)"
@@ -111,3 +112,16 @@ paip.eliza1
              (switch-viewpoint result)
              (random-elt (rule-responses rule))))))
      rules)))
+
+(defn eliza
+  []
+  (loop []
+    (println 'eliza>)
+    (let [input (read)]
+      (if (= input 'quit)
+        'done
+        (do
+          (pprint
+            (flatten
+              (use-eliza-rules input)))
+          (recur))))))
