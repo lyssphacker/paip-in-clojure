@@ -16,6 +16,7 @@ paip.eliza1
 (declare pat-match)
 
 (defn segment-match
+  "Match the segment pattern ((?* var) . pat) against input."
   ([pattern input bindings]
    (segment-match pattern input bindings 0))
   ([pattern input bindings start]
@@ -42,6 +43,7 @@ paip.eliza1
                b2))))))))
 
 (defn pat-match
+  "Match pattern against input in the context of the bindings"
   ([pattern input]
    (pat-match pattern input no-bindings))
   ([pattern input bindings]
