@@ -75,5 +75,5 @@ paip.eliza1
     '(Why do you tell me you were ?y now?)],
    '((?* ?x) I feel (?* ?y)),
    ['(Do you often feel ?y ?)],
-   '((?* ?x) I felt (?* ?y)),
+   '((?* ?x) I felt (?* ?y))
    ['(What other feelings do you have?)]})
