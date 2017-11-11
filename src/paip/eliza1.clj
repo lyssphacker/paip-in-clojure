@@ -90,12 +90,14 @@ paip.eliza1
    ['(What other feelings do you have?)]})
 
 (defn switch-viewpoint
+  "Change I to you and vice versa, and so on."
   [words]
   (postwalk-replace
     {'I 'you, 'you 'I, 'me 'you, 'am 'are}
     words))
 
 (defn use-eliza-rules
+  "Find some rule with which to transform the input."
   ([input]
    (use-eliza-rules input eliza-rules))
   ([input rules]
@@ -114,6 +116,7 @@ paip.eliza1
      rules)))
 
 (defn eliza
+  "Respond to user input using pattern matching rules."
   []
   (loop []
     (println 'eliza>)
