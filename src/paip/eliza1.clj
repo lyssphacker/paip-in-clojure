@@ -57,6 +57,14 @@ paip.eliza1
 
 ;;; ==============================
 
+(defn rule-pattern
+  [rule]
+  (get rule 0))
+
+(defn rule-responses
+  [rule]
+  (get rule 1))
+
 (def eliza-rules
   {'((?* ?x) hello (?* ?y))
    ['(How do you do. Please state your problem.)],
