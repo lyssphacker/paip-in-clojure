@@ -40,6 +40,7 @@ paip.patmatch
        (not (nil? (match-fn (first pattern))))))
 
 (defn segment-matcher
+  "Call the right function for this kind of segment pattern."
   [pattern input bindings]
   ((match-fn (first (first pattern)))
     pattern input bindings))
@@ -47,6 +48,8 @@ paip.patmatch
 (declare pat-match)
 
 (defn match-is
+  "Succeed and bind var if the input satisfies pred,
+  where var-and-pred is the list (var pred)."
   [var-and-pred input bindings]
   (let [var (first var-and-pred)
         pred (second var-and-pred)
@@ -57,6 +60,7 @@ paip.patmatch
       new-bindings)))
 
 (defn match-and
+  "Succeed if all the patterns match the input."
   [patterns input bindings]
   (cond (= bindings fail) fail
         (empty? patterns) bindings
@@ -67,6 +71,7 @@ paip.patmatch
                                     bindings))))
 
 (defn match-or
+  "Succeed if any one of the patterns match the input."
   [patterns input bindings]
   (if (empty? patterns)
     fail
@@ -81,6 +86,8 @@ paip.patmatch
         new-bindings))))
 
 (defn match-not
+  "Succeed if none of the patterns match the input.
+  This will never bind any variables."
   [patterns input bindings]
   (if (match-or patterns input bindings)
     fail
@@ -89,6 +96,7 @@ paip.patmatch
 (declare single-matcher)
 
 (defn pat-match
+  "Match pattern against input in the context of the bindings"
   ([pattern input]
    (pat-match pattern input no-bindings))
   ([pattern input bindings]
@@ -107,6 +115,9 @@ paip.patmatch
          :else fail)))
 
 (defn first-match-post
+  "Find the first position that pat1 could possibly match input,
+  starting at position start.  If pat1 is non-constant, then just
+  return start."
   [pat1 input start]
   (cond (and (atom? pat1) (not (variable? pat1)))
         (position input pat1 start)
