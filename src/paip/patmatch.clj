@@ -150,3 +150,8 @@ paip.patmatch
              (if (= b2 fail)
                (segment-match pattern input bindings (+ pos 1))
                b2))))))))
+
+(defn segment-match+
+  "Match one or more elements of input."
+  [pattern input bindings]
+  (segment-match pattern input bindings 1))
