@@ -29,7 +29,7 @@ paip.auxfns
 
 (defn show-stacktrace
   []
-  (clojure.stacktrace/print-stack-trace *e 10))
+  (clojure.stacktrace/print-stack-trace *e 30))
 
 (defmacro << [^String string]
   (let [-re #"#\{(.*?)\}"
