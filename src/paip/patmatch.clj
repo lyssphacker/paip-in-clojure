@@ -1,11 +1,9 @@
 (ns ^{:doc "Pattern matcher from section 6.2"}
 paip.patmatch
   (:require [paip.auxfns :refer (variable? fail no-bindings
-                                           match-variable cons?)]))
-(declare segment-match)
-(defn segment-match
-  [pattern input bindings]
-  input)
+                                           match-variable cons?
+                                           position)]
+            [clojure.inspector :refer (atom?)]))
 
 (def pattern-fn-map
   {'?is  'match-is,
@@ -23,7 +21,9 @@ paip.patmatch
   [x]
   (when
     (symbol? x)
-    (resolve (x pattern-fn-map))))
+    (let [func (x pattern-fn-map)]
+      (if (not (nil? func))
+        (resolve func)))))
 
 (defn segment-pattern?
   "Is this a segment-matching pattern like ((?* var) . pat)?"
@@ -105,3 +105,37 @@ paip.patmatch
                                                 (first input)
                                                 bindings))
          :else fail)))
+
+(defn first-match-post
+  [pat1 input start]
+  (cond (and (atom? pat1) (not (variable? pat1)))
+        (position pat1 input start)
+        (<= start (count input)) start
+        :else nil))
+
+(defn segment-match
+  "Match the segment pattern ((?* var) . pat) against input."
+  ([pattern input bindings]
+   (segment-match pattern input bindings 0))
+  ([pattern input bindings start]
+   (let [var (second (first pattern))
+         pat (rest pattern)]
+     (if (empty? pat)
+       (match-variable var input bindings)
+       ;; We assume that pat starts with a constant
+       ;; In other words, a pattern can't have 2 consecutive vars
+       (let [pos (first-match-post (first pat) input start)]
+         (if (nil? pos)
+           fail
+           (let [b2 (pat-match
+                      pat
+                      (drop pos input)
+                      (match-variable
+                        var
+                        (take pos input)
+                        bindings))]
+             ;; If this match failed, try another longer one
+             ;; If it worked, check that the variables match
+             (if (= b2 fail)
+               (segment-match pattern input bindings (+ pos 1))
+               b2))))))))
