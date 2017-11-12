@@ -44,6 +44,18 @@ paip.patmatch
   ((match-fn (first (first pattern)))
     pattern input bindings))
 
+(declare pat-match)
+
+(defn match-is
+  [var-and-pred input bindings]
+  (let [var (first var-and-pred)
+        pred (second var-and-pred)
+        new-bindings (pat-match var input bindings)]
+    (if (or (= new-bindings fail)
+            (not ((resolve pred) input)))
+      fail
+      new-bindings)))
+
 (declare single-matcher)
 
 (defn pat-match
