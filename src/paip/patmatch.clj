@@ -109,7 +109,7 @@ paip.patmatch
 (defn first-match-post
   [pat1 input start]
   (cond (and (atom? pat1) (not (variable? pat1)))
-        (position pat1 input start)
+        (position input pat1 start)
         (<= start (count input)) start
         :else nil))
 
