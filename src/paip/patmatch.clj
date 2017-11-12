@@ -56,6 +56,36 @@ paip.patmatch
       fail
       new-bindings)))
 
+(defn match-and
+  [patterns input bindings]
+  (cond (= bindings fail) fail
+        (empty? patterns) bindings
+        :else (match-and (rest patterns)
+                         input
+                         (pat-match (first patterns)
+                                    input
+                                    bindings))))
+
+(defn match-or
+  [patterns input bindings]
+  (if (empty? patterns)
+    fail
+    (let [new-bindings (pat-match
+                         (first patterns)
+                         input
+                         bindings)]
+      (if (= new-bindings fail)
+        (match-or (rest patterns)
+                  input
+                  bindings)
+        new-bindings))))
+
+(defn match-not
+  [patterns input bindings]
+  (if (match-or patterns input bindings)
+    fail
+    bindings))
+
 (declare single-matcher)
 
 (defn pat-match
