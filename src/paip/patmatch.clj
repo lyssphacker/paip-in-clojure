@@ -3,7 +3,8 @@ paip.patmatch
   (:require [paip.auxfns :refer (variable? fail no-bindings
                                            match-variable cons?
                                            position)]
-            [clojure.inspector :refer (atom?)]))
+            [clojure.inspector :refer (atom?)]
+            [clojure.walk :refer (postwalk-replace)]))
 
 (def pattern-fn-map
   {'?is  'match-is,
@@ -163,3 +164,12 @@ paip.patmatch
         pat (rest pattern)]
     (or (pat-match (cons var pat) input bindings)
         (pat-match pat input bindings))))
+
+(defn match-if
+  [pattern input bindings]
+  (and
+    (eval
+      (clojure.walk/postwalk-replace
+        bindings
+        (second (first pattern))))
+    (pat-match (rest pattern) input bindings)))
