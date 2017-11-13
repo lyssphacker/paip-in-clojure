@@ -155,3 +155,11 @@ paip.patmatch
   "Match one or more elements of input."
   [pattern input bindings]
   (segment-match pattern input bindings 1))
+
+(defn segment-match?
+  "Match zero or one element of input."
+  [pattern input bindings]
+  (let [var (second (first pattern))
+        pat (rest pattern)]
+    (or (pat-match (cons var pat) input bindings)
+        (pat-match pat input bindings))))
