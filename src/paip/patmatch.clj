@@ -40,12 +40,16 @@ paip.patmatch
        (not (nil? (match-fn (first pattern))))))
 
 (defn segment-matcher
-  "Call the right function for this kind of segment pattern."
+  "Call the right function for segment pattern."
   [pattern input bindings]
   ((match-fn (first (first pattern)))
     pattern input bindings))
 
-(declare single-matcher)
+(defn single-matcher
+  "Call the right function for single pattern."
+  [pattern input bindings]
+  ((match-fn (first pattern))
+    pattern input bindings))
 
 (defn pat-match
   "Match pattern against input in the context of the bindings"
