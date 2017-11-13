@@ -15,3 +15,10 @@
            (pat-match
              '(?x ?op ?y is ?z (?if (= (?op ?x ?y) ?z)))
              '(3 + 4 is 7))))))
+
+(deftest pat-match-test-3
+  (testing "pat-match-3"
+    (is (= nil
+           (pat-match
+             '(?x ?op ?y (?if (?op ?x ?y)))
+             '(3 > 4))))))

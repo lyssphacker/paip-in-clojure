@@ -41,12 +41,35 @@ paip.patmatch
        (not (nil? (match-fn (first pattern))))))
 
 (defn segment-matcher
-  "Call the right function for this kind of segment pattern."
+  "Call the right function for segment pattern."
   [pattern input bindings]
   ((match-fn (first (first pattern)))
     pattern input bindings))
 
-(declare pat-match)
+(defn single-matcher
+  "Call the right function for single pattern."
+  [pattern input bindings]
+  ((match-fn (first pattern))
+    pattern input bindings))
+
+(defn pat-match
+  "Match pattern against input in the context of the bindings"
+  ([pattern input]
+   (pat-match pattern input no-bindings))
+  ([pattern input bindings]
+   (cond (= bindings fail) fail
+         (variable? pattern) (match-variable pattern input bindings)
+         (= pattern input) bindings
+         (segment-pattern? pattern) (segment-matcher pattern input bindings)
+         (single-pattern? pattern) (single-matcher pattern input bindings)
+         (and
+           (cons? pattern)
+           (cons? input)) (pat-match (rest pattern)
+                                     (rest input)
+                                     (pat-match (first pattern)
+                                                (first input)
+                                                bindings))
+         :else fail)))
 
 (defn match-is
   "Succeed and bind var if the input satisfies pred,
@@ -93,27 +116,6 @@ paip.patmatch
   (if (match-or patterns input bindings)
     fail
     bindings))
-
-(declare single-matcher)
-
-(defn pat-match
-  "Match pattern against input in the context of the bindings"
-  ([pattern input]
-   (pat-match pattern input no-bindings))
-  ([pattern input bindings]
-   (cond (= bindings fail) fail
-         (variable? pattern) (match-variable pattern input bindings)
-         (= pattern input) bindings
-         (segment-pattern? pattern) (segment-matcher pattern input bindings)
-         (single-pattern? pattern) (single-matcher pattern input bindings)
-         (and
-           (cons? pattern)
-           (cons? input)) (pat-match (rest pattern)
-                                     (rest input)
-                                     (pat-match (first pattern)
-                                                (first input)
-                                                bindings))
-         :else fail)))
 
 (defn first-match-post
   "Find the first position that pat1 could possibly match input,
