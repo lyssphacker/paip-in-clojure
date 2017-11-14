@@ -32,7 +32,7 @@ paip.gps1
   or if there is an appropriate op for it that is applicable."
   [state ops]
   (fn [goal]
-    (or (in? state goal)
+    (or (in? goal state)
         (some (apply-op state ops)
               (filter (appropriate? goal) ops)))))
 
@@ -43,7 +43,7 @@ paip.gps1
     (with-local-vars [local-state state]
       (when (every? (achieve state ops) (:preconds op))
         (println (list 'executing (:action op)))
-        (var-set local-state (difference @local-state (:del-vec op)))
+        (var-set local-state (difference (set @local-state) (set (:del-vec op))))
         (var-set local-state (union @local-state (:add-vec op)))
         local-state))))
 
