@@ -41,6 +41,10 @@ paip.auxfns
   [x]
   (not (atom? x)))
 
+(defn funcall [f & args]
+  "Applies functionf to arguments args."
+  (apply f args))
+
 ;;;; PATTERN MATCHING FACILITY
 
 (defn variable?
