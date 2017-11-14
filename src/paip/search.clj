@@ -35,3 +35,12 @@ paip.search
   "Search old states first until goal is reached."
   [start goal? successors]
   (tree-search (vector start) goal? successors prepend))
+
+(defn finite-binary-tree
+  "Return a successor function that generates a binary tree"
+  [n]
+  (fn [x]
+    (filter
+      (fn [child]
+        (<= child n))
+      (binary-tree x))))
