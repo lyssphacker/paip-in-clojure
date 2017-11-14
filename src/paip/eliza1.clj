@@ -5,7 +5,8 @@ paip.eliza1
                                                 cons? position starts-with
                                                 random-elt)]
             [clojure.walk :refer (postwalk-replace)]
-            [clojure.pprint :refer (pprint)]))
+            [clojure.pprint :refer (pprint)]
+            [paip.patmatch :refer (rule-based-translator)]))
 
 (defn segment-pattern?
   "Is this a segment matching pattern: ((?* var) . pat)"
@@ -116,6 +117,20 @@ paip.eliza1
              (switch-viewpoint result)
              (random-elt (rule-responses rule))))))
      rules)))
+
+(defn use-eliza-rules
+  "Find some rule with which to transform the input."
+  ([input]
+   (use-eliza-rules input eliza-rules))
+  ([input rules]
+   (rule-based-translator
+     input
+     eliza-rules
+     (fn
+       [bindings responses]
+       (postwalk-replace
+         (switch-viewpoint bindings)
+         (random-elt responses))))))
 
 (defn eliza
   "Respond to user input using pattern matching rules."
