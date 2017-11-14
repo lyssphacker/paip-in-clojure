@@ -32,5 +32,6 @@ paip.search
   (concat y x))
 
 (defn breath-first-search
+  "Search old states first until goal is reached."
   [start goal? successors]
   (tree-search (vector start) goal? successors prepend))
