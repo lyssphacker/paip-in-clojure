@@ -2,7 +2,7 @@
 paip.patmatch
   (:require [paip.auxfns :refer (variable? fail no-bindings
                                            match-variable cons?
-                                           position)]
+                                           position funcall)]
             [clojure.inspector :refer (atom?)]
             [clojure.walk :refer (postwalk-replace)]))
 
@@ -201,3 +201,21 @@ paip.patmatch
         :else (cons
                 (expand-pat-match-abbrev (first pat))
                 (expand-pat-match-abbrev (rest pat)))))
+
+(defn rule-based-translator
+  ([input rules action]
+   (rule-based-translator input rules pat-match first rest action))
+  ([input rules matcher rule-if rule-then action]
+   (some
+     (fn
+       [rule]
+       (let [result (funcall
+                      matcher
+                      (funcall rule-if rule)
+                      input)]
+         (if (not= result fail)
+           (funcall
+             action
+             result
+             (funcall rule-then rule)))))
+     rules)))
