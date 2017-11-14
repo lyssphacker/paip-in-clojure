@@ -1,5 +1,5 @@
 (ns ^{:doc "Search routines from section 6.4"}
-  paip.search
+paip.search
   (:require [paip.auxfns :refer (funcall fail)]))
 
 (defn tree-search
@@ -11,7 +11,18 @@
     (funcall goal? (first states)) (first states)
     :else (tree-search
             (funcall combiner
-                     (funcall successors (first states)
-                              (rest states)))
+                     (funcall successors (first states))
+                     (rest states))
             goal? successors combiner)))
+
+(defn depth-first-search
+  "Search new states first until goal is reached."
+  [start goal? successors]
+  (tree-search (vector start) goal? successors concat))
+
+(defn binary-tree
+  [x]
+  (vector (* 2 x) (+ 1 (* 2 x))))
+
+(defn is [value] (fn [x] (= x value)))
 
