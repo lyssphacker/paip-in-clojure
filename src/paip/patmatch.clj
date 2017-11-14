@@ -180,7 +180,7 @@ paip.patmatch
       (pat-match (rest pattern) input bindings))))
 
 (def pat-match-abbrev-map
-  "Map of pattern matching abbreviations to their expansion."
+  "Map of pattern matching abbreviations to their expansions."
   {'?x* '(?* ?x),
    '?y* '(?* ?y)})
 
