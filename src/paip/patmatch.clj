@@ -169,9 +169,10 @@ paip.patmatch
 
 (defn match-if
   [pattern input bindings]
-  (and
-    (eval
-      (clojure.walk/postwalk-replace
-        bindings
-        (second (first pattern))))
-    (pat-match (rest pattern) input bindings)))
+  (let [result (eval
+                 (clojure.walk/postwalk-replace
+                   bindings
+                   (second (first pattern))))]
+    (if (= result false)
+      nil
+      (pat-match (rest pattern) input bindings))))
