@@ -1,6 +1,7 @@
 (ns ^{:doc "Search routines from section 6.4"}
 paip.search
-  (:require [paip.auxfns :refer (funcall fail)]))
+  (:require [paip.auxfns :refer (funcall fail)]
+            [clojure.math.numeric-tower :as math :refer (abs)]))
 
 (defn tree-search
   "Find a state that satisfies goal-p.  Start with states,
@@ -44,3 +45,25 @@ paip.search
       (fn [child]
         (<= child n))
       (binary-tree x))))
+
+(defn diff
+  "Return the function that finds the difference from num."
+  [num]
+  (fn [x] (math/abs (- x num))))
+
+(defn sorter
+  "Return a combiner function that sorts according to cost-fn."
+  [cost-fn]
+  (fn [new old]
+    (sort
+      #(< (cost-fn %1) (cost-fn %2))
+      (concat new old))))
+
+(defn best-first-search
+  "Search lowest cost states first until goal is reached."
+  [start goal? successors cost-fn]
+  (tree-search
+    (vector start)
+    goal?
+    successors
+    (sorter cost-fn)))
