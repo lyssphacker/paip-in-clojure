@@ -176,3 +176,24 @@ paip.patmatch
     (if (= result false)
       nil
       (pat-match (rest pattern) input bindings))))
+
+(def pat-match-abbrev-map
+  "Map of pattern matching abbreviations to their expansion."
+  {'?x* '(?* ?x),
+   '?y* '(?* ?y)})
+
+(defn pat-match-abbrev
+  [sym]
+  (let [expansion (sym pat-match-abbrev-map)]
+    (if (nil? expansion)
+      sym
+      expansion)))
+
+(defn expand-pat-match-abbrev
+  [pat]
+  (cond (symbol? pat) (pat-match-abbrev pat)
+        (atom? pat) pat
+        (empty? pat) '()
+        :else (cons
+                (expand-pat-match-abbrev (first pat))
+                (expand-pat-match-abbrev (rest pat)))))
