@@ -67,3 +67,12 @@ paip.search
     goal?
     successors
     (sorter cost-fn)))
+
+(defn price-is-right
+  "Return a function that measures the difference from price,
+  but gives a big penalty for going over price."
+  [price]
+  (fn [x]
+    (if (> x price)
+      Integer/MAX_VALUE
+      (- price x))))
