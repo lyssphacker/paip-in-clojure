@@ -168,6 +168,8 @@ paip.patmatch
         (pat-match pat input bindings))))
 
 (defn match-if
+  "Test an arbitrary expression involving variables.
+  The pattern looks like ((?if code) . rest)."
   [pattern input bindings]
   (let [result (eval
                  (clojure.walk/postwalk-replace
@@ -183,6 +185,7 @@ paip.patmatch
    '?y* '(?* ?y)})
 
 (defn pat-match-abbrev
+  "Lookup symbol's abbreviation in a map."
   [sym]
   (let [expansion (sym pat-match-abbrev-map)]
     (if (nil? expansion)
@@ -190,6 +193,7 @@ paip.patmatch
       expansion)))
 
 (defn expand-pat-match-abbrev
+  "Expand out all pattern matching abbreviations in pat."
   [pat]
   (cond (symbol? pat) (pat-match-abbrev pat)
         (atom? pat) pat
