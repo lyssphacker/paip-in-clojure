@@ -26,3 +26,11 @@ paip.search
 
 (defn is [value] (fn [x] (= x value)))
 
+(defn prepend
+  "Prepend y to start of x"
+  [x y]
+  (concat y x))
+
+(defn breath-first-search
+  [start goal? successors]
+  (tree-search (vector start) goal? successors prepend))
