@@ -202,9 +202,17 @@ paip.patmatch
                 (expand-pat-match-abbrev (first pat))
                 (expand-pat-match-abbrev (rest pat)))))
 
+(defn rule-pattern
+  [rule]
+  (get rule 0))
+
+(defn rule-responses
+  [rule]
+  (get rule 1))
+
 (defn rule-based-translator
   ([input rules action]
-   (rule-based-translator input rules pat-match first rest action))
+   (rule-based-translator input rules pat-match rule-pattern rule-responses action))
   ([input rules matcher rule-if rule-then action]
    (some
      (fn

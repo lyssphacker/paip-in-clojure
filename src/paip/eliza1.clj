@@ -6,7 +6,7 @@ paip.eliza1
                                                 random-elt)]
             [clojure.walk :refer (postwalk-replace)]
             [clojure.pprint :refer (pprint)]
-            [paip.patmatch :refer (rule-based-translator)]))
+            [paip.patmatch :refer (rule-based-translator rule-pattern rule-responses)]))
 
 (defn segment-pattern?
   "Is this a segment matching pattern: ((?* var) . pat)"
@@ -63,13 +63,6 @@ paip.eliza1
 
 ;;; ==============================
 
-(defn rule-pattern
-  [rule]
-  (get rule 0))
-
-(defn rule-responses
-  [rule]
-  (get rule 1))
 
 (def eliza-rules
   {'((?* ?x) hello (?* ?y))
