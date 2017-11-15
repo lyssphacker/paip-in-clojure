@@ -101,12 +101,19 @@ paip.search
    {:name 'Chicago :long 87.37 :lat 41.50}
    {:name 'New-York :long 73.58 :lat 40.47}
    {:name 'Denver :long 105.00 :lat 39.45}
-   {:name 'Denver :long 105.00 :lat 39.45}
-   (Oklahoma-City 97.28 35.26)
-   (Eugene 123.05 44.03) (Pittsburgh 79.57 40.27)
-   (Flagstaff 111.41 35.13) (Quebec 71.11 46.49)
-   (Grand-Jct 108.37 39.05) (Reno 119.49 39.30)
-   (Houston 105.00 34.00) (San-Francisco 122.26 37.47)
-   (Indianapolis 86.10 39.46) (Tampa 82.27 27.57)
-   (Jacksonville 81.40 30.22) (Victoria 123.21 48.25)
-   (Kansas-City 94.35 39.06) (Wilmington 77.57 34.14)])
+   {:name 'Oklahoma-City :long 97.28 :lat 35.26}
+   {:name 'Eugene :long 123.05 :lat 44.03}
+   {:name 'Pittsburgh :long 79.57 :lat 40.27}
+   {:name 'Flagstaff :long 111.41 :lat 35.13}
+   {:name 'Quebec :long 71.11 :lat 46.49}
+   {:name 'Grand-Jct :long 108.37 :lat 39.05}
+   {:name 'Grand-Jct :long 108.37 :lat 39.05}
+   {:name 'Reno :long 119.49 :lat 39.30}
+   {:name 'Houston :long 105.00 :lat 34.00}
+   {:name 'San-Francisco :long 122.26 :lat 37.47}
+   {:name 'Indianapolis :long 86.10 :lat 39.46}
+   {:name 'Tampa :long 82.27 :lat 27.57}
+   {:name 'Jacksonville :long 81.40 :lat 30.22}
+   {:name 'Victoria :long 123.21 :lat 48.25}
+   {:name 'Kansas-City :long 94.35 :lat 39.06}
+   {:name 'Wilmington :long 77.57 :lat 34.14}])
