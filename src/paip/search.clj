@@ -153,7 +153,8 @@ paip.search
 
 (defn deg->radians
   [deg]
-  (* (+ )))
+  (* (+ (Math/floor deg)
+        (* ))))
 
 (defn xyz-coords
   "Returns the x,y,z coordinates of a point on a sphere.
