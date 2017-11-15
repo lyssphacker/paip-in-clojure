@@ -57,3 +57,11 @@
   (testing "pat-match-3"
     (is (= {'?X '(2 + 2)}
            (pat-match '(?X is ?X) '((2 + 2) is (2 + 2)))))))
+
+(deftest subseqn-test-1
+  (testing "subseqn-1"
+    (is (= '(2 3) (subseqn 1 3 '(1 2 3 4))))))
+
+(deftest subseqn-test-2
+  (testing "subseqn-2"
+    (is (= '() (subseqn 0 0 '(1 2 3 4))))))

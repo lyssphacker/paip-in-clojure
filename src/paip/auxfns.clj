@@ -45,6 +45,15 @@ paip.auxfns
   "Applies functionf to arguments args."
   (apply f args))
 
+(defn subseqn
+  "Creates a sequence that is a copy of the subsequence of
+  sequence bounded by start and end."
+  [start end coll]
+  (when (or (<= start 0) (<= end 0)
+          (>= start (count coll)) (>= (count coll)))
+    (throw (Exception. "Start and/or are not valid.")))
+  (drop start (take end coll)))
+
 ;;;; PATTERN MATCHING FACILITY
 
 (defn variable?
