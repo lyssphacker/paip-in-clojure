@@ -107,7 +107,6 @@ paip.search
    {:name 'Flagstaff :long 111.41 :lat 35.13}
    {:name 'Quebec :long 71.11 :lat 46.49}
    {:name 'Grand-Jct :long 108.37 :lat 39.05}
-   {:name 'Grand-Jct :long 108.37 :lat 39.05}
    {:name 'Reno :long 119.49 :lat 39.30}
    {:name 'Houston :long 105.00 :lat 34.00}
    {:name 'San-Francisco :long 122.26 :lat 37.47}
