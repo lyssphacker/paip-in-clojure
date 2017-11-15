@@ -1,6 +1,6 @@
 (ns ^{:doc "Search routines from section 6.4"}
 paip.search
-  (:require [paip.auxfns :refer (funcall fail subseqn)]
+  (:require [paip.auxfns :refer (funcall fail subseqn find-first)]
             [clojure.math.numeric-tower :as math :refer (abs)]))
 
 (defn tree-search
@@ -116,3 +116,30 @@ paip.search
    {:name 'Victoria :long 123.21 :lat 48.25}
    {:name 'Kansas-City :long 94.35 :lat 39.06}
    {:name 'Wilmington :long 77.57 :lat 34.14}])
+
+(declare air-distance)
+
+(defn neighbors
+  "Find all cities within 1000 kilometers."
+  [city]
+  (filter
+    (fn [c]
+      (and (not= c city)
+           (< (air-distance c city) 1000.0)))
+    cities))
+
+(defn city
+  "Find the city with this name."
+  [name]
+  (find-first
+    #(= (:name %1) name)
+    cities))
+
+(defn trip
+  "Search for a way from the start to dest."
+  [start dest]
+  (beam-search
+    start (is dest) neighbors
+    (fn [c]
+      (air-distance c dest))
+    1))
