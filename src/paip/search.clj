@@ -1,6 +1,6 @@
 (ns ^{:doc "Search routines from section 6.4"}
 paip.search
-  (:require [paip.auxfns :refer (funcall fail)]
+  (:require [paip.auxfns :refer (funcall fail subseqn)]
             [clojure.math.numeric-tower :as math :refer (abs)]))
 
 (defn tree-search
@@ -76,3 +76,19 @@ paip.search
     (if (> x price)
       Integer/MAX_VALUE
       (- price x))))
+
+(defn beam-search
+  "Search highest scoring states first until goal is reached,
+  but never consider more than beam-width states at a time."
+  [start goal? successors cost-fn beam-width]
+  (tree-search
+    (vector start)
+    goal?
+    successors
+    (fn
+      [old new]
+      (let [sorted
+            (funcall (sorter cost-fn) old new)]
+        (if (> beam-width (count sorted))
+          sorted
+          (subseqn 0 beam-width sorted))))))
