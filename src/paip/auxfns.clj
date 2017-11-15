@@ -54,6 +54,11 @@ paip.auxfns
     (throw (Exception. "Start and/or are not valid.")))
   (drop start (take end coll)))
 
+(defn find-first
+  "Finds all items in collection which satisfy f predicate."
+  [f coll]
+  (first (filter f coll)))
+
 ;;;; PATTERN MATCHING FACILITY
 
 (defn variable?
