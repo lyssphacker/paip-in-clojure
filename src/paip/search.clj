@@ -142,6 +142,7 @@ paip.search
   12765.0)
 
 (defn deg->radians
+  "Convert degrees and minutes to radians."
   [deg]
   (* (+ (Math/floor deg)
         (* (rem deg 1)
@@ -160,6 +161,8 @@ paip.search
           (Math/sin psi))))
 
 (defn distance
+  "The Euclidean distance between two points.
+  The points are coordinates in n-dimensional space."
   [point1 point2]
   (Math/sqrt
     (reduce
