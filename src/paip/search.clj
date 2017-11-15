@@ -1,7 +1,8 @@
 (ns ^{:doc "Search routines from section 6.4"}
 paip.search
   (:require [paip.auxfns :refer (funcall fail subseqn
-                                         find-first bigdec2)]
+                                         find-first bigdec1
+                                         <<)]
             [clojure.math.numeric-tower :as math :refer (abs expt)]))
 
 (defn tree-search
@@ -183,3 +184,20 @@ paip.search
     (fn [c]
       (air-distance c dest))
     1))
+
+(defn make-path
+  [state & {:keys [previous cost-so-far total-cost]
+            :or   {previous    []
+                   cost-so-far 0
+                   total-cost  0}}]
+  {:state state
+   :previous previous
+   :cost-so-far cost-so-far
+   :total-cost total-cost})
+
+(defn print-path
+  [path]
+  (let [cost (bigdec1 (:total-cost path))
+        state (:state path)]
+    (println
+      (<< "<Path to #{state} cost #{cost}>"))))
