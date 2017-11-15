@@ -92,3 +92,8 @@ paip.search
         (if (> beam-width (count sorted))
           sorted
           (subseqn 0 beam-width sorted))))))
+
+(def cities
+  [{:name 'Atlanta :long 84.23 :lat 33.45},
+   {:name 'Boston :long 71.05 :lat 42.21}
+   ])
