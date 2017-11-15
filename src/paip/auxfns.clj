@@ -64,6 +64,11 @@ paip.auxfns
   (fn [n]
     (.setScale n s RoundingMode/HALF_EVEN)))
 
+(defn bigdec2
+  "Returns scaled and rounded BigDecimal value of n."
+  [n]
+  ((round 2) (bigdec n)))
+
 ;;;; PATTERN MATCHING FACILITY
 
 (defn variable?
