@@ -49,8 +49,8 @@ paip.auxfns
   "Creates a sequence that is a copy of the subsequence of
   sequence bounded by start and end."
   [start end coll]
-  (when (or (<= start 0) (<= end 0)
-          (>= start (count coll)) (>= (count coll)))
+  (when (or (< end start) (< start 0) (< end 0)
+          (> start (count coll)) (> end (count coll)))
     (throw (Exception. "Start and/or are not valid.")))
   (drop start (take end coll)))
 
