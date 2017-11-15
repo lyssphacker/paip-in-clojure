@@ -143,3 +143,31 @@ paip.search
     (fn [c]
       (air-distance c dest))
     1))
+
+(declare distance)
+(declare xyz-coords)
+
+(def earth-diameter
+  "Diameter of planet earth in kilometers."
+  12765.0)
+
+(defn deg->radians
+  [deg]
+  (* (+ )))
+
+(defn xyz-coords
+  "Returns the x,y,z coordinates of a point on a sphere.
+  The center is (0 0 0) and the north pole is (0 0 1)."
+  [city]
+  (let [psi (deg->radians (:lat city))
+        phi (deg->radians (:long city))]
+    (list (* (Math/cos psi) (Math/cos phi))
+          (* (Math/cos psi) (Math/sin phi))
+          (Math/sin psi))))
+
+(defn air-distance
+  "The great circle distance between two cities."
+  [city1 city2]
+  (let
+    [d (distance (xyz-coords city1) (xyz-coords city2))]
+    (* earth-diameter (Math/asin (/ d 2)))))
