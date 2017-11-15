@@ -1,6 +1,7 @@
 (ns ^{:doc "Auxiliary functions used by all other programs"}
 paip.auxfns
-  (:require [clojure.inspector :refer (atom?)]))
+  (:require [clojure.inspector :refer (atom?)])
+  (:import (java.math RoundingMode)))
 
 (defn random-elt [choices]
   "Choose an element from a list at random."
@@ -58,6 +59,10 @@ paip.auxfns
   "Finds all items in collection which satisfy f predicate."
   [f coll]
   (first (filter f coll)))
+
+(defn round [s]
+  (fn [n]
+    (.setScale n s RoundingMode/HALF_EVEN)))
 
 ;;;; PATTERN MATCHING FACILITY
 
