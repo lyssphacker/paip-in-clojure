@@ -1,7 +1,8 @@
 (ns ^{:doc "Search routines from section 6.4"}
 paip.search
-  (:require [paip.auxfns :refer (funcall fail subseqn find-first)]
-            [clojure.math.numeric-tower :as math :refer (abs)]))
+  (:require [paip.auxfns :refer (funcall fail subseqn
+                                         find-first bigdec2)]
+            [clojure.math.numeric-tower :as math :refer (abs expt)]))
 
 (defn tree-search
   "Find a state that satisfies goal-p.  Start with states,
@@ -135,18 +136,6 @@ paip.search
     #(= (:name %1) name)
     cities))
 
-(defn trip
-  "Search for a way from the start to dest."
-  [start dest]
-  (beam-search
-    start (is dest) neighbors
-    (fn [c]
-      (air-distance c dest))
-    1))
-
-(declare distance)
-(declare xyz-coords)
-
 (def earth-diameter
   "Diameter of planet earth in kilometers."
   12765.0)
@@ -154,7 +143,10 @@ paip.search
 (defn deg->radians
   [deg]
   (* (+ (Math/floor deg)
-        (* ))))
+        (* (rem deg 1)
+           (/ 100 60)))
+     Math/PI
+     (/ 1 180)))
 
 (defn xyz-coords
   "Returns the x,y,z coordinates of a point on a sphere.
@@ -166,9 +158,28 @@ paip.search
           (* (Math/cos psi) (Math/sin phi))
           (Math/sin psi))))
 
+(defn distance
+  [point1 point2]
+  (Math/sqrt
+    (reduce
+      +
+      (map
+        (fn [a b]
+          (expt (- a b) 2))
+        point1 point2))))
+
 (defn air-distance
   "The great circle distance between two cities."
   [city1 city2]
   (let
     [d (distance (xyz-coords city1) (xyz-coords city2))]
     (* earth-diameter (Math/asin (/ d 2)))))
+
+(defn trip
+  "Search for a way from the start to dest."
+  [start dest]
+  (beam-search
+    start (is dest) neighbors
+    (fn [c]
+      (air-distance c dest))
+    1))
