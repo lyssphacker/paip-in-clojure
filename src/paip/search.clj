@@ -94,6 +94,19 @@ paip.search
           (subseqn 0 beam-width sorted))))))
 
 (def cities
-  [{:name 'Atlanta :long 84.23 :lat 33.45},
+  [{:name 'Atlanta :long 84.23 :lat 33.45}
+   {:name 'Los-Angeles :long 118.15 :lat 34.03}
    {:name 'Boston :long 71.05 :lat 42.21}
-   ])
+   {:name 'Memphis :long 90.03 :lat 35.09}
+   {:name 'Chicago :long 87.37 :lat 41.50}
+   {:name 'New-York :long 73.58 :lat 40.47}
+   {:name 'Denver :long 105.00 :lat 39.45}
+   {:name 'Denver :long 105.00 :lat 39.45}
+   (Oklahoma-City 97.28 35.26)
+   (Eugene 123.05 44.03) (Pittsburgh 79.57 40.27)
+   (Flagstaff 111.41 35.13) (Quebec 71.11 46.49)
+   (Grand-Jct 108.37 39.05) (Reno 119.49 39.30)
+   (Houston 105.00 34.00) (San-Francisco 122.26 37.47)
+   (Indianapolis 86.10 39.46) (Tampa 82.27 27.57)
+   (Jacksonville 81.40 30.22) (Victoria 123.21 48.25)
+   (Kansas-City 94.35 39.06) (Wilmington 77.57 34.14)])
