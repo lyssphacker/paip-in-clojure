@@ -189,7 +189,7 @@ paip.search
     1))
 
 (defn make-path
-  [state & {:keys [previous cost-so-far total-cost]
+  [& {:keys [state previous cost-so-far total-cost]
             :or   {previous    []
                    cost-so-far 0
                    total-cost  0}}]
