@@ -264,3 +264,16 @@ paip.search
       (map-path
         (fn [city] (:name city))
         path))))
+
+(defn iter-wide-search
+  [start goal? successors cost-fn & {:keys [width max]
+                                     :or   {width 1
+                                            max   100}}]
+  "Search, increasing beam width from width to max.
+  Return the first solution found at any width."
+  (when-not (> width max)
+    (or
+      (beam-search start goal? successors cost-fn width)
+      (iter-wide-search start goal? successors cost-fn
+                        :width (+ width 1)
+                        :max max))))
