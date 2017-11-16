@@ -151,3 +151,14 @@ paip.auxfns
   "Prepend y to start of x"
   [x y]
   (concat y x))
+
+(defn member
+  "Tests membership of item in coll."
+  [coll item & {:keys [key test]
+                :or   {key  identity
+                       test =}}]
+  (not
+    (empty?
+      (filter
+        (fn [x] (test x item))
+        (map key coll)))))
