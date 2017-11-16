@@ -2,7 +2,8 @@
 paip.search
   (:require [paip.auxfns :refer (funcall fail subseqn
                                          find-first bigdec1
-                                         << adjoin prepend)]
+                                         << adjoin prepend
+                                         member)]
             [clojure.math.numeric-tower :as math :refer (abs expt)]
             [clojure.pprint :refer (cl-format)]))
 
@@ -281,12 +282,8 @@ paip.search
     (complement
       (fn [state]
         (or
-          (drop-while
-            #(state= state %)
-            states)
-          (drop-while
-            #(state= state %)
-            old-states))))
+          (member states state :test state=)
+          (member old-states state :test state=))))
     (funcall successors (first states))))
 
 (defn graph-search
