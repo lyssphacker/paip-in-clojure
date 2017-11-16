@@ -290,9 +290,9 @@ paip.search
     (funcall successors (first states))))
 
 (defn graph-search
-  [states goal? successors
-   combiner & {:keys [state= old-states]
-               :or   {state= =}}]
+  [states goal? successors combiner
+   & {:keys [state= old-states]
+      :or   {state= =}}]
   (cl-format true "~&;; Search: ~a\n" states)
   (cond (empty? states) fail
         (funcall goal? (first states)) (first states)
