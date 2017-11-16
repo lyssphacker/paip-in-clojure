@@ -3,7 +3,8 @@ paip.search
   (:require [paip.auxfns :refer (funcall fail subseqn
                                          find-first bigdec1
                                          << adjoin prepend
-                                         member find-item)]
+                                         member find-item
+                                         merge-seqs)]
             [clojure.math.numeric-tower :as math :refer (abs expt)]
             [clojure.pprint :refer (cl-format)]))
 
@@ -324,3 +325,12 @@ paip.search
   "Is path1 cheaper than path2?"
   [path1 path2]
   (< (:total-cost path1) (:total-cost path2)))
+
+(defn insert-path
+  "Put path into the right position, sorted by total cost."
+  [path paths]
+  (merge-seqs
+    (list path)
+    paths
+    <
+    :key (fn [x] (:total-cost x))))

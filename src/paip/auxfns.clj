@@ -175,3 +175,11 @@ paip.auxfns
     (if (empty? result)
       nil
       (first result))))
+
+(defn merge-seqs
+  "Merges sequences. Sorts them by comp applied to
+  elements whose values are extracted by key."
+  [lst1 lst2 comp & {:keys [key]
+                     :or   {key identity}}]
+  (let [result (concat lst1 lst2)]
+    (sort-by key comp result)))
