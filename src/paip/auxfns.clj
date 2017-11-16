@@ -162,3 +162,16 @@ paip.auxfns
       (some
         (fn [x] (test x item))
         (map key coll)))))
+
+(defn find-item
+  "Finds item in coll. If not found returns nil."
+  [coll item & {:keys [key test]
+                :or   {key  identity
+                       test =}}]
+  (let [result
+        (filter
+          (fn [x] (test x item))
+          (map key coll))]
+    (if (empty? result)
+      nil
+      (first result))))

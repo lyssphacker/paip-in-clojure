@@ -3,7 +3,7 @@ paip.search
   (:require [paip.auxfns :refer (funcall fail subseqn
                                          find-first bigdec1
                                          << adjoin prepend
-                                         member)]
+                                         member find-item)]
             [clojure.math.numeric-tower :as math :refer (abs expt)]
             [clojure.pprint :refer (cl-format)]))
 
@@ -310,3 +310,12 @@ paip.search
                 (adjoin old-states (first states)))))
 
 (defn next2 [x] (list (+ x 1) (+ x 2)))
+
+(defn find-path
+  "Find the path with this state among a list of paths."
+  [state paths state=]
+  (find-item
+    paths
+    state
+    :key (fn [x] (:state x))
+    :test state=))
