@@ -319,3 +319,8 @@ paip.search
     state
     :key (fn [x] (:state x))
     :test state=))
+
+(defn better-path
+  "Is path1 cheaper than path2?"
+  [path1 path2]
+  (< (:total-cost path1) (:total-cost path2)))
