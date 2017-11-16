@@ -51,7 +51,7 @@ paip.auxfns
   sequence bounded by start and end."
   [start end coll]
   (when (or (< end start) (< start 0) (< end 0)
-          (> start (count coll)) (> end (count coll)))
+            (> start (count coll)) (> end (count coll)))
     (throw (Exception. "Start and/or are not valid.")))
   (drop start (take end coll)))
 
@@ -75,6 +75,16 @@ paip.auxfns
   and rounded BigDecimal value of n."
   [n]
   ((round 1) (bigdec n)))
+
+(defn adjoin
+  "Tests whether item is the same as an existing element of list.
+  If the item is not an existing element, adjoin adds it to list
+  (as if by cons) and returns the resulting list; otherwise,
+  nothing is added and the original list is returned. "
+  [coll x]
+  (if (= -1 (position coll x))
+    (cons x coll)
+    coll))
 
 ;;;; PATTERN MATCHING FACILITY
 
