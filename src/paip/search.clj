@@ -277,3 +277,18 @@ paip.search
       (iter-wide-search start goal? successors cost-fn
                         :width (+ width 1)
                         :max max))))
+
+(defn new-states
+  "Generate successor states that have not been seen before."
+  [states successors state= old-states]
+  (filter
+    (complement
+      (fn [state]
+        (or
+          (drop-while
+            #(state= state %)
+            states)
+          (drop-while
+            #(state= state %)
+            old-states))))
+    (funcall successors (first states))))
