@@ -245,6 +245,7 @@ paip.search
      beam-width)))
 
 (defn map-path
+  "Call fn on each state in the path, collecting results."
   [fn path]
   (if (empty? path)
     '()
@@ -253,6 +254,7 @@ paip.search
       (map-path fn (:previous path)))))
 
 (defn show-city-path
+  "Show the length of a path, and the cities along it."
   [path]
   (cl-format
     true
