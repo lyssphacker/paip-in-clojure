@@ -3,7 +3,8 @@ paip.search
   (:require [paip.auxfns :refer (funcall fail subseqn
                                          find-first bigdec1
                                          <<)]
-            [clojure.math.numeric-tower :as math :refer (abs expt)]))
+            [clojure.math.numeric-tower :as math :refer (abs expt)]
+            [clojure.pprint :refer (cl-format)]))
 
 (defn tree-search
   "Find a state that satisfies goal-p.  Start with states,
@@ -190,13 +191,13 @@ paip.search
 
 (defn make-path
   [& {:keys [state previous cost-so-far total-cost]
-            :or   {previous    []
-                   cost-so-far 0
-                   total-cost  0}}]
-  {:state state
-   :previous previous
+      :or   {previous    []
+             cost-so-far 0
+             total-cost  0}}]
+  {:state       state
+   :previous    previous
    :cost-so-far cost-so-far
-   :total-cost total-cost})
+   :total-cost  total-cost})
 
 (defn print-path
   [path]
@@ -204,3 +205,60 @@ paip.search
         state (:state path)]
     (println
       (<< "<Path to #{state} cost #{cost}>"))))
+
+(defn is
+  "Returns a predicate that tests for a given value."
+  [value & {:keys [key]
+            :or   {key identity}}]
+  (fn [path]
+    (= value (funcall key path))))
+
+(defn path-saver
+  [successors cost-fn cost-left-fn]
+  (fn [old-path]
+    (let [old-state (:state old-path)]
+      (map
+        (fn [new-state]
+          (let [old-cost
+                (+ (:cost-so-far old-path)
+                   (funcall cost-fn old-state new-state))]
+            (make-path
+              :state new-state
+              :previous old-path
+              :cost-so-far old-cost
+              :total-cost (+ old-cost (funcall
+                                        cost-left-fn
+                                        new-state)))))
+        (funcall successors old-state)))))
+
+(defn trip
+  "Search for the best path from the start to dest."
+  ([start dest]
+   (trip start dest 1))
+  ([start dest beam-width]
+   (beam-search
+     (make-path :state start)
+     (is dest :key (fn [path] (:state path)))
+     (path-saver neighbors air-distance
+                 (fn [c] (air-distance c dest)))
+     (fn [path] (:total-cost path))
+     beam-width)))
+
+(defn map-path
+  [fn path]
+  (if (empty? path)
+    '()
+    (cons
+      (funcall fn (:state path))
+      (map-path fn (:previous path)))))
+
+(defn show-city-path
+  [path]
+  (cl-format
+    true
+    "#<Path ~,1f km: ~{~:(~a~)~^ - ~}>"
+    (:total-cost path)
+    (reverse
+      (map-path
+        (fn [city] (:name city))
+        path))))
