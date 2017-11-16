@@ -146,3 +146,8 @@ paip.auxfns
   "Is x a list whose first element is x?"
   [lst x]
   (and (cons? lst) (= (first lst) x)))
+
+(defn prepend
+  "Prepend y to start of x"
+  [x y]
+  (concat y x))

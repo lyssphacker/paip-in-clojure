@@ -2,7 +2,7 @@
 paip.search
   (:require [paip.auxfns :refer (funcall fail subseqn
                                          find-first bigdec1
-                                         <<)]
+                                         << adjoin prepend)]
             [clojure.math.numeric-tower :as math :refer (abs expt)]
             [clojure.pprint :refer (cl-format)]))
 
@@ -10,6 +10,7 @@ paip.search
   "Find a state that satisfies goal-p.  Start with states,
   and search according to successors and combiner."
   [states goal? successors combiner]
+  (cl-format true "~&;; Search: ~a\n" states)
   (cond
     (empty? states) fail
     (funcall goal? (first states)) (first states)
@@ -29,11 +30,6 @@ paip.search
   (vector (* 2 x) (+ 1 (* 2 x))))
 
 (defn is [value] (fn [x] (= x value)))
-
-(defn prepend
-  "Prepend y to start of x"
-  [x y]
-  (concat y x))
 
 (defn breath-first-search
   "Search old states first until goal is reached."
@@ -292,3 +288,24 @@ paip.search
             #(state= state %)
             old-states))))
     (funcall successors (first states))))
+
+(defn graph-search
+  [states goal? successors
+   combiner & {:keys [state= old-states]
+               :or   {state= =}}]
+  (cl-format true "~&;; Search: ~a\n" states)
+  (cond (empty? states) fail
+        (funcall goal? (first states)) (first states)
+        :else (graph-search
+                (funcall
+                  combiner
+                  (new-states
+                    states
+                    successors
+                    state=
+                    old-states)
+                  (rest states))
+                goal? successors combiner state=
+                (adjoin old-states (first states)))))
+
+(defn next2 [x] (list (+ x 1) (+ x 2)))
