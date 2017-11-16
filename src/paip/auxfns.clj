@@ -158,7 +158,7 @@ paip.auxfns
                 :or   {key  identity
                        test =}}]
   (not
-    (empty?
-      (filter
+    (nil?
+      (some
         (fn [x] (test x item))
         (map key coll)))))
