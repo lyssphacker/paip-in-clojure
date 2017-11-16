@@ -287,6 +287,9 @@ paip.search
     (funcall successors (first states))))
 
 (defn graph-search
+  "Find a state that satisfies goal-p.  Start with states,
+  and search according to successors and combiner.
+  Don't try the same state twice."
   [states goal? successors combiner
    & {:keys [state= old-states]
       :or   {state=     =
