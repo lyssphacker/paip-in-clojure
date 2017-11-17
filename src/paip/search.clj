@@ -399,7 +399,7 @@ paip.search
       start
       (fn [x]
         (when (funcall goal? x)
-          (var-set solutions (cons x solutions)))
-        nil)
+          (var-set solutions (cons x @solutions)))
+        false)
       successors cost-fn beam-width)
-    solutions))
+    @solutions))
