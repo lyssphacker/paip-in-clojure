@@ -345,6 +345,10 @@ paip.search
       (path-states (:previous path)))))
 
 (defn a*-search
+  "Find a path whose state satisfies goal-p.  Start with paths,
+  and expand successors, exploring least cost first.
+  When there are duplicate states, keep the one with the
+  lower cost and discard the other."
   [paths goal? successors cost-fn cost-left-fn
    & {:keys [state= old-paths]
       :or   {state= =}}]
