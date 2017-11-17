@@ -2,7 +2,7 @@
 paip.gps-srch
   (:require [clojure.set :refer (subset?)]
             [paip.auxfns :refer (member count-if)]
-            [paip.gps :refer (executing? make-block-ops action?)]
+            [paip.gps :refer (executing? make-block-ops action? convert-op)]
             [paip.search :refer (beam-search)]))
 
 (defn applicable-ops
@@ -10,7 +10,7 @@ paip.gps-srch
   [state ops]
   (filter
     (fn [op]
-      (subset? state (:preconds op)))
+      (subset? (:preconds op) state))
     ops))
 
 (defn gps-successors
