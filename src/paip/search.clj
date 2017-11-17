@@ -334,3 +334,12 @@ paip.search
     paths
     <
     :key (fn [x] (:total-cost x))))
+
+(defn path-states
+  "Collect the states along this path."
+  [path]
+  (if (empty? path)
+    '()
+    (cons
+      (:state path)
+      (path-states (:previous path)))))
