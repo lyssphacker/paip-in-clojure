@@ -71,13 +71,17 @@ paip.gps
           (set @current-state)))
       @current-state)))
 
+(defn action?
+  [x]
+  (or
+    (executing? x)
+    (= 'start x)))
+
 (defn gps
   "General Problem Solver: from state, achieve goals using ops."
   [state goals ops]
   (filter
-    #(or
-       (executing? %)
-       (= 'start %))
+    action?
     (achieve-all
       (cons 'start state)
       goals
