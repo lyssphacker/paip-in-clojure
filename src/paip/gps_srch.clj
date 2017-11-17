@@ -2,7 +2,7 @@
 paip.gps-srch
   (:require [clojure.set :refer (subset?)]
             [paip.auxfns :refer (member)]
-            [paip.gps :refer (executing?)]
+            [paip.gps :refer (executing? make-block-ops action?)]
             [paip.search :refer (beam-search)]))
 
 (defn applicable-ops
@@ -35,17 +35,14 @@ paip.gps-srch
    (search-gps start goal ops 10))
   ([start goal ops beam-width]
    (filter
-     #(or
-        (executing? %)
-        (= 'start %))
+     action?
      (beam-search
-       (cons '(start) start)
+       (cons 'start start)
        (fn [state] (subset? state goal))
        gps-successors
        (fn [state]
          (+ (count-if
-              #(or (executing? %)
-                   (= 'start %))
+              action?
               state)
             (count-if
               (fn [con]
