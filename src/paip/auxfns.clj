@@ -183,3 +183,11 @@ paip.auxfns
                      :or   {key identity}}]
   (let [result (concat lst1 lst2)]
     (sort-by key comp result)))
+
+(defn count-if
+  "Count items in sequence which satisfy predicate."
+  [predicate sequence]
+  (count
+    (filter
+      predicate
+      sequence)))
