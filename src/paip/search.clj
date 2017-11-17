@@ -343,3 +343,41 @@ paip.search
     (cons
       (:state path)
       (path-states (:previous path)))))
+
+(defn a*-search
+  [paths goal? successors cost-fn cost-left-fn
+   & {:keys [state= old-paths]
+      :or   {state= =}}]
+  (cond
+    (empty? paths) fail
+    (funcall goal? (:state (first paths))) [(first paths) paths]
+    :else
+    (let
+      [path (peek paths)
+       state (:state path)]
+      (with-local-vars
+        [new-paths (pop paths)
+         new-old-paths old-paths]
+        (var-set new-old-paths (insert-path path @new-old-paths))
+        (doseq [state2 (funcall successors state)]
+          (let [cost (+ (:cost-so-far path)
+                        (funcall cost-fn state state2))
+                cost2 (funcall cost-left-fn state2)
+                path2 (make-path
+                        :state state2
+                        :previous path
+                        :cost-so-far cost
+                        :total-cost (+ cost cost2))]
+            (with-local-vars
+              [old '()]
+              (cond
+                (var-set old (find-path state2 @new-paths state=))
+                (when (better-path path2 old)
+                  (var-set new-paths
+                           (insert-path
+                             path2
+                             (filter #(= old %) @new-paths))))
+                (var-set old (find-path state2 @new-old-paths state=))
+                (when (better-path path2 @old)
+                  (var-set))))
+            ))))))
