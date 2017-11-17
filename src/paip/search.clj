@@ -6,7 +6,8 @@ paip.search
                                          member find-item
                                          merge-seqs)]
             [clojure.math.numeric-tower :as math :refer (abs expt)]
-            [clojure.pprint :refer (cl-format)]))
+            [clojure.pprint :refer (cl-format)]
+            [clojure.inspector :refer (atom?)]))
 
 (defn tree-search
   "Find a state that satisfies goal-p.  Start with states,
@@ -83,7 +84,9 @@ paip.search
   but never consider more than beam-width states at a time."
   [start goal? successors cost-fn beam-width]
   (tree-search
-    (vector start)
+    (if (atom? start)
+      (vector start)
+      (into [] start))
     goal?
     successors
     (fn
