@@ -197,12 +197,12 @@ paip.search
    :cost-so-far cost-so-far
    :total-cost  total-cost})
 
-(defn print-path
+(defn path-to-string
+  "Return string representation of path."
   [path]
   (let [cost (bigdec1 (:total-cost path))
         state (:state path)]
-    (println
-      (<< "<Path to #{state} cost #{cost}>"))))
+    (<< "<Path to #{state} cost #{cost}>")))
 
 (defn is
   "Returns a predicate that tests for a given value."
@@ -348,15 +348,16 @@ paip.search
   [paths goal? successors cost-fn cost-left-fn
    & {:keys [state= old-paths]
       :or   {state= =}}]
+  (cl-format true ";; Search: ~a\n" (map path-to-string paths))
   (cond
     (empty? paths) fail
     (funcall goal? (:state (first paths))) [(first paths) paths]
     :else
     (let
-      [path (peek paths)
+      [path (first paths)
        state (:state path)]
       (with-local-vars
-        [new-paths (pop paths)
+        [new-paths (rest paths)
          new-old-paths old-paths]
         (var-set new-old-paths (insert-path path @new-old-paths))
         (doseq [state2 (funcall successors state)]
@@ -379,5 +380,8 @@ paip.search
                              (filter #(= old %) @new-paths))))
                 (var-set old (find-path state2 @new-old-paths state=))
                 (when (better-path path2 @old)
-                  (var-set))))
-            ))))))
+                  (var-set new-paths (insert-path path2 @new-paths))
+                  (var-set new-old-paths (filter #(= @old %))))
+                :else (var-set new-paths (insert-path path2 @new-paths))))))
+        (a*-search @new-paths goal? successors cost-fn cost-left-fn
+                   state= @new-old-paths)))))
