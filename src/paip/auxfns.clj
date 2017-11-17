@@ -76,16 +76,6 @@ paip.auxfns
   [n]
   ((round 1) (bigdec n)))
 
-(defn adjoin
-  "Tests whether item is the same as an existing element of list.
-  If the item is not an existing element, adjoin adds it to list
-  (as if by cons) and returns the resulting list; otherwise,
-  nothing is added and the original list is returned. "
-  [coll x]
-  (if (= -1 (position coll x))
-    (cons x coll)
-    coll))
-
 ;;;; PATTERN MATCHING FACILITY
 
 (defn variable?
@@ -141,6 +131,16 @@ paip.auxfns
      (if (= index -1)
        index
        (+ start index)))))
+
+(defn adjoin
+  "Tests whether item is the same as an existing element of list.
+  If the item is not an existing element, adjoin adds it to list
+  (as if by cons) and returns the resulting list; otherwise,
+  nothing is added and the original list is returned. "
+  [coll x]
+  (if (= -1 (position coll x))
+    (cons x coll)
+    coll))
 
 (defn starts-with
   "Is x a list whose first element is x?"
