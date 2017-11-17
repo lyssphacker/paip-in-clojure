@@ -1,7 +1,7 @@
 (ns ^{:doc "Section 6.4 GPS based on explicit search"}
 paip.gps-srch
   (:require [clojure.set :refer (subset?)]
-            [paip.auxfns :refer (member)]
+            [paip.auxfns :refer (member count-if)]
             [paip.gps :refer (executing? make-block-ops action?)]
             [paip.search :refer (beam-search)]))
 
@@ -15,19 +15,18 @@ paip.gps-srch
 
 (defn gps-successors
   "Return a list of states reachable from this one using ops."
-  [state ops]
-  (map
-    (fn [op]
-      (concat
-        (filter
-          (complement
-            (fn [x]
-              (member (:del-vec op) x)))
-          state)
-        (:add-vec op)))
-    (applicable-ops state ops)))
-
-(declare count-if)
+  [ops]
+  (fn [state]
+    (map
+      (fn [op]
+        (concat
+          (filter
+            (complement
+              (fn [x]
+                (member (:del-vec op) x)))
+            state)
+          (:add-vec op)))
+      (applicable-ops state ops))))
 
 (defn search-gps
   "Search for a sequence of operators leading to goal."
@@ -39,7 +38,7 @@ paip.gps-srch
      (beam-search
        (cons 'start start)
        (fn [state] (subset? state goal))
-       gps-successors
+       (gps-successors ops)
        (fn [state]
          (+ (count-if
               action?
