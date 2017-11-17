@@ -389,3 +389,17 @@ paip.search
                 :else (var-set new-paths (insert-path path2 @new-paths))))))
         (a*-search @new-paths goal? successors cost-fn cost-left-fn
                    state= @new-old-paths)))))
+
+(defn search-all
+  "Find all solutions to a search problem, using beam search."
+  ;; Be careful: this can lead to an infinite loop.
+  [start goal? successors cost-fn beam-width]
+  (with-local-vars [solutions '()]
+    (beam-search
+      start
+      (fn [x]
+        (when (funcall goal? x)
+          (var-set solutions (cons x solutions)))
+        nil)
+      successors cost-fn beam-width)
+    solutions))
