@@ -36,7 +36,7 @@ paip.gps-srch
    (filter
      action?
      (beam-search
-       (vector (vector 'start) start)
+       (list (cons 'start start))
        (fn [state] (subset? (set state) (set goal)))
        (gps-successors ops)
        (fn [state]
