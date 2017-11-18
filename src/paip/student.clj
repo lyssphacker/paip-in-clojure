@@ -49,8 +49,8 @@ paip.student
 
 (declare solve-equations)
 
-(defn rule-pattern [rule] (get 0 rule))
-(defn rule-response [rule] (get 1 rule))
+(defn rule-pattern [rule] (first rule))
+(defn rule-response [rule] (second rule))
 
 (declare translate-to-expression)
 
