@@ -191,3 +191,7 @@ paip.auxfns
     (filter
       predicate
       sequence)))
+
+(defn fmap [m f]
+  "Map function f over both keys and values of map m."
+  (into {} (for [[k v] m] [(f k) (f v)])))
