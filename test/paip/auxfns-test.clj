@@ -78,8 +78,8 @@
 (deftest fmap-test
   (testing "fmap"
     (is (= (fmap
-             {'(?x* |.|)     '?x
-              '(?x* |.| ?y*) '(?x ?y)}
+             {'(?x* .)     '?x
+              '(?x* . ?y*) '(?x ?y)}
              expand-pat-match-abbrev)
-           {'((?* ?x) |.|)         '?x
-            '((?* ?x) |.| (?* ?y)) '(?x ?y)}))))
+           {'((?* ?x) .)         '?x
+            '((?* ?x) . (?* ?y)) '(?x ?y)}))))
