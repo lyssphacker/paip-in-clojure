@@ -37,7 +37,8 @@ paip.gps-srch
      action?
      (beam-search
        (list (cons 'start start))
-       (fn [state] (subset? (set state) (set goal)))
+       (fn [state]
+         (subset? (set goal) (set state)))
        (gps-successors ops)
        (fn [state]
          (+ (count-if
