@@ -10,7 +10,7 @@ paip.gps-srch
   [state ops]
   (filter
     (fn [op]
-      (subset? (:preconds op) state))
+      (subset? (set (:preconds op)) (set state)))
     ops))
 
 (defn gps-successors
@@ -36,8 +36,8 @@ paip.gps-srch
    (filter
      action?
      (beam-search
-       (cons 'start start)
-       (fn [state] (subset? state goal))
+       (vector (vector 'start) start)
+       (fn [state] (subset? (set state) (set goal)))
        (gps-successors ops)
        (fn [state]
          (+ (count-if
