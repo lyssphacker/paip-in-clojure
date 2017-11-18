@@ -196,6 +196,14 @@ paip.auxfns
   "Map function f over both keys and values of map m."
   (into {} (for [[k v] m] [(f k) (f v)])))
 
+(defn fmap-keys [m f]
+  "Map function f over keys of map m."
+  (into {} (for [[k v] m] [(f k) v])))
+
+(defn fmap-values [m f]
+  "Map function f over values of map m."
+  (into {} (for [[k v] m] [k (f v)])))
+
 (defn remove-if
   "Returns elements from coll which do not satisfy pred."
   [pred coll]
