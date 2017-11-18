@@ -85,8 +85,8 @@ paip.search
   [start goal? successors cost-fn beam-width]
   (tree-search
     (if (atom? start)
-      (vector start)
-      (into [] start))
+      (list start)
+      start)
     goal?
     successors
     (fn
