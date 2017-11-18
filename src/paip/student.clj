@@ -1,7 +1,6 @@
 (ns ^{:doc "Chapter 7's STUDENT program to solve algebra word problems."}
 paip.student
-  (:require [paip.patmatch :refer (pat-match expand-pat-match-abbrev
-                                             rule-based-translator)]
+  (:require [paip.patmatch :refer :all]
             [paip.auxfns :refer (fmap remove-if fmap-values in?)]
             [clojure.walk :refer (postwalk-replace)]
             [clojure.inspector :refer (atom?)]))
@@ -49,8 +48,8 @@ paip.student
 
 (declare solve-equations)
 
-(defn rule-pattern [rule] (first rule))
-(defn rule-response [rule] (second rule))
+(defn rule-pat [rule] (first rule))
+(defn rule-res [rule] (second rule))
 
 (declare translate-to-expression)
 
@@ -72,8 +71,8 @@ paip.student
       words
       student-rules
       pat-match
-      rule-pattern
-      rule-response
+      rule-pat
+      rule-res
       (fn
         [bindings response]
         (postwalk-replace
