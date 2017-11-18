@@ -1,6 +1,7 @@
 (ns paip.auxfns-test
   (:require [clojure.test :refer :all]
-            [paip.auxfns :refer :all]))
+            [paip.auxfns :refer :all]
+            [paip.gps :refer (action?)]))
 
 (def test-ops
   #{{:action   'drive-son-to-school
@@ -65,3 +66,10 @@
 (deftest subseqn-test-2
   (testing "subseqn-2"
     (is (= '() (subseqn 0 0 '(1 2 3 4))))))
+
+(deftest count-if-test-1
+  (testing "count-if-1"
+    (is (= 2
+           (count-if
+             action?
+             '(executing-that start))))))
