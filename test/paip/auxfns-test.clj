@@ -1,7 +1,8 @@
 (ns paip.auxfns-test
   (:require [clojure.test :refer :all]
             [paip.auxfns :refer :all]
-            [paip.gps :refer (action?)]))
+            [paip.gps :refer (action?)]
+            [paip.patmatch :refer (expand-pat-match-abbrev)]))
 
 (def test-ops
   #{{:action   'drive-son-to-school
@@ -73,3 +74,12 @@
            (count-if
              action?
              '(executing-that start))))))
+
+(deftest fmap-test
+  (testing "fmap"
+    (is (= (fmap
+             {'(?x* |.|)     '?x
+              '(?x* |.| ?y*) '(?x ?y)}
+             expand-pat-match-abbrev)
+           {'((?* ?x) |.|)         '?x
+            '((?* ?x) |.| (?* ?y)) '(?x ?y)}))))
