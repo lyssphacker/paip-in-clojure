@@ -88,18 +88,11 @@ paip.auxfns
 
 (def no-bindings {:true :true})
 
-(defn correct-val
-  "Extract value from one element list. Keep larger lists untact."
-  [val]
-  (if (and (cons? val) (= 1 (count val)))
-    (first val)
-    val))
-
 (defn extend-bindings
   [var val bindings]
   (if (= bindings no-bindings)
-    (assoc {} var (correct-val val))
-    (assoc bindings var (correct-val val))))
+    (assoc {} var val)
+    (assoc bindings var val)))
 
 (defn match-variable
   [variable input bindings]
