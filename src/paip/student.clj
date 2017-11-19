@@ -46,8 +46,6 @@ paip.student
     student-rules-abbrev
     expand-pat-match-abbrev))
 
-(declare solve-equations)
-
 (defn rule-pat [rule] (first rule))
 (defn rule-res [rule] (second rule))
 
@@ -93,6 +91,22 @@ paip.student
         :else (concat
                 (create-list-of-equations (first exp))
                 (create-list-of-equations (rest exp)))))
+
+(declare solve)
+(declare print-equations)
+
+(defn mkexp
+  [lhs op rhs]
+  {:lhs lhs :op op :rhs rhs})
+
+(defn solve-equations
+  [equations]
+  (print-equations "The equations to be solved are:" equations)
+  (print-equations "The solution is:" (solve equations nil)))
+
+(defn solve-arithmetic
+  [equation]
+  {})
 
 (defn student
   "Solve certain Algebra Word Problems."
