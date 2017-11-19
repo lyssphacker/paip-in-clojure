@@ -117,7 +117,7 @@ paip.patmatch
     fail
     bindings))
 
-(defn first-match-post
+(defn first-match-pos
   "Find the first position that pat1 could possibly match input,
   starting at position start.  If pat1 is non-constant, then just
   return start."
@@ -138,7 +138,7 @@ paip.patmatch
        (match-variable var input bindings)
        ;; We assume that pat starts with a constant
        ;; In other words, a pattern can't have 2 consecutive vars
-       (let [pos (first-match-post (first pat) input start)]
+       (let [pos (first-match-pos (first pat) input start)]
          (if (nil? pos)
            fail
            (let [b2 (pat-match
