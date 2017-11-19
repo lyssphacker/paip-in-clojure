@@ -1,6 +1,7 @@
 (ns ^{:doc "Auxiliary functions used by all other programs"}
 paip.auxfns
-  (:require [clojure.inspector :refer (atom?)])
+  (:require [clojure.inspector :refer (atom?)]
+            [clojure.walk :refer (postwalk-replace)])
   (:import (java.math RoundingMode)))
 
 (defn random-elt [choices]
@@ -210,3 +211,10 @@ paip.auxfns
   (filter
     (complement pred)
     coll))
+
+(defn subst
+  "Substitute new for old in a form."
+  [new old form]
+  (postwalk-replace
+    {old new}
+    form))

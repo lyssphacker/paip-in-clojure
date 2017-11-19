@@ -1,7 +1,8 @@
 (ns ^{:doc "Chapter 7's STUDENT program to solve algebra word problems."}
 paip.student
   (:require [paip.patmatch :refer :all]
-            [paip.auxfns :refer (fmap remove-if fmap-values in?)]
+            [paip.auxfns :refer (fmap remove-if fmap-values in?
+                                      subst)]
             [clojure.walk :refer (postwalk-replace)]
             [clojure.inspector :refer (atom?)]))
 
