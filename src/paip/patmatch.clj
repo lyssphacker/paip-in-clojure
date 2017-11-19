@@ -125,7 +125,7 @@ paip.patmatch
   (cond (and (atom? pat1) (not (variable? pat1)))
         (position input pat1 start)
         (<= start (count input)) start
-        :else nil))
+        :else -1))
 
 (defn segment-match
   "Match the segment pattern ((?* var) . pat) against input."
@@ -139,7 +139,7 @@ paip.patmatch
        ;; We assume that pat starts with a constant
        ;; In other words, a pattern can't have 2 consecutive vars
        (let [pos (first-match-pos (first pat) input start)]
-         (if (nil? pos)
+         (if (= -1 pos)
            fail
            (let [b2 (pat-match
                       pat
