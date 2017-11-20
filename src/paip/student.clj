@@ -112,6 +112,36 @@ paip.student
     '=
     (eval (:rhs equation))))
 
+(defn unknown? [exp] (symbol? exp))
+
+(defn in-exp?
+  "True if x appears anywhere in exp"
+  [x exp]
+  (or
+    (= x exp)
+    (and
+      (map? exp)
+      (or
+        (in-exp? x (:lhs exp))
+        (in-exp? x (:rhs exp))))))
+
+(defn no-unknown?
+  "Returns true if there are no unknowns in exp."
+  [exp]
+  (cond (unknown? exp) false
+        (atom? exp) true
+        (no-unknown? (:lhs exp)) (no-unknown? (:rhs exp))
+        :else false))
+
+(defn one-unknown
+  "Returns the single unknown in exp, if there is exactly one."
+  [exp]
+  (cond (unknown? exp) exp
+        (atom? exp) nil
+        (no-unknown? (:lhs exp)) (one-unknown (:rhs exp))
+        (no-unknown? (:rhs exp)) (one-unknown (:lhs exp))
+        :else nil))
+
 (declare one-unknown)
 (declare isolate)
 
