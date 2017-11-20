@@ -103,7 +103,7 @@ paip.student
 (defn solve-equations
   [equations]
   (print-equations "The equations to be solved are:" equations)
-  (print-equations "The solution is:" (solve equations nil)))
+  (print-equations "The solution is:" (solve equations '())))
 
 (defn solve-arithmetic
   [equation]
