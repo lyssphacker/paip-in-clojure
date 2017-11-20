@@ -138,9 +138,10 @@ paip.student
 (defn student
   "Solve certain Algebra Word Problems."
   [words]
-  (create-list-of-equations
-    (translate-to-expression
-      (remove-if
-        noise-words?
-        words))))
+  (solve-equations
+    (create-list-of-equations
+      (translate-to-expression
+        (remove-if
+          noise-words?
+          words)))))
 
