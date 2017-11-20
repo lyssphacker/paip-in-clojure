@@ -4,7 +4,8 @@ paip.student
             [paip.auxfns :refer (fmap remove-if fmap-values in?
                                       subst)]
             [clojure.walk :refer (postwalk-replace)]
-            [clojure.inspector :refer (atom?)]))
+            [clojure.inspector :refer (atom?)]
+            [clojure.pprint :refer (cl-format)]))
 
 
 (def student-rules-abbrev
@@ -94,11 +95,30 @@ paip.student
                 (create-list-of-equations (rest exp)))))
 
 (declare solve)
-(declare print-equations)
 
 (defn mkexp
   [lhs op rhs]
   {:lhs lhs :op op :rhs rhs})
+
+(declare binary-exp?)
+
+(defn prefix->infix
+  [exp]
+  (if (atom? exp)
+    exp
+    (map
+      prefix->infix
+      (if (binary-exp? exp)
+        (list (:lhs exp) (:op exp) (:rhs exp))
+        exp))))
+
+(defn print-equations
+  [header equations]
+  (cl-format
+    true
+    "~%~a~{~%  ~{ ~a~}~}~%"
+    header
+    (map prefix->infix equations)))
 
 (defn solve-equations
   [equations]
