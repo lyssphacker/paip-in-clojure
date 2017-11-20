@@ -129,7 +129,7 @@ paip.student
                   (:rhs answer)
                   (:lhs answer)
                   (remove
-                    (fn [eq] (= eq equation))
+                    #(= equation %1)
                     equations))
                 (cons answer known))))))
       equations)
