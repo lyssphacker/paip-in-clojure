@@ -142,7 +142,6 @@ paip.student
         (no-unknown? (:rhs exp)) (one-unknown (:lhs exp))
         :else nil))
 
-(declare one-unknown)
 (declare isolate)
 
 (defn solve
