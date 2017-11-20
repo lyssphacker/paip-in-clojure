@@ -167,6 +167,22 @@ paip.student
       equations)
     known))
 
+(defn exp-args
+  [exp]
+  (select-keys
+    exp
+    [:lhs :rhs]))
+
+(defn exp?
+  [x]
+  (and (:lhs x) (:op x) (:rhs x)))
+
+(defn binary-exp?
+  [x]
+  (and
+    (exp? x)
+    (= (count (exp-args x)) 2)))
+
 (defn student
   "Solve certain Algebra Word Problems."
   [words]
