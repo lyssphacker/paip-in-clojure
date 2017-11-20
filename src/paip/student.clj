@@ -107,7 +107,33 @@ paip.student
 
 (defn solve-arithmetic
   [equation]
-  {})
+  (mkexp
+    (:lhs equation)
+    '=
+    (eval (:rhs equation))))
+
+(declare one-unknown)
+(declare isolate)
+
+(defn solve
+  [equations known]
+  (or
+    (some
+      (fn [equation]
+        (let [x (one-unknown equation)]
+          (when x
+            (let [answer (solve-arithmetic
+                           (isolate equation x))]
+              (solve
+                (subst
+                  (:rhs answer)
+                  (:lhs answer)
+                  (remove
+                    (fn [eq] (= eq equation))
+                    equations))
+                (cons answer known))))))
+      equations)
+    known))
 
 (defn student
   "Solve certain Algebra Word Problems."
