@@ -145,6 +145,9 @@ paip.student
 (declare isolate)
 
 (defn solve
+  "Solve a system of equations by constraint propagation."
+  ;; Try to solve for one equation, and substitute its value into
+  ;; the others. If that doesn't work, return what is known.
   [equations known]
   (or
     (some
