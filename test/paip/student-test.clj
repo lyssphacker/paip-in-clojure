@@ -6,17 +6,13 @@
   (testing "one-unknown-1"
     (is (= 'a
            (one-unknown
-             {:lhs 'a
-              :op  '=
-              :rhs 1})))))
+             (mkexp 'a '= 1))))))
 
 (deftest one-unknown-test-2
   (testing "one-unknown-2"
     (is (= 'b
            (one-unknown
-             {:lhs
-                   {:lhs 'b
-                    :op  '=
-                    :rhs 3}
-              :op  '=
-              :rhs 1})))))
+             (mkexp
+               (mkexp 'b '= 3)
+               '=
+               1))))))

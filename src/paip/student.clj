@@ -2,7 +2,7 @@
 paip.student
   (:require [paip.patmatch :refer :all]
             [paip.auxfns :refer (fmap remove-if fmap-values in?
-                                      subst)]
+                                      subst cons?)]
             [clojure.walk :refer (postwalk-replace)]
             [clojure.inspector :refer (atom?)]
             [clojure.pprint :refer (cl-format)]))
@@ -42,6 +42,22 @@ paip.student
    '(?x* % less than ?y*)            '(* ?y (/ (- 100 ?x) 100)),
    '(?x* % more than ?y*)            '(* ?y (/ (+ 100 ?x) 100)),
    '(?x* % ?y*)                      '(* (/ ?x 100) ?y)})
+
+(defn exp-args
+  [exp]
+  (rest exp))
+
+(defn exp?
+  [x]
+  (cons? x))
+
+(defn mkexp
+  [lhs op rhs]
+  (list lhs op rhs))
+
+(defn exp-lhs [exp] (nth exp 0))
+(defn exp-op [exp] (nth exp 1))
+(defn exp-rhs [exp] (nth exp 2))
 
 (def student-rules
   (fmap
@@ -94,12 +110,6 @@ paip.student
                 (create-list-of-equations (first exp))
                 (create-list-of-equations (rest exp)))))
 
-(declare solve)
-
-(defn mkexp
-  [lhs op rhs]
-  {:lhs lhs :op op :rhs rhs})
-
 (declare binary-exp?)
 
 (defn prefix->infix
@@ -109,7 +119,7 @@ paip.student
     (map
       prefix->infix
       (if (binary-exp? exp)
-        (list (:lhs exp) (:op exp) (:rhs exp))
+        (list (exp-lhs exp) (exp-op exp) (exp-rhs exp))
         exp))))
 
 (defn print-equations
@@ -128,9 +138,9 @@ paip.student
 (defn solve-arithmetic
   [equation]
   (mkexp
-    (:lhs equation)
+    (exp-lhs equation)
     '=
-    (eval (:rhs equation))))
+    (eval (exp-rhs equation))))
 
 (defn unknown? [exp] (symbol? exp))
 
@@ -142,15 +152,15 @@ paip.student
     (and
       (map? exp)
       (or
-        (in-exp? x (:lhs exp))
-        (in-exp? x (:rhs exp))))))
+        (in-exp? x (exp-lhs exp))
+        (in-exp? x (exp-rhs exp))))))
 
 (defn no-unknown?
   "Returns true if there are no unknowns in exp."
   [exp]
   (cond (unknown? exp) false
         (atom? exp) true
-        (no-unknown? (:lhs exp)) (no-unknown? (:rhs exp))
+        (no-unknown? (exp-lhs exp)) (no-unknown? (exp-rhs exp))
         :else false))
 
 (defn one-unknown
@@ -158,8 +168,8 @@ paip.student
   [exp]
   (cond (unknown? exp) exp
         (atom? exp) nil
-        (no-unknown? (:lhs exp)) (one-unknown (:rhs exp))
-        (no-unknown? (:rhs exp)) (one-unknown (:lhs exp))
+        (no-unknown? (exp-lhs exp)) (one-unknown (exp-rhs exp))
+        (no-unknown? (exp-rhs exp)) (one-unknown (exp-lhs exp))
         :else nil))
 
 (declare isolate)
@@ -178,24 +188,14 @@ paip.student
                            (isolate equation x))]
               (solve
                 (subst
-                  (:rhs answer)
-                  (:lhs answer)
+                  (exp-rhs answer)
+                  (exp-lhs answer)
                   (remove
                     #(= equation %1)
                     equations))
                 (cons answer known))))))
       equations)
     known))
-
-(defn exp-args
-  [exp]
-  (select-keys
-    exp
-    [:lhs :rhs]))
-
-(defn exp?
-  [x]
-  (and (:lhs x) (:op x) (:rhs x)))
 
 (defn binary-exp?
   [x]
