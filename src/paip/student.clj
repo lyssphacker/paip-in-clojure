@@ -117,6 +117,7 @@ paip.student
     (= (count (exp-args x)) 2)))
 
 (defn prefix->infix
+  "Translate prefix to infix expressions."
   [exp]
   (if (atom? exp)
     exp
@@ -127,6 +128,7 @@ paip.student
         exp))))
 
 (defn print-equations
+  "Print a list of equations."
   [header equations]
   (cl-format
     true
@@ -135,6 +137,8 @@ paip.student
     (map prefix->infix equations)))
 
 (defn solve-arithmetic
+  "Do the arithmetic for the right hand side."
+  ;; This assumes that the right hand side is in the right form.
   [equation]
   (mkexp
     (exp-lhs equation)
@@ -181,6 +185,7 @@ paip.student
 (defn inverse-op [op] (op operators-and-inverses))
 
 (defn commutative?
+  "Is operator commutative?"
   [op]
   (in? op '(+ * =)))
 
@@ -238,6 +243,7 @@ paip.student
     known))
 
 (defn solve-equations
+  "Print the equations and their solution"
   [equations]
   (print-equations "The equations to be solved are:" equations)
   (print-equations "The solution is:" (solve equations '())))
