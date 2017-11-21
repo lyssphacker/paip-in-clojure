@@ -53,10 +53,10 @@ paip.student
 
 (defn mkexp
   [lhs op rhs]
-  (list lhs op rhs))
+  (list op lhs rhs))
 
-(defn exp-lhs [exp] (nth exp 0))
-(defn exp-op [exp] (nth exp 1))
+(defn exp-lhs [exp] (nth exp 1))
+(defn exp-op [exp] (nth exp 0))
 (defn exp-rhs [exp] (nth exp 2))
 
 (def student-rules
