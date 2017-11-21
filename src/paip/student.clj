@@ -153,7 +153,7 @@ paip.student
   (or
     (= x exp)
     (and
-      (map? exp)
+      (cons? exp)
       (or
         (in-exp? x (exp-lhs exp))
         (in-exp? x (exp-rhs exp))))))
