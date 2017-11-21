@@ -134,11 +134,6 @@ paip.student
     header
     (map prefix->infix equations)))
 
-(defn solve-equations
-  [equations]
-  (print-equations "The equations to be solved are:" equations)
-  (print-equations "The solution is:" (solve equations '())))
-
 (defn solve-arithmetic
   [equation]
   (mkexp
@@ -241,6 +236,11 @@ paip.student
                 (cons answer known))))))
       equations)
     known))
+
+(defn solve-equations
+  [equations]
+  (print-equations "The equations to be solved are:" equations)
+  (print-equations "The solution is:" (solve equations '())))
 
 (defn student
   "Solve certain Algebra Word Problems."
