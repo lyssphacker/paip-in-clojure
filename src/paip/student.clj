@@ -203,6 +203,19 @@ paip.student
     (exp? x)
     (= (count (exp-args x)) 2)))
 
+(def operators-and-inverses
+  {'+ '-
+   '- '+
+   '* '/
+   '/ '*
+   '= '=})
+
+(defn inverse-op [op] (op operators-and-inverses))
+
+(defn comutative?
+  [op]
+  (in? op '(+ * =)))
+
 (defn student
   "Solve certain Algebra Word Problems."
   [words]
