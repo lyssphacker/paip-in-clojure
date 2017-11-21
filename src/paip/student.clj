@@ -110,7 +110,11 @@ paip.student
                 (create-list-of-equations (first exp))
                 (create-list-of-equations (rest exp)))))
 
-(declare binary-exp?)
+(defn binary-exp?
+  [x]
+  (and
+    (exp? x)
+    (= (count (exp-args x)) 2)))
 
 (defn prefix->infix
   [exp]
@@ -172,7 +176,48 @@ paip.student
         (no-unknown? (exp-rhs exp)) (one-unknown (exp-lhs exp))
         :else nil))
 
-(declare isolate)
+(def operators-and-inverses
+  {'+ '-
+   '- '+
+   '* '/
+   '/ '*
+   '= '=})
+
+(defn inverse-op [op] (op operators-and-inverses))
+
+(defn commutative?
+  [op]
+  (in? op '(+ * =)))
+
+(defn isolate
+  [e x]
+  "Isolate the lone x in e on the left hand side of e."
+  ;; This assumes there is exactly one x in e,
+  ;; and that e is an equation.
+  (cond (= (exp-lhs e) x)
+        ;; Case I: X = A -> X = n
+        e
+        (in-exp? x (exp-rhs e))
+        ;; Case II: A = f(X) -> f(X) = A
+        (isolate (mkexp (exp-rhs e) '= (exp-lhs e)) x)
+        (in-exp? x (exp-lhs (exp-lhs e)))
+        ;; Case III: f(X)*A = B -> f(X) = B/A
+        (isolate (mkexp (exp-lhs (exp-lhs e)) '=
+                        (mkexp (exp-rhs e)
+                               (inverse-op (exp-op (exp-lhs e)))
+                               (exp-rhs (exp-lhs e)))) x)
+        (commutative? (exp-op (exp-lhs e)))
+        ;; Case IV: A*f(X) = B -> f(X) = B/A
+        (isolate (mkexp (exp-rhs (exp-lhs e)) '=
+                        (mkexp (exp-rhs e)
+                               (inverse-op (exp-op (exp-lhs e)))
+                               (exp-lhs (exp-lhs e)))) x)
+        :else
+        ;; Case V: A/f(X) = B -> f(X) = A/B
+        (isolate (mkexp (exp-rhs (exp-lhs e)) '=
+                        (mkexp (exp-lhs (exp-lhs e))
+                               (exp-op (exp-lhs e))
+                               (exp-rhs e))) x)))
 
 (defn solve
   "Solve a system of equations by constraint propagation."
@@ -196,25 +241,6 @@ paip.student
                 (cons answer known))))))
       equations)
     known))
-
-(defn binary-exp?
-  [x]
-  (and
-    (exp? x)
-    (= (count (exp-args x)) 2)))
-
-(def operators-and-inverses
-  {'+ '-
-   '- '+
-   '* '/
-   '/ '*
-   '= '=})
-
-(defn inverse-op [op] (op operators-and-inverses))
-
-(defn comutative?
-  [op]
-  (in? op '(+ * =)))
 
 (defn student
   "Solve certain Algebra Word Problems."
