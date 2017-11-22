@@ -10,8 +10,6 @@ paip.student
 
 (def student-rules-abbrev
   '(((?x* |.|) ?x)
-     ((?x* * ?y*) (* ?x ?y))
-     ((?x* times ?y*) (* ?x ?y))
      ((?x* |.| ?y*) (?x ?y))
      ((if ?x* |, | then ?y*) (?x ?y))
      ((if ?x* then ?y*) (?x ?y))
@@ -32,6 +30,8 @@ paip.student
      ((?x* plus ?y*) (+ ?x ?y))
      ((sum ?x* and ?y*) (+ ?x ?y))
      ((product ?x* and ?y*) (* ?x ?y))
+     ((?x* * ?y*) (* ?x ?y))
+     ((?x* times ?y*) (* ?x ?y))
      ((?x* / ?y*) (/ ?x ?y))
      ((?x* per ?y*) (/ ?x ?y))
      ((?x* divided by ?y*) (/ ?x ?y))
