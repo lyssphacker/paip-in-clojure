@@ -1,4 +1,4 @@
-(ns paip.eliza1-test
+(ns paip.eliza1_test
   (:require [clojure.test :refer :all]
             [paip.eliza1 :refer (pat-match)]))
 

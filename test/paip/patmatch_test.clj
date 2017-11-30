@@ -1,4 +1,4 @@
-(ns paip.patmatch-test
+(ns paip.patmatch_test
   (:require [clojure.test :refer :all]
             [paip.patmatch :refer :all]))
 

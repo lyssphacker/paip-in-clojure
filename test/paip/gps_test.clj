@@ -1,4 +1,4 @@
-(ns paip.gps-test
+(ns paip.gps_test
   (:require [clojure.test :refer :all]
             [paip.gps :refer :all]))
 

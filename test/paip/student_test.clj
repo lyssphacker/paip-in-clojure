@@ -1,4 +1,4 @@
-(ns paip.student-test
+(ns paip.student_test
   (:require [clojure.test :refer :all]
             [paip.student :refer :all]))
 

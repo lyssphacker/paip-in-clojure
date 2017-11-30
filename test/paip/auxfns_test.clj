@@ -1,4 +1,4 @@
-(ns paip.auxfns-test
+(ns paip.auxfns_test
   (:require [clojure.test :refer :all]
             [paip.auxfns :refer :all]
             [paip.gps :refer (action?)]
