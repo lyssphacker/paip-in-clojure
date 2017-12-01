@@ -258,3 +258,4 @@ paip.student
           noise-words?
           words)))))
 
+(student '(if a is equal to b))
