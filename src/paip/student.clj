@@ -2,7 +2,7 @@
 paip.student
   (:require [paip.patmatch :refer :all]
             [paip.auxfns :refer (fmap remove-if fmap-values in?
-                                      subst cons? mapcar)]
+                                      subst cons?)]
             [clojure.walk :refer (postwalk-replace)]
             [clojure.inspector :refer (atom?)]
             [clojure.pprint :refer (cl-format)]))
