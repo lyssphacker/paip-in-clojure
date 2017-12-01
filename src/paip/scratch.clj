@@ -1,16 +1,5 @@
 (ns ^{:doc "Contains experiments, ad-hoc tests, etc."}
 paip.scratch
-  (:require [paip.student :refer (student)]))
+  (:require [paip.auxfns :refer :all]))
 
-;(student '(if the number of customers Tom gets is twice the square of
-;                  20 % of the number of advertisements he runs \,
-;                  and the number of advertisements is 45 \,
-;                  then what is the number of customers Tom gets ?))
 
-(defn foo
-  []
-  (student '(if a is equal to b)))
-
-(foo)
-
-(student '(if a is equal to b))
