@@ -2,19 +2,19 @@
 paip.student
   (:require [paip.patmatch :refer :all]
             [paip.auxfns :refer (fmap remove-if fmap-values in?
-                                      subst cons?)]
+                                      subst cons? mapcar)]
             [clojure.walk :refer (postwalk-replace)]
             [clojure.inspector :refer (atom?)]
             [clojure.pprint :refer (cl-format)]))
 
 
 (def student-rules-abbrev
-  '(((?x* |.|) ?x)
-     ((?x* |.| ?y*) (?x ?y))
-     ((if ?x* |, | then ?y*) (?x ?y))
+  '(((?x* .) ?x)
+     ((?x* . ?y*) (?x ?y))
+     ((if ?x* \, then ?y*) (?x ?y))
      ((if ?x* then ?y*) (?x ?y))
-     ((if ?x* |, | ?y*) (?x ?y))
-     ((?x* |, | and ?y*) (?x ?y))
+     ((if ?x* \, ?y*) (?x ?y))
+     ((?x* \, and ?y*) (?x ?y))
      ((find ?x* and ?y*) ((= to-find-1 ?x) (= to-find-2 ?y)))
      ((find ?x*) (= to-find ?x))
      ((?x* equals ?y*) (= ?x ?y))
@@ -60,9 +60,9 @@ paip.student
 (defn exp-rhs [exp] (nth exp 2))
 
 (def student-rules
-  (fmap
-    student-rules-abbrev
-    expand-pat-match-abbrev))
+  (map
+    expand-pat-match-abbrev
+    student-rules-abbrev))
 
 (defn rule-pat [rule] (first rule))
 (defn rule-res [rule] (second rule))
@@ -257,5 +257,3 @@ paip.student
         (remove-if
           noise-words?
           words)))))
-
-(student '(if a is equal to b))
