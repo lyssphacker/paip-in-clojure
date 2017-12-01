@@ -218,9 +218,3 @@ paip.auxfns
   (postwalk-replace
     {old new}
     form))
-
-(defn mapcar
-  "Returns a collection consisting of elements computed
-  by applying f to the first element of coll."
-  [f coll]
-  (map #(apply f (list (first %))) coll))
