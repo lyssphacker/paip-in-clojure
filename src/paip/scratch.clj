@@ -1,5 +1,5 @@
 (ns ^{:doc "Contains experiments, ad-hoc tests, etc."}
-paip.foo
+paip.scratch
   (:require [paip.student :refer (student)]))
 
 ;(student '(if the number of customers Tom gets is twice the square of
@@ -12,3 +12,5 @@ paip.foo
   (student '(if a is equal to b)))
 
 (foo)
+
+(student '(if a is equal to b))
