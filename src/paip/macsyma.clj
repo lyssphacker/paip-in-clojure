@@ -30,6 +30,8 @@ paip.macsyma
 (defn rule-res [rule] (second rule))
 
 (defn infix->prefix
+  "Translate an infix expression into prefix notation."
+  ;; Note we cannot do implicit multiplication in this system
   [exp]
   (b/cond
     (atom? exp) exp
