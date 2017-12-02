@@ -1,14 +1,12 @@
 (ns ^{:doc "The implementation of MACSYMA"}
 paip.macsyma
   (:require [better-cond.core :as b]
-            [paip.patmatch :refer (expand-pat-match-abbrev
-                                    rule-based-translator
-                                    pat-match)]
+            [paip.patmatch :refer :all]
             [clojure.math.numeric-tower :as math]
             [clojure.inspector :refer (atom?)]
             [clojure.walk :refer (postwalk-replace)]))
 
-(def pat-match-abbrev-map
+(def macsyma-pat-match-abbrev-map
   "Map of pattern matching abbreviations to their expansions."
   {'x+ '(?+ x),
    'y+ '(?+ y)
@@ -17,7 +15,7 @@ paip.macsyma
    's  '(?is s not-numberp)})
 
 (def infix->prefix-rules
-  (map (expand-pat-match-abbrev pat-match-abbrev-map)
+  (map (expand-pat-match-abbrev macsyma-pat-match-abbrev-map)
        '(((x+ = y+) (= x y))
           ((- x+) (- x))
           ((+ x+) (+ x))
