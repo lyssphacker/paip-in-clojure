@@ -5,7 +5,7 @@ paip.macsyma
             [clojure.math.numeric-tower :as math]
             [clojure.inspector :refer (atom?)]
             [clojure.walk :refer (postwalk-replace)]
-            [paip.auxfns :refer (fmap-values)]))
+            [paip.auxfns :refer (fmap-values member)]))
 
 (def macsyma-pat-match-abbrev-map
   "Map of pattern matching abbreviations to their expansions."
@@ -51,3 +51,11 @@ paip.macsyma
     (not (nil? res)) res
     (symbol? (first exp)) (list (first exp) (infix->prefix (rest exp)))
     :else (throw (Exception. "Illegal exp"))))
+
+(defn variable?
+  "Variables are the symbols M through Z."
+  ;; put x,y,z first to find them a little faster
+  [exp]
+  (member
+    '(x y z m n o p q r s t u v w)
+    exp))
