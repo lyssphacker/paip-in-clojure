@@ -61,7 +61,7 @@ paip.student
 
 (def student-rules
   (map
-    expand-pat-match-abbrev
+    (expand-pat-match-abbrev pat-match-abbrev-map)
     student-rules-abbrev))
 
 (defn rule-pat [rule] (first rule))

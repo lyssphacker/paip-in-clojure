@@ -186,21 +186,23 @@ paip.patmatch
 
 (defn pat-match-abbrev
   "Lookup symbol's abbreviation in a map."
-  [sym]
-  (let [expansion (sym pat-match-abbrev-map)]
+  [sym map]
+  (let [expansion (sym map)]
     (if (nil? expansion)
       sym
       expansion)))
 
 (defn expand-pat-match-abbrev
   "Expand out all pattern matching abbreviations in pat."
-  [pat]
-  (cond (symbol? pat) (pat-match-abbrev pat)
-        (atom? pat) pat
-        (empty? pat) '()
-        :else (cons
-                (expand-pat-match-abbrev (first pat))
-                (expand-pat-match-abbrev (rest pat)))))
+  [map]
+  (fn
+    [pat]
+    (cond (symbol? pat) (pat-match-abbrev pat map)
+          (atom? pat) pat
+          (empty? pat) '()
+          :else (cons
+                  ((expand-pat-match-abbrev map) (first pat))
+                  ((expand-pat-match-abbrev map) (rest pat))))))
 
 (defn rule-pattern
   [rule]

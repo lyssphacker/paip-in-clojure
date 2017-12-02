@@ -8,8 +8,16 @@ paip.macsyma
             [clojure.inspector :refer (atom?)]
             [clojure.walk :refer (postwalk-replace)]))
 
+(def pat-match-abbrev-map
+  "Map of pattern matching abbreviations to their expansions."
+  {'x+ '(?+ x),
+   'y+ '(?+ y)
+   'n  '(?is n numberp)
+   'm  '(?is m numberp)
+   's  '(?is s not-numberp)})
+
 (def infix->prefix-rules
-  (map expand-pat-match-abbrev
+  (map (expand-pat-match-abbrev pat-match-abbrev-map)
        '(((x+ = y+) (= x y))
           ((- x+) (- x))
           ((+ x+) (+ x))
