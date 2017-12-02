@@ -8,22 +8,6 @@ paip.macsyma
             [clojure.inspector :refer (atom?)]
             [clojure.walk :refer (postwalk-replace)]))
 
-(defn foo
-  [x]
-  (b/cond
-    (= x 1) 1
-    :let [y x]
-    (= y 2) 2
-    :else 3))
-
-(defn bar
-  [x]
-  (b/cond
-    (= x 1) 1
-    :when-let [y (= x 2)]
-    2
-    :else 3))
-
 (def infix->prefix-rules
   (map expand-pat-match-abbrev
        '(((x+ = y+) (= x y))
