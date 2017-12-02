@@ -4,7 +4,8 @@ paip.macsyma
             [paip.patmatch :refer :all]
             [clojure.math.numeric-tower :as math]
             [clojure.inspector :refer (atom?)]
-            [clojure.walk :refer (postwalk-replace)]))
+            [clojure.walk :refer (postwalk-replace)]
+            [paip.auxfns :refer (fmap-values)]))
 
 (def macsyma-pat-match-abbrev-map
   "Map of pattern matching abbreviations to their expansions."
@@ -33,22 +34,18 @@ paip.macsyma
   (b/cond
     (atom? exp) exp
     (= (count exp) 1) (infix->prefix (first exp))
-    :when-let [res
-               (rule-based-translator
-                 exp
-                 infix->prefix-rules
-                 pat-match
-                 rule-pat
-                 rule-res
-                 (fn
-                   [bindings response]
-                   (postwalk-replace
-                     (map
-                       (fn [pair]
-                         (cons (first pair)
-                               (infix->prefix (rest pair))))
-                       bindings)
-                     response)))] res
+    :let [res
+          (rule-based-translator
+            exp
+            infix->prefix-rules
+            pat-match
+            rule-pat
+            rule-res
+            (fn
+              [bindings response]
+              (postwalk-replace
+                (fmap-values bindings infix->prefix)
+                response)))]
+    (not (nil? res)) res
     (symbol? (first exp)) (list (first exp) (infix->prefix (rest exp)))
     :else (throw (Exception. "Illegal exp"))))
-
