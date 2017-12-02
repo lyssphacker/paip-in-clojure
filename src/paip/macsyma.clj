@@ -43,24 +43,22 @@ paip.macsyma
   (b/cond
     (atom? exp) exp
     (= (count exp) 1) (infix->prefix (first exp))
-    :let [ret
-          (rule-based-translator
-            exp
-            infix->prefix-rules
-            pat-match
-            rule-pat
-            rule-res
-            (fn
-              [bindings response]
-              (postwalk-replace
-                (map
-                  (fn [pair]
-                    (cons (first pair)
-                          (infix->prefix (rest pair))))
-                  bindings)
-                response)))]
-    :when-let [res (not (nil? ret))]
-    ret
+    :when-let [res
+               (rule-based-translator
+                 exp
+                 infix->prefix-rules
+                 pat-match
+                 rule-pat
+                 rule-res
+                 (fn
+                   [bindings response]
+                   (postwalk-replace
+                     (map
+                       (fn [pair]
+                         (cons (first pair)
+                               (infix->prefix (rest pair))))
+                       bindings)
+                     response)))] res
     (symbol? (first exp)) (list (first exp) (infix->prefix (rest exp)))
     :else (throw (Exception. "Illegal exp"))))
 
