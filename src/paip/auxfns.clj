@@ -44,7 +44,7 @@ paip.auxfns
   (not (atom? x)))
 
 (defn funcall [f & args]
-  "Applies functionf to arguments args."
+  "Applies function f to arguments args."
   (apply f args))
 
 (defn subseqn
