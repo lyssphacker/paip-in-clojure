@@ -4,7 +4,9 @@ paip.macsyma
             [paip.patmatch :refer (expand-pat-match-abbrev
                                     rule-based-translator
                                     pat-match)]
-            [clojure.math.numeric-tower :as math]))
+            [clojure.math.numeric-tower :as math]
+            [clojure.inspector :refer (atom?)]
+            [clojure.walk :refer (postwalk-replace)]))
 
 (defn foo
   [x]
@@ -33,15 +35,32 @@ paip.macsyma
           ((x+ / y+) (/ x y))
           ((x+ expt y+) (expt x y)))))
 
-;(rule-based-translator
-;  words
-;  student-rules
-;  pat-match
-;  rule-pat
-;  rule-res
-;  (fn
-;    [bindings response]
-;    (postwalk-replace
-;      (translate-pair bindings)
-;      response)))
+(defn rule-pat [rule] (first rule))
+(defn rule-res [rule] (second rule))
+
+(defn infix->prefix
+  [exp]
+  (b/cond
+    (atom? exp) exp
+    (= (count exp) 1) (infix->prefix (first exp))
+    :let [ret
+          (rule-based-translator
+            exp
+            infix->prefix-rules
+            pat-match
+            rule-pat
+            rule-res
+            (fn
+              [bindings response]
+              (postwalk-replace
+                (map
+                  (fn [pair]
+                    (cons (first pair)
+                          (infix->prefix (rest pair))))
+                  bindings)
+                response)))]
+    :when-let [res (not (nil? ret))]
+    ret
+    (symbol? (first exp)) (list (first exp) (infix->prefix (rest exp)))
+    :else (throw (Exception. "Illegal exp"))))
 
