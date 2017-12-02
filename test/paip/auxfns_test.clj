@@ -2,7 +2,8 @@
   (:require [clojure.test :refer :all]
             [paip.auxfns :refer :all]
             [paip.gps :refer (action?)]
-            [paip.patmatch :refer (expand-pat-match-abbrev)]))
+            [paip.patmatch :refer (expand-pat-match-abbrev
+                                    pat-match-abbrev-map)]))
 
 (def test-ops
   #{{:action   'drive-son-to-school
@@ -80,6 +81,6 @@
     (is (= (fmap
              {'(?x* .)     '?x
               '(?x* . ?y*) '(?x ?y)}
-             expand-pat-match-abbrev)
+             (expand-pat-match-abbrev pat-match-abbrev-map))
            {'((?* ?x) .)         '?x
             '((?* ?x) . (?* ?y)) '(?x ?y)}))))
