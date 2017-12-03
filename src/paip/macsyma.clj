@@ -66,3 +66,34 @@ paip.macsyma
   "Exponentiation"
   [x y]
   (math/expt x y))
+
+(declare simplify-exp)
+
+
+(defn simplify
+  "Simplify an expression by first simplifying its components."
+  [exp]
+  (if
+    (atom? exp)
+    exp
+    (simplify-exp
+      (map simplify exp))))
+
+
+(defn simplifier
+  "Read a mathematical expression, simplify it, and print the result."
+  []
+  (loop []
+    (print 'simplifier>)
+    (let [input (read-string (read-line))]
+      (if (= input 'quit)
+        'done
+        (do
+          (println (simp input))
+          (recur))))))
+
+(defn simp
+  [inf]
+  (prefix->infix
+    (simplify
+      (infix->prefix inf))))
