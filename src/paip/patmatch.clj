@@ -1,8 +1,8 @@
 (ns ^{:doc "Pattern matcher from section 6.2"}
 paip.patmatch
-  (:require [paip.auxfns :refer (variable? fail no-bindings
-                                           match-variable cons?
-                                           position funcall)]
+  (:require [paip.auxfns :refer (fail no-bindings
+                                      match-variable cons?
+                                      position funcall)]
             [clojure.inspector :refer (atom?)]
             [clojure.walk :refer (postwalk-replace)]))
 
@@ -42,9 +42,9 @@ paip.patmatch
 
 (defn segment-matcher
   "Call the right function for segment pattern."
-  [pattern input bindings]
+  [pattern input bindings variable?]
   ((match-fn (first (first pattern)))
-    pattern input bindings))
+    pattern input bindings variable?))
 
 (defn single-matcher
   "Call the right function for single pattern."
@@ -54,13 +54,13 @@ paip.patmatch
 
 (defn pat-match
   "Match pattern against input in the context of the bindings"
-  ([pattern input]
-   (pat-match pattern input no-bindings))
-  ([pattern input bindings]
+  ([pattern input variable?]
+   (pat-match pattern input no-bindings variable?))
+  ([pattern input bindings variable?]
    (cond (= bindings fail) fail
          (variable? pattern) (match-variable pattern input bindings)
          (= pattern input) bindings
-         (segment-pattern? pattern) (segment-matcher pattern input bindings)
+         (segment-pattern? pattern) (segment-matcher pattern input bindings variable?)
          (single-pattern? pattern) (single-matcher pattern input bindings)
          (and
            (cons? pattern)
@@ -68,16 +68,18 @@ paip.patmatch
                                      (rest input)
                                      (pat-match (first pattern)
                                                 (first input)
-                                                bindings))
+                                                bindings
+                                                variable?)
+                                     variable?)
          :else fail)))
 
 (defn match-is
   "Succeed and bind var if the input satisfies pred,
   where var-and-pred is the list (var pred)."
-  [var-and-pred input bindings]
+  [var-and-pred input bindings variable?]
   (let [var (first var-and-pred)
         pred (second var-and-pred)
-        new-bindings (pat-match var input bindings)]
+        new-bindings (pat-match var input bindings variable?)]
     (if (or (= new-bindings fail)
             (not ((resolve pred) input)))
       fail
@@ -85,35 +87,39 @@ paip.patmatch
 
 (defn match-and
   "Succeed if all the patterns match the input."
-  [patterns input bindings]
+  [patterns input bindings variable?]
   (cond (= bindings fail) fail
         (empty? patterns) bindings
         :else (match-and (rest patterns)
                          input
                          (pat-match (first patterns)
                                     input
-                                    bindings))))
+                                    bindings
+                                    variable?)
+                         variable?)))
 
 (defn match-or
   "Succeed if any one of the patterns match the input."
-  [patterns input bindings]
+  [patterns input bindings variable?]
   (if (empty? patterns)
     fail
     (let [new-bindings (pat-match
                          (first patterns)
                          input
-                         bindings)]
+                         bindings
+                         variable?)]
       (if (= new-bindings fail)
         (match-or (rest patterns)
                   input
-                  bindings)
+                  bindings
+                  variable?)
         new-bindings))))
 
 (defn match-not
   "Succeed if none of the patterns match the input.
   This will never bind any variables."
-  [patterns input bindings]
-  (if (match-or patterns input bindings)
+  [patterns input bindings variable?]
+  (if (match-or patterns input bindings variable?)
     fail
     bindings))
 
@@ -121,7 +127,7 @@ paip.patmatch
   "Find the first position that pat1 could possibly match input,
   starting at position start.  If pat1 is non-constant, then just
   return start."
-  [pat1 input start]
+  [pat1 input start variable?]
   (cond (and (atom? pat1) (not (variable? pat1)))
         (position input pat1 start)
         (<= start (count input)) start
@@ -129,16 +135,16 @@ paip.patmatch
 
 (defn segment-match
   "Match the segment pattern ((?* var) . pat) against input."
-  ([pattern input bindings]
-   (segment-match pattern input bindings 0))
-  ([pattern input bindings start]
+  ([pattern input bindings variable?]
+   (segment-match pattern input bindings 0 variable?))
+  ([pattern input bindings start variable?]
    (let [var (second (first pattern))
          pat (rest pattern)]
      (if (empty? pat)
        (match-variable var input bindings)
        ;; We assume that pat starts with a constant
        ;; In other words, a pattern can't have 2 consecutive vars
-       (let [pos (first-match-pos (first pat) input start)]
+       (let [pos (first-match-pos (first pat) input start variable?)]
          (if (= -1 pos)
            fail
            (let [b2 (pat-match
@@ -147,37 +153,38 @@ paip.patmatch
                       (match-variable
                         var
                         (take pos input)
-                        bindings))]
+                        bindings)
+                      variable?)]
              ;; If this match failed, try another longer one
              ;; If it worked, check that the variables match
              (if (= b2 fail)
-               (segment-match pattern input bindings (+ pos 1))
+               (segment-match pattern input bindings (+ pos 1) variable?)
                b2))))))))
 
 (defn segment-match+
   "Match one or more elements of input."
-  [pattern input bindings]
-  (segment-match pattern input bindings 1))
+  [pattern input bindings variable?]
+  (segment-match pattern input bindings 1 variable?))
 
 (defn segment-match?
   "Match zero or one element of input."
-  [pattern input bindings]
+  [pattern input bindings variable?]
   (let [var (second (first pattern))
         pat (rest pattern)]
-    (or (pat-match (cons var pat) input bindings)
-        (pat-match pat input bindings))))
+    (or (pat-match (cons var pat) input bindings variable?)
+        (pat-match pat input bindings variable?))))
 
 (defn match-if
   "Test an arbitrary expression involving variables.
   The pattern looks like ((?if code) . rest)."
-  [pattern input bindings]
+  [pattern input bindings variable?]
   (let [result (eval
                  (clojure.walk/postwalk-replace
                    bindings
                    (second (first pattern))))]
     (if (= result false)
       nil
-      (pat-match (rest pattern) input bindings))))
+      (pat-match (rest pattern) input bindings variable?))))
 
 (def pat-match-abbrev-map
   "Map of pattern matching abbreviations to their expansions."
