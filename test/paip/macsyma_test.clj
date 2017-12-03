@@ -7,3 +7,9 @@
     (is
       (= '(+ 2 3)
          (infix->prefix '(2 + 3))))))
+
+(deftest simp-1
+  (testing "simp-1"
+    (is
+      (= 137
+         (simp '(5 * 20 + 30 + 7))))))
