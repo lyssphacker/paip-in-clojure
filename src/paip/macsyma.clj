@@ -5,7 +5,12 @@ paip.macsyma
             [clojure.math.numeric-tower :as math]
             [clojure.inspector :refer (atom?)]
             [clojure.walk :refer (postwalk-replace)]
-            [paip.auxfns :refer (fmap-values member)]))
+            [paip.auxfns :refer (fmap-values member)]
+            [paip.student :refer (prefix->infix
+                                   binary-exp?
+                                   rule-pat rule-res
+                                   exp-args exp? mkexp
+                                   exp-lhs exp-rhs exp-op)]))
 
 (def macsyma-pat-match-abbrev-map
   "Map of pattern matching abbreviations to their expansions."
@@ -25,9 +30,6 @@ paip.macsyma
           ((x+ * y+) (* x y))
           ((x+ / y+) (/ x y))
           ((x+ expt y+) (expt x y)))))
-
-(defn rule-pat [rule] (first rule))
-(defn rule-res [rule] (second rule))
 
 (defn infix->prefix
   "Translate an infix expression into prefix notation."
