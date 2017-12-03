@@ -13,3 +13,15 @@
     (is
       (= 137
          (simp '(5 * 20 + 30 + 7))))))
+
+(deftest simp-2
+  (testing "simp-2"
+    (is
+      (= 0
+         (simp '(y / z * (5 * x - (4 + 1) * x)))))))
+
+(deftest simp-3
+  (testing "simp-3"
+    (is
+      (= 'x
+         (simp '((4 - 3) * x + (y / y - 1) * z))))))
