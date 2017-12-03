@@ -61,3 +61,8 @@ paip.macsyma
   (member
     '(x y z m n o p q r s t u v w)
     exp))
+
+(defn expt
+  "Exponentiation"
+  [x y]
+  (math/expt x y))
