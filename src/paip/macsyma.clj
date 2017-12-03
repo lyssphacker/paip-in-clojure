@@ -67,8 +67,39 @@ paip.macsyma
   [x y]
   (math/expt x y))
 
-(declare simplify-exp)
+(def simplification-rules
+  (map infix->prefix
+       '((x + 0 = x)
+          (0 + x = x)
+          (x + x = 2 * x)
+          (x - 0 = x)
+          (0 - x = - x)
+          (x - x = 0)
+          (- - x = x)
+          (x * 1 = x)
+          (1 * x = x)
+          (x * 0 = 0)
+          (0 * x = 0)
+          (x * x = x expt 2)
+          (x / 0 = undefined)
+          (0 / x = 0)
+          (x / 1 = x)
+          (x / x = 1)
+          (0 expt 0 = undefined)
+          (x expt 0 = 1)
+          (0 expt x = 0)
+          (1 expt x = 1)
+          (x expt 1 = x)
+          (x expt -1 = 1 / x)
+          (x * (y / x) = y)
+          ((y / x) * x = y)
+          ((y * x) / x = y)
+          ((x * y) / x = y)
+          (x + - x = 0)
+          ((- x) + x = 0)
+          (x + y - x = y))))
 
+(declare simplify-exp)
 
 (defn simplify
   "Simplify an expression by first simplifying its components."
@@ -79,6 +110,41 @@ paip.macsyma
     (simplify-exp
       (map simplify exp))))
 
+(defn evaluable
+  "Is this an arithmetic expression that can be evaluated?"
+  [exp]
+  (and
+    (every? number? (exp-args exp))
+    (or (member '(+ - * /) (exp-op exp))
+        (and (= (exp-op exp) 'expt)
+             (integer? (second (exp-args exp)))))))
+
+(defn simplify-exp
+  "Simplify using a rule, or by doing arithmetic."
+  [exp]
+  (b/cond
+    (atom? exp) exp
+    (= (count exp) 1) (infix->prefix (first exp))
+    :let [res
+          (rule-based-translator
+            exp
+            simplification-rules
+            pat-match
+            exp-lhs
+            exp-rhs
+            (fn
+              [bindings response]
+              (simplify
+                (postwalk-replace bindings response))))]
+    (not (nil? res)) res
+    (evaluable exp) (eval exp)
+    :else exp))
+
+(defn simp
+  [inf]
+  (prefix->infix
+    (simplify
+      (infix->prefix inf))))
 
 (defn simplifier
   "Read a mathematical expression, simplify it, and print the result."
@@ -92,8 +158,3 @@ paip.macsyma
           (println (simp input))
           (recur))))))
 
-(defn simp
-  [inf]
-  (prefix->infix
-    (simplify
-      (infix->prefix inf))))
