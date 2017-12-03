@@ -1,8 +1,8 @@
 (ns ^{:doc "Chapter 7's STUDENT program to solve algebra word problems."}
 paip.student
   (:require [paip.patmatch :refer :all]
-            [paip.auxfns :refer (fmap remove-if fmap-values in?
-                                      subst cons?)]
+            [paip.auxfns :refer (variable? fmap remove-if fmap-values in?
+                                           subst cons?)]
             [clojure.walk :refer (postwalk-replace)]
             [clojure.inspector :refer (atom?)]
             [clojure.pprint :refer (cl-format)]))
@@ -93,7 +93,8 @@ paip.student
         [bindings response]
         (postwalk-replace
           (translate-pair bindings)
-          response)))
+          response))
+      variable?)
     (make-variable words)))
 
 (defn noise-words?

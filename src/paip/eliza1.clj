@@ -123,7 +123,8 @@ paip.eliza1
        [bindings responses]
        (postwalk-replace
          (switch-viewpoint bindings)
-         (random-elt responses))))))
+         (random-elt responses)))
+     variable?)))
 
 (defn eliza
   "Respond to user input using pattern matching rules."

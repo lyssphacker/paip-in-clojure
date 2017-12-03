@@ -220,16 +220,17 @@ paip.patmatch
   (get rule 1))
 
 (defn rule-based-translator
-  ([input rules action]
-   (rule-based-translator input rules pat-match rule-pattern rule-responses action))
-  ([input rules matcher rule-if rule-then action]
+  ([input rules action variable?]
+   (rule-based-translator input rules pat-match rule-pattern rule-responses action variable?))
+  ([input rules matcher rule-if rule-then action variable?]
    (some
      (fn
        [rule]
        (let [result (funcall
                       matcher
                       (funcall rule-if rule)
-                      input)]
+                      input
+                      variable?)]
          (if (not= result fail)
            (funcall
              action

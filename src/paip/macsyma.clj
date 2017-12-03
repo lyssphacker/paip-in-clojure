@@ -31,6 +31,14 @@ paip.macsyma
           ((x+ / y+) (/ x y))
           ((x+ expt y+) (expt x y)))))
 
+(defn variable?
+  "Variables are the symbols M through Z."
+  ;; put x,y,z first to find them a little faster
+  [exp]
+  (member
+    '(x y z m n o p q r s t u v w)
+    exp))
+
 (defn infix->prefix
   "Translate an infix expression into prefix notation."
   ;; Note we cannot do implicit multiplication in this system
@@ -49,18 +57,11 @@ paip.macsyma
               [bindings response]
               (postwalk-replace
                 (fmap-values bindings infix->prefix)
-                response)))]
+                response))
+            variable?)]
     (not (nil? res)) res
     (symbol? (first exp)) (list (first exp) (infix->prefix (rest exp)))
     :else (throw (Exception. "Illegal exp"))))
-
-(defn variable?
-  "Variables are the symbols M through Z."
-  ;; put x,y,z first to find them a little faster
-  [exp]
-  (member
-    '(x y z m n o p q r s t u v w)
-    exp))
 
 (defn expt
   "Exponentiation"
@@ -135,7 +136,8 @@ paip.macsyma
             (fn
               [bindings response]
               (simplify
-                (postwalk-replace bindings response))))]
+                (postwalk-replace bindings response)))
+            variable?)]
     (not (nil? res)) res
     (evaluable exp) (eval exp)
     :else exp))
