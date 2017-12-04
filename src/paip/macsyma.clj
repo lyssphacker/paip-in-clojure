@@ -14,7 +14,7 @@ paip.macsyma
 
 (def macsyma-pat-match-abbrev-map
   "Map of pattern matching abbreviations to their expansions."
-  {'x+ '(?+ x),
+  {'x+ '(?+ x)
    'y+ '(?+ y)
    'n  '(?is n numberp)
    'm  '(?is m numberp)
