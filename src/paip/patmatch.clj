@@ -2,7 +2,7 @@
 paip.patmatch
   (:require [paip.auxfns :refer (fail no-bindings
                                       match-variable cons?
-                                      position funcall)]
+                                      position funcall eql?)]
             [clojure.inspector :refer (atom?)]
             [clojure.walk :refer (postwalk-replace)]))
 
@@ -59,7 +59,7 @@ paip.patmatch
   ([pattern input bindings variable?]
    (cond (= bindings fail) fail
          (variable? pattern) (match-variable pattern input bindings)
-         (= pattern input) bindings
+         (eql? pattern input) bindings
          (segment-pattern? pattern) (segment-matcher pattern input bindings variable?)
          (single-pattern? pattern) (single-matcher pattern input bindings)
          (and

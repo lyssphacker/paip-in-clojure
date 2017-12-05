@@ -218,3 +218,9 @@ paip.auxfns
   (postwalk-replace
     {old new}
     form))
+
+(defn eql?
+  [x y]
+  (and (not (coll? x))
+       (not (coll? y))
+       (= x y)))
