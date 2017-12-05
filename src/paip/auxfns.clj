@@ -221,6 +221,7 @@ paip.auxfns
 
 (defn eql?
   [x y]
-  (and (not (coll? x))
-       (not (coll? y))
-       (= x y)))
+  (cond
+    (and (coll? x) (coll? y))
+    (and (empty? x) (empty? y))
+    :else (= x y)))
