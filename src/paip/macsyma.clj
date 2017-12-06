@@ -2,10 +2,11 @@
 paip.macsyma
   (:require [better-cond.core :as b]
             [paip.patmatch :refer :all]
+            [paip.macsymar :refer :all]
             [clojure.math.numeric-tower :as math]
             [clojure.inspector :refer (atom?)]
             [clojure.walk :refer (postwalk-replace)]
-            [paip.auxfns :refer (fmap-values member)]
+            [paip.auxfns :refer (fmap-values member mappend)]
             [paip.student :refer (prefix->infix
                                    binary-exp?
                                    rule-pat rule-res
@@ -72,51 +73,22 @@ paip.macsyma
   [x y]
   (math/expt x y))
 
-(def simplification-rules
-  (map infix->prefix
-       '((x + 0 = x)
-          (0 + x = x)
-          (x + x = 2 * x)
-          (x - 0 = x)
-          (0 - x = - x)
-          (x - x = 0)
-          (- - x = x)
-          (x * 1 = x)
-          (1 * x = x)
-          (x * 0 = 0)
-          (0 * x = 0)
-          (x * x = x expt 2)
-          (x / 0 = undefined)
-          (0 / x = 0)
-          (x / 1 = x)
-          (x / x = 1)
-          (0 expt 0 = undefined)
-          (x expt 0 = 1)
-          (0 expt x = 0)
-          (1 expt x = 1)
-          (x expt 1 = x)
-          (x expt -1 = 1 / x)
-          (x * (y / x) = y)
-          ((y / x) * x = y)
-          ((y * x) / x = y)
-          ((x * y) / x = y)
-          (x + - x = 0)
-          ((- x) + x = 0)
-          (x + y - x = y))))
-
 (defn simp-rule
   "Transform a rule into proper format."
   [rule]
   (let [exp (infix->prefix rule)]
     (mkexp
-      (expand-pat-match-abbrev (exp-lhs exp))
+      ((expand-pat-match-abbrev macsyma-pat-match-abbrev-map) (exp-lhs exp))
       (exp-op exp)
       (exp-rhs exp))))
 
-;(defn all-simplification-rules
-;  ([]
-;    (all-simplification-rules simplification-rules))
-;  ([& rules]))
+(defn simplification-rules
+  ([]
+   (simplification-rules basic-rules))
+  ([& rules]
+    (mappend
+      #(map simp-rule %)
+      rules)))
 
 (declare simplify-exp)
 
@@ -147,7 +119,7 @@ paip.macsyma
     :let [res
           (rule-based-translator
             exp
-            simplification-rules
+            (simplification-rules)
             pat-match
             exp-lhs
             exp-rhs
