@@ -82,13 +82,15 @@ paip.macsyma
       (exp-op exp)
       (exp-rhs exp))))
 
-(defn simplification-rules
+(defn get-simplification-rules
   ([]
-   (simplification-rules basic-rules associativity-commutativity))
+   (get-simplification-rules basic-rules associativity-commutativity))
   ([& rules]
     (mappend
       #(map simp-rule %)
       rules)))
+
+(def simplification-rules (get-simplification-rules))
 
 (declare simplify-exp)
 
@@ -119,7 +121,7 @@ paip.macsyma
     :let [res
           (rule-based-translator
             exp
-            (simplification-rules)
+            simplification-rules
             pat-match
             exp-lhs
             exp-rhs
