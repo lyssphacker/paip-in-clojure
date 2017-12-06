@@ -48,9 +48,9 @@ paip.patmatch
 
 (defn single-matcher
   "Call the right function for single pattern."
-  [pattern input bindings]
+  [pattern input bindings variable?]
   ((match-fn (first pattern))
-    pattern input bindings))
+    pattern input bindings variable?))
 
 (defn pat-match
   "Match pattern against input in the context of the bindings"
@@ -61,7 +61,7 @@ paip.patmatch
          (variable? pattern) (match-variable pattern input bindings)
          (eql? pattern input) bindings
          (segment-pattern? pattern) (segment-matcher pattern input bindings variable?)
-         (single-pattern? pattern) (single-matcher pattern input bindings)
+         (single-pattern? pattern) (single-matcher pattern input bindings variable?)
          (and
            (cons? pattern)
            (cons? input)) (pat-match (rest pattern)
