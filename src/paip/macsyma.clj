@@ -84,7 +84,7 @@ paip.macsyma
 
 (defn simplification-rules
   ([]
-   (simplification-rules basic-rules))
+   (simplification-rules basic-rules associativity-commutativity))
   ([& rules]
     (mappend
       #(map simp-rule %)
