@@ -12,13 +12,17 @@ paip.macsyma
                                    exp-args exp? mkexp
                                    exp-lhs exp-rhs exp-op)]))
 
+(defn not-number?
+  [x]
+  (not (number? x)))
+
 (def macsyma-pat-match-abbrev-map
   "Map of pattern matching abbreviations to their expansions."
   {'x+ '(?+ x)
    'y+ '(?+ y)
-   'n  '(?is n numberp)
-   'm  '(?is m numberp)
-   's  '(?is s not-numberp)})
+   'n  '(?is n number?)
+   'm  '(?is m number?)
+   's  '(?is s not-number?)})
 
 (def infix->prefix-rules
   (map (expand-pat-match-abbrev macsyma-pat-match-abbrev-map)
@@ -99,6 +103,20 @@ paip.macsyma
           (x + - x = 0)
           ((- x) + x = 0)
           (x + y - x = y))))
+
+(defn simp-rule
+  "Transform a rule into proper format."
+  [rule]
+  (let [exp (infix->prefix rule)]
+    (mkexp
+      (expand-pat-match-abbrev (exp-lhs exp))
+      (exp-op exp)
+      (exp-rhs exp))))
+
+;(defn all-simplification-rules
+;  ([]
+;    (all-simplification-rules simplification-rules))
+;  ([& rules]))
 
 (declare simplify-exp)
 
