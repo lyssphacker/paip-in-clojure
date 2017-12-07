@@ -31,7 +31,7 @@
      ((- x) + x = 0)
      (x + y - x = y)))
 
-(def associativity-commutativity
+(def associativity-commutativity-rules
   '((s * n = n * s)
      (n * (m * x) = (n * m) * x)
      (x * (n * y) = n * (x * y))
@@ -41,7 +41,7 @@
      (x + (y + n) = (x + y) + n)
      ((x + n) + y = (x + y) + n)))
 
-(def logs-trigs
+(def logs-trigs-rules
   '((log 1 = 0)
      (log 0 = undefined)
      (log e = 1)
@@ -58,3 +58,20 @@
      (log x + log y = log (x * y))
      (log x - log y = log (x / y))
      ((sin x) expt 2 + (cos x) expt 2 = 1)))
+
+(def differentiation-rules
+  '((d x / d x = 1)
+     (d (u + v) / d x = (d u / d x) + (d v / d x))
+     (d (u - v) / d x = (d u / d x) - (d v / d x))
+     (d (- u) / d x = - (d u / d x))
+     (d (u * v) / d x = u * (d v / d x) + v * (d u / d x))
+     (d (u / v) / d x = (v * (d u / d x) - u * (d v / d x))
+        / v expt 2)                                             ; [This corrects an error in the first printing]
+     (d (u expt n) / d x = n * u expt (n - 1) * (d u / d x))
+     (d (u expt v) / d x = v * u expt (v - 1) * (d u / d x)
+        + u ^ v * (log u) * (d v / d x))
+     (d (log u) / d x = (d u / d x) / u)
+     (d (sin u) / d x = (cos u) * (d u / d x))
+     (d (cos u) / d x = - (sin u) * (d u / d x))
+     (d (e expt u) / d x = (e expt u) * (d u / d x))
+     (d u / d x = 0)))
