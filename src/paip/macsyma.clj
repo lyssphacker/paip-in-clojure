@@ -6,7 +6,8 @@ paip.macsyma
             [clojure.math.numeric-tower :as math]
             [clojure.inspector :refer (atom?)]
             [clojure.walk :refer (postwalk-replace)]
-            [paip.auxfns :refer (fmap-values member mappend)]
+            [paip.auxfns :refer (fmap-values member mappend
+                                             funcall)]
             [paip.student :refer (prefix->infix
                                    binary-exp?
                                    rule-pat rule-res
@@ -32,8 +33,8 @@ paip.macsyma
           ((+ x+) (+ x))
           ((x+ + y+) (+ x y))
           ((x+ - y+) (- x y))
-          ((d y+ / d x) (d y x))        ;*** New rule
-          ((Int y+ d x) (int y x))      ;*** New rule
+          ((d y+ / d x) (d y x))                            ;*** New rule
+          ((Int y+ d x) (int y x))                          ;*** New rule
           ((x+ * y+) (* x y))
           ((x+ / y+) (/ x y))
           ((x+ expt y+) (expt x y)))))
@@ -115,10 +116,14 @@ paip.macsyma
         (and (= (exp-op exp) 'expt)
              (integer? (second (exp-args exp)))))))
 
+(declare simplify-by-fn)
+
 (defn simplify-exp
   "Simplify using a rule, or by doing arithmetic."
   [exp]
   (b/cond
+    :let [res (simplify-by-fn exp)]
+    (not (nil? res)) res
     (atom? exp) exp
     (= (count exp) 1) (infix->prefix (first exp))
     :let [res
@@ -155,3 +160,23 @@ paip.macsyma
           (println (simp input))
           (recur))))))
 
+(declare unfactorize)
+(declare factorize)
+(declare integrate)
+
+(def simp-fn-map
+  {'Int
+   (fn [exp]
+     (unfactorize
+       (factorize
+         (integrate
+           (exp-lhs exp)
+           (exp-rhs exp)))))})
+
+(defn simplify-by-fn
+  [exp]
+  (let [fn ((exp-op exp) simp-fn-map)
+        result (if fn (funcall fn exp))]
+    (if (nil? result)
+      nil
+      (simplify result))))
