@@ -84,11 +84,12 @@ paip.macsyma
 
 (defn get-simplification-rules
   ([]
-   (get-simplification-rules basic-rules associativity-commutativity))
+   (get-simplification-rules basic-rules associativity-commutativity
+                             logs-trigs))
   ([& rules]
-    (mappend
-      #(map simp-rule %)
-      rules)))
+   (mappend
+     #(map simp-rule %)
+     rules)))
 
 (def simplification-rules (get-simplification-rules))
 
