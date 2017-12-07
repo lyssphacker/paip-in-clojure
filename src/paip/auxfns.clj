@@ -225,3 +225,7 @@ paip.auxfns
     (and (coll? x) (coll? y))
     (and (empty? x) (empty? y))
     :else (= x y)))
+
+(defn third
+  [x]
+  (nth x 2))
