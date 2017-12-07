@@ -25,3 +25,9 @@
     (is
       (= 'x
          (simp '((4 - 3) * x + (y / y - 1) * z))))))
+
+(deftest simp-4
+  (testing "simp-4"
+    (is
+      (= '(720 * x)
+         (simp '(2 * x * 3 * x * 4 * (1 / x) * 5 * 6))))))
