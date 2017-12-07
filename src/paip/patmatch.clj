@@ -2,27 +2,30 @@
 paip.patmatch
   (:require [paip.auxfns :refer (fail no-bindings
                                       match-variable cons?
-                                      position funcall eql?)]
+                                      position funcall eql?
+                                      third)]
             [clojure.inspector :refer (atom?)]
             [clojure.walk :refer (postwalk-replace)]))
 
-(def pattern-fn-map
+(def single-pattern-fn-map
   {'?is  'match-is,
    '?or  'match-or,
    '?and 'match-and,
    '?not 'match-not,
-   '?*   'segment-match,
-   '?+   'segment-match+,
-   '??   'segment-match?,
    '?if  'match-if})
+
+(def segment-pattern-fn-map
+  {'?* 'segment-match,
+   '?+ 'segment-match+,
+   '?? 'segment-match?})
 
 (defn match-fn
   "Get the matching function for x,
   if it is a symbol that has one."
-  [x]
+  [x map]
   (when
     (symbol? x)
-    (let [func (x pattern-fn-map)]
+    (let [func (x map)]
       (if (not (nil? func))
         (resolve func)))))
 
@@ -31,25 +34,33 @@ paip.patmatch
   [pattern]
   (and (cons? pattern) (cons? (first pattern))
        (symbol? (first (first pattern)))
-       (not (nil? (match-fn (first (first pattern)))))))
+       (not (nil? (match-fn
+                    (first (first pattern))
+                    segment-pattern-fn-map)))))
 
 (defn single-pattern?
   "Is this a single-matching pattern?
   E.g. (?is x predicate) (?and . patterns) (?or . patterns)."
   [pattern]
   (and (cons? pattern)
-       (not (nil? (match-fn (first pattern))))))
+       (not (nil? (match-fn
+                    (first pattern)
+                    single-pattern-fn-map)))))
 
 (defn segment-matcher
   "Call the right function for segment pattern."
   [pattern input bindings variable?]
-  ((match-fn (first (first pattern)))
+  ((match-fn
+     (first (first pattern))
+     segment-pattern-fn-map)
     pattern input bindings variable?))
 
 (defn single-matcher
   "Call the right function for single pattern."
   [pattern input bindings variable?]
-  ((match-fn (first pattern))
+  ((match-fn
+     (first pattern)
+     single-pattern-fn-map)
     pattern input bindings variable?))
 
 (defn pat-match
@@ -77,8 +88,8 @@ paip.patmatch
   "Succeed and bind var if the input satisfies pred,
   where var-and-pred is the list (var pred)."
   [var-and-pred input bindings variable?]
-  (let [var (first var-and-pred)
-        pred (second var-and-pred)
+  (let [var (second var-and-pred)
+        pred (third var-and-pred)
         new-bindings (pat-match var input bindings variable?)]
     (if (or (= new-bindings fail)
             (not ((resolve pred) input)))
