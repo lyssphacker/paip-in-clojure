@@ -31,3 +31,10 @@
     (is
       (= '(720 * x)
          (simp '(2 * x * 3 * x * 4 * (1 / x) * 5 * 6))))))
+
+(deftest simp-5
+  (testing "simp-5"
+    (is
+      (= 1
+         (simp '(sin (x + x) * sin (d x expt 2 / d x) +
+                     cos (2 * x) * cos (x * d 2 * y / d y)))))))
