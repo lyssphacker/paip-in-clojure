@@ -7,7 +7,8 @@ paip.macsyma
             [clojure.inspector :refer (atom?)]
             [clojure.walk :refer (postwalk-replace)]
             [paip.auxfns :refer (fmap-values member mappend
-                                             funcall)]
+                                             funcall starts-with
+                                             length=1 find-first)]
             [paip.student :refer (prefix->infix
                                    binary-exp?
                                    rule-pat rule-res
@@ -161,7 +162,30 @@ paip.macsyma
           (recur))))))
 
 (declare unfactorize)
-(declare factorize)
+(defn factorize
+  [exp]
+  (with-local-vars [factors nil
+        constant 1]
+    (letfn [(fac [x n]
+              (cond
+                (number? x) (var-set constant
+                                     (* @constant (expt x n)))
+                (starts-with x '*) (do
+                                     (fac (exp-lhs x) n)
+                                     (fac (exp-rhs x) n))
+                (starts-with x '/) (do
+                                     (fac (exp-lhs x) n)
+                                     (fac (exp-rhs x) (- n)))
+                (and (starts-with x '-)
+                     (length=1 (exp-args x)))
+                (var-set constant (- @constant))
+                (fac (exp-lhs x) n)
+                (and (starts-with x 'expt)
+                     (number? (exp-rhs x))) (fac (exp-lhs x)
+                                                 (* n (exp-rhs x)))
+                :else (let [factor (find-first #(= x (exp-lhs %)) factors)]
+                        (if factor
+                          ()))))])))
 (declare integrate)
 
 (def simp-fn-map
