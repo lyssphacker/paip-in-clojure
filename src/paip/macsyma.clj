@@ -227,3 +227,26 @@ paip.macsyma
     (if (nil? result)
       nil
       (simplify result))))
+
+(defn divide-factors
+  "Divide a list of factors by another, producing a third."
+  [numer denom]
+  (with-local-vars [result numer]
+    (doseq [d denom]
+      (let [index (find-first-index
+                     #(= (exp-lhs d) (exp-lhs %))
+                     result)]
+        (if (not= index -1)
+          (var-set
+            result
+            (update-in
+              @result
+              (vec index)
+              #(mkexp (exp-lhs %)
+                      (exp-op %)
+                      (- (exp-rhs %) (exp-rhs d)))))
+          (var-set
+            result
+            (cons `(expt ~(exp-lhs d) ~(- (exp-rhs d)))
+                  @result)))))
+    (filter #(= (exp-rhs %) 0) @result)))
