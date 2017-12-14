@@ -229,3 +229,8 @@ paip.auxfns
 (defn third
   [x]
   (nth x 2))
+
+(defn length=1
+  "Is x a list of length 1?"
+  [x]
+  (and (cons? x) (empty? (rest x))))
