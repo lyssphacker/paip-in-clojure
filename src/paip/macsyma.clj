@@ -8,7 +8,7 @@ paip.macsyma
             [clojure.walk :refer (postwalk-replace)]
             [paip.auxfns :refer (fmap-values member mappend
                                              funcall starts-with
-                                             length=1 find-first)]
+                                             length=1 find-first-index)]
             [paip.student :refer (prefix->infix
                                    binary-exp?
                                    rule-pat rule-res
@@ -164,7 +164,7 @@ paip.macsyma
 (declare unfactorize)
 (defn factorize
   [exp]
-  (with-local-vars [factors nil
+  (with-local-vars [factors []
         constant 1]
     (letfn [(fac [x n]
               (cond
@@ -178,14 +178,28 @@ paip.macsyma
                                      (fac (exp-rhs x) (- n)))
                 (and (starts-with x '-)
                      (length=1 (exp-args x)))
-                (var-set constant (- @constant))
-                (fac (exp-lhs x) n)
+                (do
+                  (var-set constant (- @constant))
+                  (fac (exp-lhs x) n))
                 (and (starts-with x 'expt)
                      (number? (exp-rhs x))) (fac (exp-lhs x)
                                                  (* n (exp-rhs x)))
-                :else (let [factor (find-first #(= x (exp-lhs %)) factors)]
-                        (if factor
-                          ()))))])))
+                :else (let [index (find-first-index #(= x (exp-lhs %)) factors)]
+                        (if (not= index -1)
+                          (var-set factors
+                                   (update-in @factors
+                                              (vec index)
+                                              #(mkexp (exp-lhs %)
+                                                  (exp-op %)
+                                                  (+ (exp-rhs %) n))))
+                          (var-set factors
+                                   (cons `(expt ~x ~n)
+                                         @factors))))))]
+      (fac exp 1)
+      (case constant
+        0 '((expt 0 1))
+        1 factors
+        `((expt ~constant 1) ~@factors)))))
 (declare integrate)
 
 (def simp-fn-map
