@@ -236,6 +236,6 @@ paip.auxfns
   (and (cons? x) (empty? (rest x))))
 
 (defn find-first-index
-  [f coll x]
+  [f coll]
   (let [el (find-first f coll)]
     (.indexOf coll el)))
