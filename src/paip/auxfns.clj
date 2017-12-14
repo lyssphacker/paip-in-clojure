@@ -234,3 +234,8 @@ paip.auxfns
   "Is x a list of length 1?"
   [x]
   (and (cons? x) (empty? (rest x))))
+
+(defn find-first-index
+  [f coll x]
+  (let [el (find-first f coll)]
+    (.indexOf coll el)))
