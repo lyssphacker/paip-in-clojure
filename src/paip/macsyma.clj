@@ -161,8 +161,17 @@ paip.macsyma
           (println (simp input))
           (recur))))))
 
-(declare unfactorize)
+(defn unfactorize
+  "Convert a list of factors back into prefix form."
+  [factors]
+  (cond
+    (empty? factors) 1
+    (length=1 factors) (first factors)
+    :else `(* ~(first factors) ~(unfactorize (rest factors)))))
+
 (defn factorize
+  "Return a list of the factors of exp^n,
+  where each factor is of the form (^ y n)."
   [exp]
   (with-local-vars [factors []
         constant 1]
