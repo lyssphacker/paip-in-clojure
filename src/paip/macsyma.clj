@@ -8,7 +8,8 @@ paip.macsyma
             [clojure.walk :refer (postwalk-replace)]
             [paip.auxfns :refer (fmap-values member mappend
                                              funcall starts-with
-                                             length=1 find-first-index)]
+                                             length=1 find-first-index
+                                             eql?)]
             [paip.student :refer (prefix->infix
                                    binary-exp?
                                    rule-pat rule-res
@@ -250,3 +251,13 @@ paip.macsyma
             (cons `(expt ~(exp-lhs d) ~(- (exp-rhs d)))
                   @result)))))
     (filter #(= (exp-rhs %) 0) @result)))
+
+(defn find-anywhere
+  "Does item occur anywhere in tree?  If so, return it."
+  [item tree]
+  (b/cond
+    (eql? item tree) tree
+    (atom? tree) nil
+    :let [res (find-anywhere item (first tree))]
+    (not (nil? res)) res
+    :else (find-anywhere item (rest tree))))
