@@ -257,7 +257,8 @@ paip.macsyma
   [item tree]
   (b/cond
     (eql? item tree) tree
-    (atom? tree) nil
+    (or (and (coll? tree) (empty? tree))
+        (atom? tree)) nil
     :let [res (find-anywhere item (first tree))]
     (not (nil? res)) res
     :else (find-anywhere item (rest tree))))
