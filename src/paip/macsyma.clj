@@ -261,3 +261,8 @@ paip.macsyma
     :let [res (find-anywhere item (first tree))]
     (not (nil? res)) res
     :else (find-anywhere item (rest tree))))
+
+(defn free-of
+  "True if expression has no occurrence of var."
+  [exp var]
+  (not (find-anywhere var exp)))
