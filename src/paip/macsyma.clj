@@ -267,3 +267,15 @@ paip.macsyma
   "True if expression has no occurrence of var."
   [exp var]
   (not (find-anywhere var exp)))
+
+(defn partition-if
+  "Return 2 values: elements of list that satisfy pred,
+  and elements that don't."
+  [pred list]
+  (with-local-vars [yes-list '()
+                    no-list '()]
+    (doseq [item list]
+      (if (funcall pred item)
+        (var-set yes-list (cons item @yes-list))
+        (var-set no-list (cons item @no-list))))
+    [(reverse @yes-list) (reverse @no-list)]))
