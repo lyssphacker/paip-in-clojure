@@ -279,3 +279,35 @@ paip.macsyma
         (var-set yes-list (cons item @yes-list))
         (var-set no-list (cons item @no-list))))
     [(reverse @yes-list) (reverse @no-list)]))
+
+(declare deriv-divides)
+
+(defn integrate
+  [exp x]
+  (b/cond
+    ;; First try some trivial cases
+    (free-of exp x) `(* ~exp x) ; Int c dx = c*x
+    (starts-with exp '+) `(+ ~(integrate (exp-lhs exp) x) ; Int f + g  =
+                             ~(integrate (exp-rhs exp) x)) ; Int f + Int g
+    (starts-with exp '-)
+    (case (count (exp-args exp))
+      1 (integrate (exp-lhs exp) x)
+      2 `(- ~(integrate (exp-lhs exp) x)
+            ~(integrate (exp-rhs exp) x)))
+    :else (let [[const-factors x-factors]
+          (partition-if
+            (fn [factor]
+              (free-of factor x))
+            (factorize exp))]
+          (identity ;simplify
+            `(* ~(unfactorize const-factors)
+                ;; And try to integrate:
+                ~(cond
+                   (empty? x-factors) x
+                   :let [res (some
+                               (fn [factor]
+                                 (deriv-divides factor x-factors x))
+                               x-factors)]
+                   (not (nil? res)) res
+                   ;; <other methods here>
+                   :else `(int? ~(unfactorize x-factors) ~x)))))))
