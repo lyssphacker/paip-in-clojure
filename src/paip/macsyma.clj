@@ -291,9 +291,10 @@ paip.macsyma
                              ~(integrate (exp-rhs exp) x)) ; Int f + Int g
     (starts-with exp '-)
     (case (count (exp-args exp))
-      1 (integrate (exp-lhs exp) x)
-      2 `(- ~(integrate (exp-lhs exp) x)
-            ~(integrate (exp-rhs exp) x)))
+      1 (integrate (exp-lhs exp) x) ; Int - f = - Int f
+      2 `(- ~(integrate (exp-lhs exp) x) ; Int f - g  =
+            ~(integrate (exp-rhs exp) x))) ; Int f - Int g
+    ;; Now move the constant factors to the left of the integral
     :else (let [[const-factors x-factors]
           (partition-if
             (fn [factor]
