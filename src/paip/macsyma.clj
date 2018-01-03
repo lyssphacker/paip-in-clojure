@@ -296,10 +296,10 @@ paip.macsyma
             ~(integrate (exp-rhs exp) x))) ; Int f - Int g
     ;; Now move the constant factors to the left of the integral
     :else (let [[const-factors x-factors]
-            (partition-if
-              (fn [factor]
-                (free-of factor x))
-              (factorize exp))]
+              (partition-if
+                (fn [factor]
+                  (free-of factor x))
+                (factorize exp))]
               (identity ;simplify
                 `(* ~(unfactorize const-factors)
                     ;; And try to integrate:
