@@ -280,6 +280,10 @@ paip.macsyma
         (var-set no-list (cons item @no-list))))
     [(reverse @yes-list) (reverse @no-list)]))
 
+(defn deriv
+  [y x]
+  (simplify `(d ~y ~x)))
+
 (declare deriv-divides)
 
 (defn integrate
