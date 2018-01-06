@@ -239,7 +239,7 @@ paip.macsyma
     (doseq [d denom]
       (let [index (find-first-index
                      #(= (exp-lhs d) (exp-lhs %))
-                     result)]
+                     @result)]
         (if (not= index -1)
           (var-set
             result
@@ -297,7 +297,7 @@ paip.macsyma
                  (assoc @table
                    (exp-op (exp-lhs (exp-lhs rule)))
                    rule))))
-    table))
+    @table))
 
 (def integration-table
   (create-integration-table integration-table-rules))
