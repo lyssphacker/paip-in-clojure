@@ -75,3 +75,13 @@
      (d (cos u) / d x = - (sin u) * (d u / d x))
      (d (e expt u) / d x = (e expt u) * (d u / d x))
      (d u / d x = 0)))
+
+(def integration-table-rules
+   '((Int log(x) d x = x * log(x) - x)
+     (Int exp(x) d x = exp(x))
+     (Int sin(x) d x = - cos(x))
+     (Int cos(x) d x = sin(x))
+     (Int tan(x) d x = - log(cos(x)))
+     (Int sinh(x) d x = cosh(x))
+     (Int cosh(x) d x = sinh(x))
+     (Int tanh(x) d x = log(cosh(x)))))

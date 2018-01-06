@@ -9,7 +9,7 @@ paip.macsyma
             [paip.auxfns :refer (fmap-values member mappend
                                              funcall starts-with
                                              length=1 find-first-index
-                                             eql?)]
+                                             eql? subst)]
             [paip.student :refer (prefix->infix
                                    binary-exp?
                                    rule-pat rule-res
@@ -284,7 +284,56 @@ paip.macsyma
   [y x]
   (simplify `(d ~y ~x)))
 
-(declare deriv-divides)
+(defn create-integration-table
+  [rules]
+  (with-local-vars [table {}]
+    (doseq [i-rule rules]
+      ;; changed infix->prefix to simp-rule - norvig Jun 11 1996
+      (let [rule (simp-rule i-rule)]
+        (var-set table
+                 (assoc @table
+                   (exp-op (exp-lhs (exp-lhs rule)))
+                   rule))))
+    table))
+
+(def integration-table
+  (create-integration-table integration-table-rules))
+
+(defn in-integral-table?
+  [exp]
+  (and (exp? exp) ((exp-op exp) integration-table)))
+
+(defn integrate-from-table
+  [op arg]
+  (let [rule (op integration-table)]
+    (subst arg
+           (exp-lhs (exp-lhs (exp-lhs rule)))
+           (exp-rhs rule))))
+
+(defn deriv-divides
+  [factor factors x]
+  (assert (starts-with factor 'expt))
+  (let [u (exp-lhs factor)
+        n (exp-rhs factor)
+        k (divide-factors
+            factors (factorize `(* ~factor ~(deriv u x))))]
+    (cond
+      (free-of k x)
+      ;; Int k*u^n*du/dx dx = k*Int u^n du
+      ;;                    = k*u^(n+1)/(n+1) for n/=-1
+      ;;                    = k*log(u) for n=-1
+      (if (= n 1)
+        `(* ~(unfactorize k) (log ~u))
+        `(/ (* ~(unfactorize k) (^ ~u ~(+ n 1)))
+            ~(+ n 1)))
+      (and (= n 1) (in-integral-table? u))
+      ;; Int y'*f(y) dx = Int f(y) dy
+      (let [k2 (divide-factors
+                 factors
+                 (factorize `(* ~u ~(deriv (exp-lhs u) x))))]
+        (if (free-of k2 x)
+          `(* ~(integrate-from-table (exp-op u) (exp-lhs u))
+              ~(unfactorize k2)))))))
 
 (defn integrate
   [exp x]
