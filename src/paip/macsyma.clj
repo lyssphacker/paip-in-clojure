@@ -325,7 +325,7 @@ paip.macsyma
       ;;                    = k*log(u) for n=-1
       (if (= n 1)
         `(* ~(unfactorize k) (log ~u))
-        `(/ (* ~(unfactorize k) (^ ~u ~(+ n 1)))
+        `(/ (* ~(unfactorize k) (expt ~u ~(+ n 1)))
             ~(+ n 1)))
       (and (= n 1) (in-integral-table? u))
       ;; Int y'*f(y) dx = Int f(y) dy
@@ -357,7 +357,7 @@ paip.macsyma
               (identity ;simplify
                 `(* ~(unfactorize const-factors)
                     ;; And try to integrate:
-                    ~(cond
+                    ~(b/cond
                        (empty? x-factors) x
                        :let [res (some
                                    (fn [factor]
