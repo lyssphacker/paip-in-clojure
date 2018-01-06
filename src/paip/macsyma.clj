@@ -315,7 +315,7 @@ paip.macsyma
 
 (defn deriv-divides
   [factor factors x]
-  (assert (starts-with factor 'expt))
+  (assert (starts-with factor 'paip.macsyma/expt))
   (let [u (exp-lhs factor)
         n (exp-rhs factor)
         k (divide-factors
