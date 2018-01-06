@@ -194,7 +194,7 @@ paip.macsyma
                 (and (starts-with x 'expt)
                      (number? (exp-rhs x))) (fac (exp-lhs x)
                                                  (* n (exp-rhs x)))
-                :else (let [index (find-first-index #(= x (exp-lhs %)) factors)]
+                :else (let [index (find-first-index #(= x (exp-lhs %)) @factors)]
                         (if (not= index -1)
                           (var-set factors
                                    (update-in @factors
@@ -214,7 +214,7 @@ paip.macsyma
 (declare integrate)
 
 (def simp-fn-map
-  {'Int
+  {'int
    (fn [exp]
      (unfactorize
        (factorize
