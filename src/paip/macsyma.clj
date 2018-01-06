@@ -206,10 +206,12 @@ paip.macsyma
                                    (cons `(expt ~x ~n)
                                          @factors))))))]
       (fac exp 1)
-      (case constant
+      (case @constant
         0 '((expt 0 1))
-        1 factors
-        `((expt ~constant 1) ~@factors)))))
+        1 @factors
+        (let [constant1 @constant
+              factors1 @factors]
+          `((expt ~constant1 1) ~factors1))))))
 
 (declare integrate)
 
