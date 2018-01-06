@@ -211,7 +211,7 @@ paip.macsyma
         1 @factors
         (let [constant1 @constant
               factors1 @factors]
-          `((expt ~constant1 1) ~factors1))))))
+          `((expt ~constant1 1) ~@factors1))))))
 
 (declare integrate)
 
