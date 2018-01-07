@@ -36,7 +36,7 @@ paip.macsyma
           ((x+ + y+) (+ x y))
           ((x+ - y+) (- x y))
           ((d y+ / d x) (d y x))                            ;*** New rule
-          ((Int y+ d x) (int y x))                          ;*** New rule
+          ((int y+ d x) (int y x))                          ;*** New rule
           ((x+ * y+) (* x y))
           ((x+ / y+) (/ x y))
           ((x+ expt y+) (expt x y)))))
