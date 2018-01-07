@@ -325,7 +325,7 @@ paip.macsyma
       ;; Int k*u^n*du/dx dx = k*Int u^n du
       ;;                    = k*u^(n+1)/(n+1) for n/=-1
       ;;                    = k*log(u) for n=-1
-      (if (= n 1)
+      (if (= n -1)
         `(* ~(unfactorize k) (log ~u))
         `(/ (* ~(unfactorize k) (expt ~u ~(+ n 1)))
             ~(+ n 1)))
