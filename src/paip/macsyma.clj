@@ -253,7 +253,7 @@ paip.macsyma
             result
             (cons `(expt ~(exp-lhs d) ~(- (exp-rhs d)))
                   @result)))))
-    (filter #(= (exp-rhs %) 0) @result)))
+    (filter #(not= (exp-rhs %) 0) @result)))
 
 (defn find-anywhere
   "Does item occur anywhere in tree?  If so, return it."
