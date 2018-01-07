@@ -245,7 +245,7 @@ paip.macsyma
             result
             (update-in
               @result
-              (vec index)
+              [index]
               #(mkexp (exp-lhs %)
                       (exp-op %)
                       (- (exp-rhs %) (exp-rhs d)))))
