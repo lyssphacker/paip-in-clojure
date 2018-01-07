@@ -244,7 +244,7 @@ paip.macsyma
           (var-set
             result
             (update-in
-              @result
+              (vec @result)
               [index]
               #(mkexp (exp-lhs %)
                       (exp-op %)
