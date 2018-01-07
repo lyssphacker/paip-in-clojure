@@ -216,7 +216,7 @@ paip.macsyma
 (declare integrate)
 
 (def simp-fn-map
-  {'Int
+  {'int
    (fn [exp]
      (unfactorize
        (factorize
