@@ -239,3 +239,7 @@ paip.auxfns
   [f coll]
   (let [el (find-first f coll)]
     (.indexOf coll el)))
+
+(defmacro mapcar
+  [f & list]
+  `(map ~f ~@list))

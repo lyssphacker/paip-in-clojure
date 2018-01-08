@@ -9,7 +9,7 @@ paip.macsyma
             [paip.auxfns :refer (fmap-values member mappend
                                              funcall starts-with
                                              length=1 find-first-index
-                                             eql? subst)]
+                                             eql? subst mapcar)]
             [paip.student :refer (prefix->infix
                                    binary-exp?
                                    rule-pat rule-res
@@ -107,7 +107,7 @@ paip.macsyma
     (atom? exp)
     exp
     (simplify-exp
-      (map simplify exp))))
+      (mapcar simplify exp))))
 
 (defn evaluable
   "Is this an arithmetic expression that can be evaluated?"
