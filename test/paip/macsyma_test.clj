@@ -38,3 +38,21 @@
       (= 1
          (simp '(sin (x + x) * sin (d x expt 2 / d x) +
                      cos (2 * x) * cos (x * d 2 * y / d y)))))))
+
+(deftest simp-6
+  (testing "simp-6"
+    (is
+      (= '(-1/2 * (cos (x expt 2)))
+         (simp '(int x * sin(x expt 2) d x))))))
+
+(deftest simp-7
+  (testing "simp-7"
+    (is
+      (= '((3 * ((x expt 4) / 4)) - (1/3 * ((x expt -2) / -2)))
+         (simp '(int ((3 * x expt 3) - 1 / (3 * x expt 3)) d x))))))
+
+(deftest simp-8
+  (testing "simp-8"
+    (is
+      (= '(-4/3 * (((x expt 3) + 2) expt -2))
+         (simp '(int 8 * x expt 2 / (x expt 3 + 2) expt 3 d x))))))
