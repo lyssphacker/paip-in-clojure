@@ -14,7 +14,8 @@ paip.macsyma
                                    binary-exp?
                                    rule-pat rule-res
                                    exp-args exp? mkexp
-                                   exp-lhs exp-rhs exp-op)]))
+                                   exp-lhs exp-rhs exp-op)]
+            [backtick :refer :all]))
 
 (defn not-number?
   [x]
