@@ -169,7 +169,7 @@ paip.macsyma
   (cond
     (empty? factors) 1
     (length=1 factors) (first factors)
-    :else `(* ~(first factors) ~(unfactorize (rest factors)))))
+    :else (template (* ~(first factors) ~(unfactorize (rest factors))))))
 
 (defn factorize
   "Return a list of the factors of exp^n,
@@ -204,7 +204,7 @@ paip.macsyma
                                                   (exp-op %)
                                                   (+ (exp-rhs %) n))))
                           (var-set factors
-                                   (cons `(expt ~x ~n)
+                                   (cons (template (expt ~x ~n))
                                          @factors))))))]
       (fac exp 1)
       (case @constant
@@ -212,7 +212,7 @@ paip.macsyma
         1 @factors
         (let [constant1 @constant
               factors1 @factors]
-          `((expt ~constant1 1) ~@factors1))))))
+          (template ((expt ~constant1 1) ~@factors1)))))))
 
 (declare integrate)
 
@@ -343,14 +343,14 @@ paip.macsyma
   [exp x]
   (b/cond
     ;; First try some trivial cases
-    (free-of exp x) `(* ~exp x) ; Int c dx = c*x
-    (starts-with exp '+) `(+ ~(integrate (exp-lhs exp) x) ; Int f + g  =
-                             ~(integrate (exp-rhs exp) x)) ; Int f + Int g
+    (free-of exp x) (template (* ~exp x)) ; Int c dx = c*x
+    (starts-with exp '+) (template (+ ~(integrate (exp-lhs exp) x) ; Int f + g  =
+                                      ~(integrate (exp-rhs exp) x))) ; Int f + Int g
     (starts-with exp '-)
     (case (count (exp-args exp))
       1 (integrate (exp-lhs exp) x) ; Int - f = - Int f
-      2 `(- ~(integrate (exp-lhs exp) x) ; Int f - g  =
-            ~(integrate (exp-rhs exp) x))) ; Int f - Int g
+      2 (template (- ~(integrate (exp-lhs exp) x) ; Int f - g  =
+                     ~(integrate (exp-rhs exp) x)))) ; Int f - Int g
     ;; Now move the constant factors to the left of the integral
     :else (let [[const-factors x-factors]
               (partition-if
@@ -358,14 +358,14 @@ paip.macsyma
                   (free-of factor x))
                 (factorize exp))]
               (identity ;simplify
-                `(* ~(unfactorize const-factors)
-                    ;; And try to integrate:
-                    ~(b/cond
-                       (empty? x-factors) x
-                       :let [res (some
-                                   (fn [factor]
-                                     (deriv-divides factor x-factors x))
-                                   x-factors)]
-                       (not (nil? res)) res
-                       ;; <other methods here>
-                       :else `(int? ~(unfactorize x-factors) ~x)))))))
+                (template (* ~(unfactorize const-factors)
+                             ;; And try to integrate:
+                             ~(b/cond
+                                (empty? x-factors) x
+                                :let [res (some
+                                            (fn [factor]
+                                              (deriv-divides factor x-factors x))
+                                            x-factors)]
+                                (not (nil? res)) res
+                                ;; <other methods here>
+                                :else (template (int? ~(unfactorize x-factors) ~x)))))))))
