@@ -251,7 +251,7 @@ paip.macsyma
                       (- (exp-rhs %) (exp-rhs d)))))
           (var-set
             result
-            (cons `(expt ~(exp-lhs d) ~(- (exp-rhs d)))
+            (cons (template (expt ~(exp-lhs d) ~(- (exp-rhs d))))
                   @result)))))
     (filter #(not= (exp-rhs %) 0) @result)))
 
@@ -285,7 +285,7 @@ paip.macsyma
 
 (defn deriv
   [y x]
-  (simplify `(d ~y ~x)))
+  (simplify (template (d ~y ~x))))
 
 (defn create-integration-table
   [rules]

@@ -7,4 +7,5 @@
                  [org.clojure/tools.trace "0.7.9"]
                  [org.clojure/math.numeric-tower "0.0.4"]
                  [better-cond "1.0.1"]
-                 [org.clojure/math.numeric-tower "0.0.4"]])
+                 [org.clojure/math.numeric-tower "0.0.4"]
+                 [backtick "0.3.4"]])
