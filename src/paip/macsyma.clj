@@ -320,24 +320,24 @@ paip.macsyma
   (let [u (exp-lhs factor)
         n (exp-rhs factor)
         k (divide-factors
-            factors (factorize `(* ~factor ~(deriv u x))))]
+            factors (factorize (template (* ~factor ~(deriv u x)))))]
     (cond
       (free-of k x)
       ;; Int k*u^n*du/dx dx = k*Int u^n du
       ;;                    = k*u^(n+1)/(n+1) for n/=-1
       ;;                    = k*log(u) for n=-1
       (if (= n -1)
-        `(* ~(unfactorize k) (log ~u))
-        `(/ (* ~(unfactorize k) (expt ~u ~(+ n 1)))
-            ~(+ n 1)))
+        (template (* ~(unfactorize k) (log ~u)))
+        (template (/ (* ~(unfactorize k) (expt ~u ~(+ n 1)))
+                     ~(+ n 1))))
       (and (= n 1) (in-integral-table? u))
       ;; Int y'*f(y) dx = Int f(y) dy
       (let [k2 (divide-factors
                  factors
-                 (factorize `(* ~u ~(deriv (exp-lhs u) x))))]
+                 (factorize (template (* ~u ~(deriv (exp-lhs u) x)))))]
         (if (free-of k2 x)
-          `(* ~(integrate-from-table (exp-op u) (exp-lhs u))
-              ~(unfactorize k2)))))))
+          (template (* ~(integrate-from-table (exp-op u) (exp-lhs u))
+                       ~(unfactorize k2))))))))
 
 (defn integrate
   [exp x]
