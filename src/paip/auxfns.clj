@@ -241,5 +241,12 @@ paip.auxfns
     (.indexOf coll el)))
 
 (defmacro mapcar
+  "Operates on successive elements of the lists.
+  Function is applied to the first element of each list,
+  then to the second element of each list, and so on.
+  The iteration terminates when the shortest list runs out,
+  and excess elements in other lists are ignored.
+  The value returned by mapcar is a list of the results
+  of successive calls to function. "
   [f & list]
   `(map ~f ~@list))
