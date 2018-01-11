@@ -26,8 +26,8 @@
   [variable x bindings]
   (cond (contains? bindings variable)
         (unify (variable bindings) x bindings)
-        (and (variable? x) (contains? bindings variable))
-        (unify variable (variable bindings) bindings)
+        (and (variable? x) (contains? bindings x))
+        (unify variable (x bindings) bindings)
         (and occurs-check (check-occurs variable x bindings))
         fail
         :else (extend-bindings variable x bindings)))
