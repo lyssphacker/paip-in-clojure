@@ -1,7 +1,6 @@
 (ns ^{:doc "Unification functions"}
   paip.unify
-  (:require [paip.patmatch :refer :all]
-            [paip.auxfns :refer (no-bindings variable? eql?
+  (:require [paip.auxfns :refer (no-bindings variable? eql?
                                              cons? match-variable
                                              fail extend-bindings)]
             [clojure.inspector :refer (atom?)]))
