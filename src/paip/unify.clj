@@ -14,7 +14,7 @@
         true
         (and (variable? x) (contains? bindings x))
         (check-occurs variable (bindings x) bindings)
-        (cons? x)
+        (and (cons? x) (not (empty? x)))
         (or (check-occurs variable (first x) bindings)
             (check-occurs variable (rest x) bindings))
         :else false))
