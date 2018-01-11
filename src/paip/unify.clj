@@ -61,7 +61,13 @@
         x
         (and (variable? x) (bindings x))
         (subst-bindings bindings (bindings x))
-        (atom? x) x
+        (or (atom? x) (empty? x))
+        x
         :else (cons
                 (subst-bindings bindings (first x))
                 (subst-bindings bindings (rest x)))))
+
+(defn unifier
+  "Return something that unifies with both x and y (or fail)."
+  [x y]
+  (subst-bindings (unify x y) x))
