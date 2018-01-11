@@ -3,7 +3,8 @@
   (:require [paip.patmatch :refer :all]
             [paip.auxfns :refer (no-bindings variable? eql?
                                              cons? match-variable
-                                             fail extend-bindings)]))
+                                             fail extend-bindings)]
+            [clojure.inspector :refer (atom?)]))
 
 (def occurs-check  "Should we do the occurs check?" true)
 
@@ -49,3 +50,16 @@
                                     (first y)
                                     bindings))
          :else fail)))
+
+(defn subst-bindings
+  "Substitute the value of variables in bindings into x,
+  taking recursively bound variables into account."
+  [bindings x]
+  (cond (= bindings fail) fail
+        (= bindings no-bindings) x
+        (and (variable? x) (bindings x))
+        (subst-bindings bindings (bindings x))
+        (atom? x) x
+        :else (cons
+                (subst-bindings bindings (first x))
+                (subst-bindings bindings (rest x)))))
