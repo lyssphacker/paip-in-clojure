@@ -16,7 +16,7 @@
         (check-occurs variable (bindings x) bindings)
         (cons? x)
         (or (check-occurs variable (first x) bindings)
-            (occurs-check variable (rest x) bindings))
+            (check-occurs variable (rest x) bindings))
         :else false))
 
 (declare unify)
