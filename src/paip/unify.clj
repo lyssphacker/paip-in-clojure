@@ -55,8 +55,10 @@
   "Substitute the value of variables in bindings into x,
   taking recursively bound variables into account."
   [bindings x]
-  (cond (= bindings fail) fail
-        (= bindings no-bindings) x
+  (cond (= bindings fail)
+        fail
+        (= bindings no-bindings)
+        x
         (and (variable? x) (bindings x))
         (subst-bindings bindings (bindings x))
         (atom? x) x
