@@ -14,6 +14,8 @@
 (defn predicate [relation] (first relation))
 
 (defn add-clause
+  "Add a clause to the data base, indexed by head's predicate."
+  ;; The predicate must be a non-variable symbol.
   [clause]
   (let [pred (predicate (clause-head clause))]
     (assert (and (symbol? pred) (not (variable? pred))))
@@ -28,6 +30,7 @@
     pred))
 
 (defmacro <- [& clause]
+  "Add a clause to the data base."
   `(add-clause '~clause))
 
 (defn clear-predicate
@@ -38,6 +41,7 @@
       (dissoc c predicate))))
 
 (defn clear-db
+  "Remove all clauses (for all predicates) from the data base."
   []
   (doseq [predicate db-predicates]
     (clear-predicate predicate)))
