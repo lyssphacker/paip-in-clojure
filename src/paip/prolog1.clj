@@ -1,7 +1,9 @@
 (ns ^{:doc "First version of the prolog interpreter (11.2)."}
   paip.prolog1
   (:require [paip.unify :refer :all]
-            [paip.auxfns :refer (variable? prepend)]))
+            [paip.auxfns :refer (variable? prepend
+                                           funcall)]
+            [clojure.inspector :refer (atom?)]))
 
 (defn clause-head [clause] (first clause))
 (defn clause-body [clause] (rest clause))
@@ -45,5 +47,11 @@
   []
   (doseq [predicate db-predicates]
     (clear-predicate predicate)))
+
+(defn unique-find-anywhere-if
+  ([predicate tree]
+    (unique-find-anywhere-if predicate tree nil))
+  ([predicate tree found-so-far]
+    (if (atom? tree))))
 
 
