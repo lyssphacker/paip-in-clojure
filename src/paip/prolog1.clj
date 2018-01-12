@@ -20,7 +20,7 @@
     (alter-var-root
       #'db-predicates
           (fn [p]
-            (prepend pred p)))
+            (prepend (list pred) p)))
     (alter-var-root
       #'clauses
       (fn [m]
@@ -29,3 +29,17 @@
 
 (defmacro <- [& clause]
   `(add-clause '~clause))
+
+(defn clear-predicate
+  [predicate]
+  (alter-var-root
+    #'clauses
+    (fn [c]
+      (dissoc c predicate))))
+
+(defn clear-db
+  []
+  (doseq [predicate db-predicates]
+    (clear-predicate predicate)))
+
+
