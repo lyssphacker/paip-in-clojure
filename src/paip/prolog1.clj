@@ -72,7 +72,18 @@
   [exp]
   (unique-find-anywhere-if variable? exp))
 
-(declare prove)
+(declare rename-variables)
+(declare prove-all)
+
+(defn prove
+  "Return a list of possible solutions to goal."
+  [goal bindings]
+  (mapcan
+    (fn [clause]
+      (let [new-clause (rename-variables clause)]
+        (prove-all (clause-body new-clause)
+                   (unify goal (clause-head new-clause)))))
+    (clauses (predicate goal))))
 
 (defn prove-all
   "Return a list of solutions to the conjunction of goals."
