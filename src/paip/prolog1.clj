@@ -3,8 +3,10 @@
   (:require [paip.unify :refer :all]
             [paip.auxfns :refer (variable? prepend
                                            funcall adjoin
-                                           mapcan fail)]
-            [clojure.inspector :refer (atom?)]))
+                                           mapcan fail
+                                           mapcar)]
+            [clojure.inspector :refer (atom?)]
+            [clojure.walk :refer (postwalk-replace)]))
 
 (defn clause-head [clause] (first clause))
 (defn clause-body [clause] (rest clause))
@@ -72,7 +74,15 @@
   [exp]
   (unique-find-anywhere-if variable? exp))
 
-(declare rename-variables)
+(defn rename-variables
+  "Replace all variables in x with new ones."
+  [x]
+  (postwalk-replace
+    (mapcar
+      (fn [var] {var (gensym var)})
+      (variables-in x))
+    x))
+
 (declare prove-all)
 
 (defn prove
