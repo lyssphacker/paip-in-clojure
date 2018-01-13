@@ -2,7 +2,7 @@
   paip.prolog1
   (:require [paip.unify :refer :all]
             [paip.auxfns :refer (variable? prepend
-                                           funcall)]
+                                           funcall adjoin)]
             [clojure.inspector :refer (atom?)]))
 
 (defn clause-head [clause] (first clause))
@@ -49,9 +49,26 @@
     (clear-predicate predicate)))
 
 (defn unique-find-anywhere-if
+  "Return a list of leaves of tree satisfying predicate,
+  with duplicates removed."
   ([predicate tree]
-    (unique-find-anywhere-if predicate tree nil))
+    (unique-find-anywhere-if predicate tree '()))
   ([predicate tree found-so-far]
-    (if (atom? tree))))
+    (if (atom? tree)
+      (if (funcall predicate tree)
+        (adjoin found-so-far tree)
+        found-so-far)
+      (unique-find-anywhere-if
+        predicate
+        (first tree)
+        (unique-find-anywhere-if
+          predicate
+          (rest tree)
+          found-so-far)))))
+
+(defn variables-in
+  "Return a list of all the variables in EXP."
+  [exp]
+  (unique-find-anywhere-if variable? exp))
 
 
