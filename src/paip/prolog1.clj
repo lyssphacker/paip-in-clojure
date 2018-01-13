@@ -2,7 +2,8 @@
   paip.prolog1
   (:require [paip.unify :refer :all]
             [paip.auxfns :refer (variable? prepend
-                                           funcall adjoin)]
+                                           funcall adjoin
+                                           mapcan fail)]
             [clojure.inspector :refer (atom?)]))
 
 (defn clause-head [clause] (first clause))
@@ -71,4 +72,16 @@
   [exp]
   (unique-find-anywhere-if variable? exp))
 
+(declare prove)
 
+(defn prove-all
+  "Return a list of solutions to the conjunction of goals."
+  [goals bindings]
+  (cond (= bindings fail) fail
+        (empty? goals) (list bindings)
+        :else (mapcan
+                (fn [goal1-solution]
+                  (prove-all
+                    (rest goals)
+                    goal1-solution))
+                (prove (first goals) bindings))))
