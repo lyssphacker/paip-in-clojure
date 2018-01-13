@@ -54,7 +54,7 @@
   ([predicate tree]
     (unique-find-anywhere-if predicate tree '()))
   ([predicate tree found-so-far]
-    (if (atom? tree)
+    (if (or (atom? tree) (empty? tree))
       (if (funcall predicate tree)
         (adjoin found-so-far tree)
         found-so-far)
