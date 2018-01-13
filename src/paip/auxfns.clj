@@ -250,3 +250,7 @@ paip.auxfns
   of successive calls to function. "
   [f & list]
   `(map ~f ~@list))
+
+(defmacro mapcan
+  [f & list]
+  `(apply concat (map ~f ~@list)))
