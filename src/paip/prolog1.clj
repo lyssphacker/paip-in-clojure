@@ -12,7 +12,7 @@
 (defn clause-head [clause] (first clause))
 (defn clause-body [clause] (rest clause))
 
-(def clauses {})
+(def clauses {'show-prolog-vars 'show-prolog-vars})
 
 (def db-predicates '())
 
