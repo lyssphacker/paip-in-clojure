@@ -40,7 +40,7 @@
           (= input 'f) nil
           (= input 'c) (continue?)
           :else (do
-                  (cl-format true " Type ; to see more or . to stop")
+                  (cl-format true " Type f to see more or t to stop")
                   (continue?)))))
 
 (defn show-prolog-vars
