@@ -27,7 +27,7 @@
     (alter-var-root
       #'db-predicates
           (fn [p]
-            (prepend (list pred) p)))
+            (adjoin p pred)))
     (alter-var-root
       #'clauses
       (fn [m]
