@@ -78,9 +78,10 @@
   "Replace all variables in x with new ones."
   [x]
   (postwalk-replace
-    (mapcar
-      (fn [var] {var (gensym var)})
-      (variables-in x))
+    (into {}
+          (mapcar
+            (fn [var] {var (gensym var)})
+            (variables-in x)))
     x))
 
 (declare prove-all)
