@@ -93,7 +93,7 @@
     (fn [clause]
       (let [new-clause (rename-variables clause)]
         (prove-all (clause-body new-clause)
-                   (unify goal (clause-head new-clause)))))
+                   (unify goal (clause-head new-clause) bindings))))
     (clauses (predicate goal))))
 
 (defn prove-all
