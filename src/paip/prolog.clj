@@ -9,7 +9,8 @@
             [paip.auxfns :refer (funcall fail no-bindings variable?)]
             [clojure.pprint :refer (cl-format)]
             [clojure.walk :refer (postwalk-replace)]
-            [clojure.inspector :refer (atom?)]))
+            [clojure.inspector :refer (atom?)]
+            [backtick :refer :all]))
 
 (declare prove-all)
 
@@ -63,7 +64,7 @@
 
 (defn top-level-prove
   [goals]
-  (prove-all `(~@goals (show-prolog-vars ~@(variables-in goals)))
+  (prove-all (template (~@goals (show-prolog-vars ~@(variables-in goals))))
              no-bindings)
   (cl-format true "~&No.~%"))
 
