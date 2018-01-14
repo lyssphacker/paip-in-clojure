@@ -4,7 +4,7 @@
             [paip.auxfns :refer (variable? prepend
                                            funcall adjoin
                                            mapcan fail
-                                           mapcar)]
+                                           mapcar no-bindings)]
             [clojure.inspector :refer (atom?)]
             [clojure.walk :refer (postwalk-replace)]))
 
@@ -107,3 +107,6 @@
                     (rest goals)
                     goal1-solution))
                 (prove (first goals) bindings))))
+
+(defmacro ?- [& goals]
+  `(prove-all '~goals no-bindings))
