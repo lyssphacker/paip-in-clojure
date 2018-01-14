@@ -37,7 +37,7 @@
   []
   (let [input (read)]
     (cond (= input 't ) true
-          (= input 'f) nil
+          (= input 'f) false
           (= input 'c) (continue?)
           :else (do
                   (cl-format true " Type f to see more or t to stop")
