@@ -109,4 +109,4 @@
                 (prove (first goals) bindings))))
 
 (defmacro ?- [& goals]
-  `(prove-all '~goals no-bindings))
+  `(prove-all '~goals ~no-bindings))
