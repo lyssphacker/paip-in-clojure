@@ -6,9 +6,10 @@
                                              clear-predicate unique-find-anywhere-if
                                              clauses rename-variables)]
             [paip.unify :refer :all]
-            [paip.auxfns :refer (funcall fail no-bindings)]
+            [paip.auxfns :refer (funcall fail no-bindings variable?)]
             [clojure.pprint :refer (cl-format)]
-            [clojure.walk :refer (postwalk-replace)]))
+            [clojure.walk :refer (postwalk-replace)]
+            [clojure.inspector :refer (atom?)]))
 
 (declare prove-all)
 
@@ -52,11 +53,31 @@
     fail
     (prove-all other-goals bindings)))
 
-(declare variables-in)
+(defn non-anon-variable?
+  [x]
+  (and (variable? x) (not (= x '?))))
+
+(defn variables-in
+  [exp]
+  (unique-find-anywhere-if non-anon-variable? exp))
 
 (defn top-level-prove
   [goals]
   (prove-all `(~@goals (show-prolog-vars ~@(variables-in goals)))
              no-bindings)
   (cl-format true "~&No.~%"))
+
+(defn replace-?-vars
+  [exp]
+  (cond (= exp '?) (gensym "?")
+        (atom? exp) exp
+        :else (cons
+                (replace-?-vars (first exp))
+                (replace-?-vars (rest exp)))))
+
+(defmacro <- [& clause]
+  `(add-clause '~(replace-?-vars clause)))
+
+(defmacro ?- [& goals]
+  `(top-level-prove '~(replace-?-vars goals)))
 
