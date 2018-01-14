@@ -113,7 +113,7 @@
   "Print each variable with its binding."
   [vars bindings]
   (if (empty? vars)
-    (cl-format true "~&Yes")
+    (cl-format true "~&Yes~%")
     (doseq [var vars]
       (cl-format true "~&~a = ~a~%" var
               (subst-bindings bindings var)))))
@@ -122,7 +122,7 @@
   "Print the variables in each of the solutions."
   [vars solutions]
   (if (empty? vars)
-    (cl-format true "~&No.")
+    (cl-format true "~&No~%")
     (doseq [solution solutions]
       (show-prolog-vars vars solution))))
 
