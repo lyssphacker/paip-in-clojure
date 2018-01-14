@@ -70,7 +70,7 @@
 (defn replace-?-vars
   [exp]
   (cond (= exp '?) (gensym "?")
-        (atom? exp) exp
+        (or (atom? exp) (empty? exp)) exp
         :else (cons
                 (replace-?-vars (first exp))
                 (replace-?-vars (rest exp)))))
