@@ -6,7 +6,8 @@
                                            mapcan fail
                                            mapcar no-bindings)]
             [clojure.inspector :refer (atom?)]
-            [clojure.walk :refer (postwalk-replace)]))
+            [clojure.walk :refer (postwalk-replace)]
+            [clojure.pprint :refer (cl-format)]))
 
 (defn clause-head [clause] (first clause))
 (defn clause-body [clause] (rest clause))
@@ -108,5 +109,26 @@
                     goal1-solution))
                 (prove (first goals) bindings))))
 
+(defn show-prolog-vars
+  [vars bindings]
+  (if (empty? vars)
+    (cl-format true "~&Yes")
+    (doseq [var vars]
+      (cl-format true "~&~a = ~a~%" var
+              (subst-bindings bindings var)))))
+
+(defn show-prolog-solutions
+  [vars solutions]
+  (if (empty? vars)
+    (cl-format true "~&No.")
+    (doseq [solution solutions]
+      (show-prolog-vars vars solution))))
+
+(defn top-level-prove
+  [goals]
+  (show-prolog-solutions
+    (variables-in goals)
+    (prove-all goals no-bindings)))
+
 (defmacro ?- [& goals]
-  `(prove-all '~goals ~no-bindings))
+  `(top-level-prove '~goals))
