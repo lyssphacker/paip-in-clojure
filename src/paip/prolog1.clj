@@ -110,6 +110,7 @@
                 (prove (first goals) bindings))))
 
 (defn show-prolog-vars
+  "Print each variable with its binding."
   [vars bindings]
   (if (empty? vars)
     (cl-format true "~&Yes")
@@ -118,6 +119,7 @@
               (subst-bindings bindings var)))))
 
 (defn show-prolog-solutions
+  "Print the variables in each of the solutions."
   [vars solutions]
   (if (empty? vars)
     (cl-format true "~&No.")
@@ -125,6 +127,7 @@
       (show-prolog-vars vars solution))))
 
 (defn top-level-prove
+  "Prove the goals, and print variables readably."
   [goals]
   (show-prolog-solutions
     (variables-in goals)
