@@ -25,7 +25,7 @@
               (concat (clause-body new-clause) other-goals)
               (unify goal (clause-head new-clause) bindings))))
         clauses)
-      (funcall clauses (rest goal) bindings other-goals))))
+      (funcall (resolve clauses)(rest goal) bindings other-goals))))
 
 (defn prove-all
   [goals bindings]
