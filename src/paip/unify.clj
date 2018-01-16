@@ -2,8 +2,10 @@
   paip.unify
   (:require [paip.auxfns :refer (no-bindings variable? eql?
                                              cons? match-variable
-                                             fail extend-bindings)]
-            [clojure.inspector :refer (atom?)]))
+                                             fail extend-bindings
+                                             starts-with)]
+            [clojure.inspector :refer (atom?)]
+            [clojure.string :refer (starts-with?)]))
 
 (def occurs-check  "Should we do the occurs check?" true)
 
@@ -32,6 +34,13 @@
         fail
         :else (extend-bindings variable x bindings)))
 
+(defn cdr?
+  [x]
+  (and (seq? x)
+       (= (count x) 1)
+       (symbol? (first (first x)))
+       (= (name (first (first x))) "?*")))
+
 (defn unify
   "See if x and y match with given bindings."
   ([x y]
@@ -39,6 +48,8 @@
   ([x y bindings]
    (cond (= bindings fail) fail
          (eql? x y) bindings
+         (cdr? x) (unify-variable (second (first x)) y bindings)
+         (cdr? y) (unify-variable (second (first y)) x bindings)
          (variable? x) (unify-variable x y bindings)
          (variable? y) (unify-variable y x bindings)
          (and
