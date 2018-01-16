@@ -56,7 +56,7 @@
 
 (defn non-anon-variable?
   [x]
-  (and (variable? x) (not= x '?)))
+  (and (variable? x) (not= x '?) (not= x '?*)))
 
 (defn variables-in
   [exp]
