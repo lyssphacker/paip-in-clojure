@@ -34,10 +34,10 @@
         fail
         :else (extend-bindings variable x bindings)))
 
-(defn cdr?
+(defn cdr-variable?
   [x]
   (and (seq? x)
-       (= (count x) 1)
+       (seq? (first x))
        (symbol? (first (first x)))
        (= (name (first (first x))) "?*")))
 
@@ -48,10 +48,10 @@
   ([x y bindings]
    (cond (= bindings fail) fail
          (eql? x y) bindings
-         (cdr? x) (unify-variable (second (first x)) y bindings)
-         (cdr? y) (unify-variable (second (first y)) x bindings)
          (variable? x) (unify-variable x y bindings)
          (variable? y) (unify-variable y x bindings)
+         (cdr-variable? x) (unify-variable (second (first x)) y bindings)
+         (cdr-variable? y) (unify-variable (second (first y)) x bindings)
          (and
            (cons? x)
            (cons? y)) (unify (rest x)
