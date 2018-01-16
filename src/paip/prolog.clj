@@ -5,7 +5,7 @@
                                              add-clause clear-db
                                              clear-predicate unique-find-anywhere-if
                                              clauses)]
-            [paip.unify :refer :all]
+            [paip.unify :refer (subst-bindings)]
             [paip.auxfns :refer (funcall fail no-bindings variable?
                                          mapcar)]
             [clojure.pprint :refer (cl-format)]
@@ -62,7 +62,7 @@
     (cl-format true "~&Yes~%")
     (doseq [var vars]
       (cl-format true "~&~a = ~a~%" var
-              (postwalk-replace bindings var))))
+              (subst-bindings bindings var))))
   (if (continue?)
     fail
     (prove-all other-goals bindings)))
