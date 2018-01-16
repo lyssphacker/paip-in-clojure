@@ -4,13 +4,26 @@
                                              predicate db-predicates
                                              add-clause clear-db
                                              clear-predicate unique-find-anywhere-if
-                                             clauses rename-variables)]
+                                             clauses)]
             [paip.unify :refer :all]
-            [paip.auxfns :refer (funcall fail no-bindings variable?)]
+            [paip.auxfns :refer (funcall fail no-bindings variable?
+                                         mapcar)]
             [clojure.pprint :refer (cl-format)]
             [clojure.walk :refer (postwalk-replace)]
             [clojure.inspector :refer (atom?)]
             [backtick :refer :all]))
+
+(declare variables-in)
+
+(defn rename-variables
+  "Replace all variables in x with new ones."
+  [x]
+  (postwalk-replace
+    (into {}
+          (mapcar
+            (fn [var] {var (gensym var)})
+            (variables-in x)))
+    x))
 
 (declare prove-all)
 
@@ -25,7 +38,7 @@
               (concat (clause-body new-clause) other-goals)
               (unify goal (clause-head new-clause) bindings))))
         clauses)
-      (funcall (resolve clauses)(rest goal) bindings other-goals))))
+      (funcall (resolve clauses) (rest goal) bindings other-goals))))
 
 (defn prove-all
   [goals bindings]
