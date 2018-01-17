@@ -5,7 +5,7 @@
                                              add-clause clear-db
                                              clear-predicate unique-find-anywhere-if
                                              clauses)]
-            [paip.unify :refer (subst-bindings)]
+            [paip.unify :refer (subst-bindings unify)]
             [paip.auxfns :refer (funcall fail no-bindings variable?
                                          mapcar)]
             [clojure.pprint :refer (cl-format)]
