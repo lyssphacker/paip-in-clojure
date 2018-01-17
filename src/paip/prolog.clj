@@ -49,7 +49,7 @@
 (defn continue?
   []
   (let [input (read)]
-    (cond (= input 't ) true
+    (cond (= input 't) true
           (= input 'f) false
           (= input 'c) (continue?)
           :else (do
