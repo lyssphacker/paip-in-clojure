@@ -254,3 +254,7 @@ paip.auxfns
 (defmacro mapcan
   [f & list]
   `(apply concat (map ~f ~@list)))
+
+(defn add1
+  [x]
+  (+ x 1))

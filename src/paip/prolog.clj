@@ -7,7 +7,7 @@
                                              clauses)]
             [paip.unify :refer (subst-bindings unify)]
             [paip.auxfns :refer (funcall fail no-bindings variable?
-                                         mapcar)]
+                                         mapcar add1)]
             [clojure.pprint :refer (cl-format)]
             [clojure.walk :refer (postwalk-replace)]
             [clojure.inspector :refer (atom?)]
@@ -94,4 +94,3 @@
 
 (defmacro ?- [& goals]
   `(top-level-prove '~(replace-?-vars goals)))
-
