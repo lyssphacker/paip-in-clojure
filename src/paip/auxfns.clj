@@ -41,7 +41,7 @@ paip.auxfns
 
 (defn cons?
   [x]
-  (not (atom? x)))
+  (and (not-empty x) (not (atom? x))))
 
 (defn funcall [f & args]
   "Applies function f to arguments args."
