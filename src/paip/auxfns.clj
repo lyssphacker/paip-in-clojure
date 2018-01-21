@@ -266,10 +266,10 @@ paip.auxfns
   Example usage:
   (defrecord+ point [[x 1] [y 2]])
   => #'make-point
-  (def foo (make-point))
+  (def foo (make-point :x 3 :y 4))
   => #'foo
   (:x foo)
-  => 1"
+  => 3"
   [record-name fields-and-values & record-body]
   (let [fields-and-values (map #(if (vector? %) % [% nil]) fields-and-values)
         fields            (vec (map first fields-and-values))
