@@ -280,4 +280,7 @@ paip.auxfns
          ~@record-body)
        (defn ~(symbol (str "make-" (name record-name)))
          [& {:keys ~fields :or ~default-map}]
-         (new ~record-name ~@fields)))))
+         (new ~record-name ~@fields))
+       (defn ~(symbol (str (name record-name) "?"))
+         [x#]
+         (instance? ~record-name x#)))))
