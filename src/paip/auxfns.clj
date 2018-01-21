@@ -1,7 +1,8 @@
 (ns ^{:doc "Auxiliary functions used by all other programs"}
 paip.auxfns
   (:require [clojure.inspector :refer (atom?)]
-            [clojure.walk :refer (postwalk-replace)])
+            [clojure.walk :refer (postwalk-replace)]
+            [clojure.pprint :refer (cl-format)])
   (:import (java.math RoundingMode)))
 
 (defn random-elt [choices]
@@ -258,3 +259,25 @@ paip.auxfns
 (defn add1
   [x]
   (+ x 1))
+
+(defmacro defrecord+
+  "Extends defrecord with the ability to define default values for fields,
+  function for printing record out and a constructor for the record.
+  Example usage:
+  (defrecord+ point [[x 1] [y 2]])
+  => #'make-point
+  (def foo (make-point))
+  => #'foo
+  (:x foo)
+  => 1"
+  [record-name fields-and-values & record-body]
+  (let [fields-and-values (map #(if (vector? %) % [% nil]) fields-and-values)
+        fields            (vec (map first fields-and-values))
+        default-map       (into {} fields-and-values)]
+    `(do
+       (defrecord ~record-name
+         ~fields
+         ~@record-body)
+       (defn ~(symbol (str "make-" (name record-name)))
+         [& {:keys ~fields :or ~default-map}]
+         (new ~record-name ~@fields)))))
